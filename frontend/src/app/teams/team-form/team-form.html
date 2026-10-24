@@ -1,0 +1,196 @@
+<section class="space-y-6">
+  <header>
+    <h2 class="text-xl font-semibold tracking-tight">Team einrichten</h2>
+    <p class="mt-1 text-sm text-content-muted">
+      Ein umfangreicheres Signal-Forms-Beispiel mit Validierung und Einstellungen.
+    </p>
+  </header>
+
+  @if (validatedTeam(); as team) {
+    <div
+      role="status"
+      class="rounded-control border border-success bg-success-subtle p-4 text-sm text-success"
+    >
+      <span class="font-semibold">Formular validiert:</span>
+      {{ team.name }} ({{ team.slug }}). Die Daten sind in dieser Demo nicht persistent gespeichert.
+    </div>
+  }
+
+  <form class="space-y-6" [formRoot]="teamForm">
+    <section class="rounded-card border border-border bg-surface p-5">
+      <h2 class="text-base font-semibold">Grunddaten</h2>
+      <p class="mt-1 text-sm text-content-muted">Name, interne Kennung und Zweck des Teams.</p>
+
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <div>
+          <app-text-field
+            label="Teamname"
+            placeholder="Customer Experience"
+            [formField]="teamForm.name"
+          />
+          @if (teamForm.name().touched() && teamForm.name().invalid()) {
+            <ul class="mt-1 space-y-1 text-xs text-danger">
+              @for (error of teamForm.name().errors(); track error.kind) {
+                <li>{{ error.message }}</li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div>
+          <app-text-field
+            label="Team-Kürzel"
+            prefix="teams/"
+            placeholder="customer-experience"
+            [formField]="teamForm.slug"
+          />
+          @if (teamForm.slug().touched() && teamForm.slug().invalid()) {
+            <ul class="mt-1 space-y-1 text-xs text-danger">
+              @for (error of teamForm.slug().errors(); track error.kind) {
+                <li>{{ error.message }}</li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div class="md:col-span-2">
+          <app-textarea
+            label="Beschreibung"
+            placeholder="Wofür ist das Team verantwortlich?"
+            [formField]="teamForm.description"
+          />
+          <div class="mt-1 flex justify-between text-xs text-content-muted">
+            <span>Mindestens 20 Zeichen</span>
+            <span>{{ teamForm.description().value().length }} Zeichen</span>
+          </div>
+          @if (teamForm.description().touched() && teamForm.description().invalid()) {
+            <ul class="mt-1 space-y-1 text-xs text-danger">
+              @for (error of teamForm.description().errors(); track error.kind) {
+                <li>{{ error.message }}</li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-card border border-border bg-surface p-5">
+      <h2 class="text-base font-semibold">Verantwortung</h2>
+      <p class="mt-1 text-sm text-content-muted">
+        Ordne das Team einem Bereich und einer Person zu.
+      </p>
+
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <div>
+          <app-select
+            label="Bereich"
+            labelSize="medium"
+            placeholder="Bereich wählen…"
+            [options]="departmentOptions"
+            [formField]="teamForm.department"
+          />
+          @if (teamForm.department().touched() && teamForm.department().invalid()) {
+            <p class="mt-1 text-xs text-danger">{{ teamForm.department().errors()[0].message }}</p>
+          }
+        </div>
+
+        <div>
+          <app-text-field
+            label="Teamverantwortliche:r"
+            type="email"
+            placeholder="name&#64;beispiel.de"
+            [formField]="teamForm.ownerEmail"
+          />
+          @if (teamForm.ownerEmail().touched() && teamForm.ownerEmail().invalid()) {
+            <ul class="mt-1 space-y-1 text-xs text-danger">
+              @for (error of teamForm.ownerEmail().errors(); track error.kind) {
+                <li>{{ error.message }}</li>
+              }
+            </ul>
+          }
+        </div>
+
+        <div>
+          <app-select
+            label="Zeitzone"
+            labelSize="medium"
+            [options]="timezoneOptions"
+            [formField]="teamForm.timezone"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-card border border-border bg-surface p-5">
+      <h2 class="text-base font-semibold">Zugriff und Benachrichtigungen</h2>
+      <p class="mt-1 text-sm text-content-muted">
+        Lege die Standardregeln für neue Teammitglieder fest.
+      </p>
+
+      <div class="mt-5 grid gap-4 md:grid-cols-2">
+        <div>
+          <app-select
+            label="Sichtbarkeit"
+            labelSize="medium"
+            [options]="visibilityOptions"
+            [formField]="teamForm.visibility"
+          />
+        </div>
+
+        <div>
+          <app-select
+            label="Standardrolle"
+            labelSize="medium"
+            [options]="roleOptions"
+            [formField]="teamForm.defaultRole"
+          />
+        </div>
+      </div>
+
+      <div class="mt-5 space-y-3">
+        <label class="flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            class="mt-0.5 rounded border-border-strong text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus"
+            [formField]="teamForm.notifyAboutUpdates"
+          />
+          <span>
+            <span class="block font-medium">Aktivitätsmeldungen senden</span>
+            <span class="mt-0.5 block text-xs text-content-muted">
+              Mitglieder erhalten eine E-Mail bei wichtigen Änderungen.
+            </span>
+          </span>
+        </label>
+        <label class="flex items-start gap-3 text-sm">
+          <input
+            type="checkbox"
+            class="mt-0.5 rounded border-border-strong text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus"
+            [formField]="teamForm.allowExternalMembers"
+          />
+          <span>
+            <span class="block font-medium">Externe Mitglieder zulassen</span>
+            <span class="mt-0.5 block text-xs text-content-muted">
+              Personen außerhalb des Workspace können eingeladen werden.
+            </span>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <p class="text-xs text-content-muted">
+        Formular-Demo: Die Eingaben werden validiert, aber nicht persistent gespeichert.
+      </p>
+      <button appButton type="submit" variant="primary" size="large">Team prüfen</button>
+    </div>
+  </form>
+
+  @if (validatedTeam(); as team) {
+    <div
+      role="status"
+      class="rounded-control border border-success bg-success-subtle p-4 text-sm text-success"
+    >
+      Team „{{ team.name }}“ ist valide und kann angelegt werden.
+    </div>
+  }
+</section>

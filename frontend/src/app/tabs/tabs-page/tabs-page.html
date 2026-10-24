@@ -1,0 +1,68 @@
+<section class="space-y-6">
+  <header>
+    <h1 class="text-2xl font-semibold tracking-tight">Tabs</h1>
+    <p class="mt-1 text-sm text-content-muted">
+      Wiederverwendbare Tabs mit Tastaturnavigation und Angular Aria.
+    </p>
+  </header>
+
+  <app-tabs [tabs]="tabs" [(selectedTab)]="selectedTab">
+    <ng-template appTabPanel="overview">
+      <div class="grid gap-4 sm:grid-cols-2">
+        <article class="rounded-card border border-border bg-surface-subtle p-4">
+          <h2 class="font-semibold">Arbeitsbereich</h2>
+          <p class="mt-2 text-sm text-content-muted">12 offene Aufgaben in 3 Projekten.</p>
+        </article>
+        <article class="rounded-card border border-border bg-surface-subtle p-4">
+          <h2 class="font-semibold">Letzte Aktivität</h2>
+          <p class="mt-2 text-sm text-content-muted">Zuletzt aktualisiert vor 8 Minuten.</p>
+        </article>
+      </div>
+    </ng-template>
+
+    <ng-template appTabPanel="activity">
+      <h2 class="font-semibold">Letzte Aktivitäten</h2>
+      <ol class="mt-4 divide-y divide-border">
+        <li class="py-3 text-sm">
+          <span class="font-medium">Jordan Davis</span>
+          <span class="text-content-muted"> hat den Projektstatus geändert.</span>
+          <time class="ml-2 text-xs text-content-subtle">vor 8 Min.</time>
+        </li>
+        <li class="py-3 text-sm">
+          <span class="font-medium">Alex Morgan</span>
+          <span class="text-content-muted"> hat eine Bestellung erstellt.</span>
+          <time class="ml-2 text-xs text-content-subtle">vor 34 Min.</time>
+        </li>
+        <li class="py-3 text-sm">
+          <span class="font-medium">Casey Chen</span>
+          <span class="text-content-muted"> hat einen Kunden eingeladen.</span>
+          <time class="ml-2 text-xs text-content-subtle">vor 2 Std.</time>
+        </li>
+      </ol>
+    </ng-template>
+
+    <ng-template appTabPanel="settings">
+      <h2 class="font-semibold">Benachrichtigungen</h2>
+      <label class="mt-4 flex items-center gap-3 text-sm">
+        <input
+          type="checkbox"
+          class="rounded border-border-strong text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus"
+          [checked]="notificationsEnabled()"
+          (change)="updateNotifications($event)"
+        />
+        E-Mail-Benachrichtigungen für Änderungen erhalten
+      </label>
+      <p class="mt-2 text-xs text-content-muted">
+        Der Zustand bleibt beim Wechseln zwischen Tabs erhalten.
+      </p>
+    </ng-template>
+
+    <ng-template appTabPanel="team">
+      <app-team-form />
+    </ng-template>
+
+    <ng-template appTabPanel="team-readonly">
+      <app-team-readonly />
+    </ng-template>
+  </app-tabs>
+</section>

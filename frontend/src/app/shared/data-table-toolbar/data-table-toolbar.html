@@ -1,0 +1,11 @@
+<form class="flex flex-wrap items-end gap-3 border-b border-border p-5" (submit)="submit($event)">
+  <ng-content select="[data-table-searches]" />
+
+  <ng-content select="[data-table-filters]" />
+
+  <button appButton type="submit" variant="primary">Suchen</button>
+
+  <button appButton type="button" variant="secondary" icon="refresh" (click)="resetFilters()">
+    {{ resetLabel() }}
+  </button>
+</form>

@@ -1,0 +1,139 @@
+<section
+  [class.rounded-card]="framed()"
+  [class.border]="framed()"
+  [class.border-border]="framed()"
+  [class.bg-surface]="framed()"
+  [attr.aria-busy]="loading()"
+>
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[760px] table-fixed text-left text-sm">
+      <caption class="sr-only">
+        {{
+          caption()
+        }}
+      </caption>
+      <thead class="bg-canvas text-xs uppercase tracking-wide text-content-muted">
+        <tr>
+          @for (column of columns(); track column.key) {
+            <th
+              scope="col"
+              class="px-5 py-3"
+              [attr.aria-sort]="
+                sort() === column.key
+                  ? direction() === 'asc'
+                    ? 'ascending'
+                    : 'descending'
+                  : 'none'
+              "
+            >
+              @if (column.sortable) {
+                <button
+                  appButton
+                  type="button"
+                  variant="link"
+                  size="small"
+                  [icon]="sortIcon(column.key)"
+                  iconPosition="end"
+                  (click)="sortChange.emit(column.key)"
+                >
+                  {{ column.header }}
+                </button>
+              } @else {
+                {{ column.header }}
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+
+      <tbody class="divide-y divide-slate-100">
+        @for (row of rows(); track trackBy()(row)) {
+          <tr class="hover:bg-canvas">
+            @for (column of columns(); track column.key) {
+              <td class="px-5 py-3.5 text-content-secondary">
+                @if (cellTemplate(column.key); as template) {
+                  <ng-container
+                    [ngTemplateOutlet]="template"
+                    [ngTemplateOutletContext]="{ $implicit: row }"
+                  />
+                } @else {
+                  {{ column.value(row) }}
+                }
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td [attr.colspan]="columns().length" class="px-5 py-12 text-center text-content-muted">
+              {{ loading() ? 'Lädt…' : emptyMessage() }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (error()) {
+    <p role="alert" class="p-5 text-sm text-danger">{{ error() }}</p>
+  }
+
+  <footer
+    class="grid gap-3 border-t border-border px-5 py-4 text-xs text-content-muted sm:grid-cols-[1fr_auto_1fr] sm:items-center"
+  >
+    <span role="status" aria-live="polite">
+      {{ firstRow() }}–{{ lastRow() }} von {{ total() }} Ergebnissen
+    </span>
+
+    <nav aria-label="Tabellenseiten" class="flex items-center justify-center gap-1">
+      <button
+        appButton
+        type="button"
+        variant="secondary"
+        size="small"
+        icon="arrow-left"
+        aria-label="Vorherige Seite"
+        [disabled]="page() === 0 || loading()"
+        (click)="pageChange.emit(page() - 1)"
+      ></button>
+
+      @for (pageNumber of visiblePages(); track pageNumber) {
+        <button
+          appButton
+          type="button"
+          variant="secondary"
+          size="small"
+          [attr.aria-label]="'Seite ' + (pageNumber + 1)"
+          [attr.aria-current]="page() === pageNumber ? 'page' : null"
+          [active]="page() === pageNumber"
+          [disabled]="loading()"
+          (click)="pageChange.emit(pageNumber)"
+        >
+          {{ pageNumber + 1 }}
+        </button>
+      }
+
+      <button
+        appButton
+        type="button"
+        variant="secondary"
+        size="small"
+        icon="arrow-right"
+        aria-label="Nächste Seite"
+        [disabled]="page() + 1 >= totalPages() || loading()"
+        (click)="pageChange.emit(page() + 1)"
+      ></button>
+    </nav>
+
+    <div class="flex sm:justify-self-end">
+      <div class="w-28">
+        <app-select
+          label="Zeilen pro Seite"
+          [options]="pageSizeSelectOptions()"
+          [value]="pageSize().toString()"
+          [changed]="false"
+          (valueChange)="updatePageSize($event)"
+        />
+      </div>
+    </div>
+  </footer>
+</section>

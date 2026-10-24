@@ -1,0 +1,44 @@
+@import 'tailwindcss';
+@source './app';
+
+@theme inline {
+  --color-canvas: var(--ui-color-canvas);
+  --color-surface: var(--ui-color-surface);
+  --color-surface-subtle: var(--ui-color-surface-subtle);
+  --color-surface-muted: var(--ui-color-surface-muted);
+  --color-content: var(--ui-color-content);
+  --color-content-secondary: var(--ui-color-content-secondary);
+  --color-content-muted: var(--ui-color-content-muted);
+  --color-content-subtle: var(--ui-color-content-subtle);
+  --color-border: var(--ui-color-border);
+  --color-border-strong: var(--ui-color-border-strong);
+  --color-border-hover: var(--ui-color-border-hover);
+  --color-brand: var(--ui-color-brand);
+  --color-brand-hover: var(--ui-color-brand-hover);
+  --color-brand-subtle: var(--ui-color-brand-subtle);
+  --color-brand-strong: var(--ui-color-brand-strong);
+  --color-on-brand: var(--ui-color-on-brand);
+  --color-focus: var(--ui-color-focus);
+  --color-overlay: var(--ui-color-overlay);
+  --color-success: var(--ui-color-success);
+  --color-success-subtle: var(--ui-color-success-subtle);
+  --color-warning: var(--ui-color-warning);
+  --color-warning-subtle: var(--ui-color-warning-subtle);
+  --color-danger: var(--ui-color-danger);
+  --color-danger-subtle: var(--ui-color-danger-subtle);
+  --radius-control: var(--ui-radius-control);
+  --radius-card: var(--ui-radius-card);
+  --radius-dialog: var(--ui-radius-dialog);
+  --radius-pill: var(--ui-radius-pill);
+  --radius-avatar: var(--ui-radius-avatar);
+  --spacing-control: var(--ui-size-control);
+  --spacing-dropdown: var(--ui-size-dropdown);
+  --spacing: var(--ui-size-spacing);
+  --text-xs: var(--ui-font-size-xs);
+  --text-sm: var(--ui-font-size-sm);
+  --text-base: var(--ui-font-size-base);
+  --text-control: var(--ui-font-size-control);
+  --text-lg: var(--ui-font-size-lg);
+  --text-xl: var(--ui-font-size-xl);
+  --text-2xl: var(--ui-font-size-2xl);
+}

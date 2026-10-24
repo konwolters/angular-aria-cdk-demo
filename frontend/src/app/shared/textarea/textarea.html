@@ -1,0 +1,37 @@
+<div class="block">
+  <label class="block text-sm font-medium">
+    <span class="flex items-center gap-2">
+      <span>{{ label() }}</span>
+      @if (isChanged()) {
+        <span
+          class="rounded bg-brand px-1.5 py-0.5 text-xs font-semibold tracking-wide text-on-brand"
+        >
+          {{ changedLabel() }}
+        </span>
+      }
+    </span>
+    <textarea
+      [value]="value()"
+      [placeholder]="placeholder()"
+      [rows]="rows()"
+      [disabled]="disabled() || readonly()"
+      [readonly]="readonly()"
+      [required]="required()"
+      [tabindex]="readonly() ? -1 : null"
+      [attr.aria-invalid]="invalid() ? 'true' : null"
+      class="mt-1 min-h-28 w-full resize-y rounded-control border border-border-strong p-3 text-sm font-normal text-content-secondary outline-none focus:border-focus"
+      [class.bg-surface]="!readonly()"
+      [class.bg-surface-muted]="readonly()"
+      [class.cursor-not-allowed]="readonly()"
+      [class.opacity-50]="disabled()"
+      [class.cursor-not-allowed]="readonly()"
+      (input)="updateValue($event)"
+      (blur)="touch.emit()"
+    ></textarea>
+  </label>
+  @if (isChanged()) {
+    <span class="mt-1 block text-xs font-normal text-content-muted">
+      {{ previousValueLabel() }}: {{ originalValue() }}
+    </span>
+  }
+</div>

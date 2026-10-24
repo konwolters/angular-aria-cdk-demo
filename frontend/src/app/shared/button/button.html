@@ -1,0 +1,9 @@
+@if (icon() && iconPosition() === 'start') {
+  <app-icon [name]="icon()!" [size]="iconSize()" />
+}
+
+<ng-content />
+
+@if (icon() && iconPosition() === 'end') {
+  <app-icon [name]="icon()!" [size]="iconSize()" />
+}

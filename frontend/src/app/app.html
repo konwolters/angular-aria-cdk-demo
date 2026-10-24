@@ -1,0 +1,66 @@
+<div>
+  <aside class="fixed inset-y-0 left-0 hidden w-64 border-r border-border bg-surface p-6 lg:block">
+    <a routerLink="/customers" class="flex items-center gap-3">
+      <span class="grid h-10 w-10 place-items-center rounded-card bg-brand font-bold text-on-brand">
+        A
+      </span>
+      <span>
+        <span class="block font-semibold">Angular Aria CDK</span>
+        <span class="block text-xs text-content-muted">Component demo</span>
+      </span>
+    </a>
+
+    <p class="mb-3 mt-10 text-xs font-semibold uppercase tracking-wider text-content-subtle">
+      Workspace
+    </p>
+    <nav aria-label="Hauptnavigation" class="space-y-1">
+      <a
+        routerLink="/customers"
+        routerLinkActive="bg-brand-subtle text-brand-strong"
+        ariaCurrentWhenActive="page"
+        class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
+      >
+        <app-icon name="grid" [size]="16" />
+        Customers
+      </a>
+      <a
+        routerLink="/orders"
+        routerLinkActive="bg-brand-subtle text-brand-strong"
+        ariaCurrentWhenActive="page"
+        class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
+      >
+        <app-icon name="receipt" [size]="16" />
+        Orders
+      </a>
+      <a
+        routerLink="/projects"
+        routerLinkActive="bg-brand-subtle text-brand-strong"
+        ariaCurrentWhenActive="page"
+        class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
+      >
+        <app-icon name="layers" [size]="16" />
+        Projects
+      </a>
+      <a
+        routerLink="/tabs"
+        routerLinkActive="bg-brand-subtle text-brand-strong"
+        ariaCurrentWhenActive="page"
+        class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
+      >
+        <app-icon name="tabs" [size]="16" />
+        Tabs
+      </a>
+    </nav>
+
+    <div class="absolute bottom-6 left-6 right-6 rounded-card bg-canvas p-4">
+      <div class="text-sm font-medium">UI primitives</div>
+      <p class="mt-1 text-xs leading-5 text-content-muted">
+        Angular + Tailwind. Keine Komponentenbibliothek.
+      </p>
+    </div>
+  </aside>
+
+  <main class="min-h-screen px-4 py-8 sm:px-6 lg:ml-64 lg:px-10">
+    <router-outlet />
+  </main>
+</div>

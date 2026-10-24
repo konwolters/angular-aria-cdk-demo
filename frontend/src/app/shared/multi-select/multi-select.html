@@ -1,0 +1,116 @@
+<div #origin class="relative">
+  <div
+    class="mb-1 flex items-center gap-2 font-medium text-content-secondary"
+    [class.text-xs]="labelSize() === 'small'"
+    [class.text-sm]="labelSize() === 'medium'"
+  >
+    <span>{{ label() }}</span>
+    @if (isChanged()) {
+      <span
+        class="rounded bg-brand px-1.5 py-0.5 text-xs font-semibold tracking-wide text-on-brand"
+      >
+        {{ changedLabel() }}
+      </span>
+    }
+  </div>
+  @if (searchable()) {
+    <div
+      class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control focus-within:border-focus"
+      [class.bg-surface-muted]="readonly()"
+      [class.cursor-not-allowed]="readonly()"
+    >
+      <input
+        #combobox="ngCombobox"
+        ngCombobox
+        [(value)]="searchTerm"
+        [expanded]="expanded()"
+        (expandedChange)="onExpandedChange($event)"
+        [readonly]="readonly()"
+        [disabled]="readonly()"
+        [tabindex]="readonly() ? -1 : undefined"
+        (click)="onExpandedChange(true)"
+        [attr.aria-label]="selectionSummary().accessibleLabel + ', suchen'"
+        [placeholder]="selectionSummary().displayValue || 'Alle'"
+        class="h-full min-w-0 flex-1 bg-transparent text-content-secondary outline-none placeholder:text-content-subtle"
+        [class.cursor-not-allowed]="readonly()"
+      />
+      <app-icon name="chevron-down" [size]="16" />
+    </div>
+  } @else {
+    <div
+      #combobox="ngCombobox"
+      ngCombobox
+      [expanded]="expanded()"
+      (expandedChange)="onExpandedChange($event)"
+      [readonly]="readonly()"
+      [disabled]="readonly()"
+      [tabindex]="readonly() ? -1 : undefined"
+      (mousedown)="preventReadonlyFocus($event)"
+      [attr.aria-label]="selectionSummary().accessibleLabel"
+      class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control hover:bg-surface-subtle focus:border-focus"
+      [class.cursor-pointer]="!readonly()"
+      [class.bg-surface-muted]="readonly()"
+      [class.cursor-not-allowed]="readonly()"
+    >
+      @if (selected().length > 0) {
+        <span class="min-w-0 flex-1 truncate text-content-secondary">
+          {{ selectionSummary().displayValue }}
+        </span>
+      } @else {
+        <span class="min-w-0 flex-1 text-content-subtle">Alle</span>
+      }
+      <app-icon name="chevron-down" [size]="16" />
+    </div>
+  }
+
+  @if (isChanged()) {
+    <span class="mt-1 block text-xs text-content-muted">
+      {{ previousValueLabel() }}: {{ originalValues().join(', ') }}
+    </span>
+  }
+
+  @if (combobox(); as trigger) {
+    <ng-template
+      [cdkConnectedOverlay]="{ origin, usePopover: 'inline', matchWidth: true }"
+      [cdkConnectedOverlayOpen]="expanded()"
+      [cdkConnectedOverlayOffsetY]="6"
+      (overlayOutsideClick)="close()"
+    >
+      <ng-template ngComboboxPopup [combobox]="trigger">
+        <div class="w-dropdown rounded-control border border-border bg-surface p-2">
+          <div
+            #listbox="ngListbox"
+            ngListbox
+            ngComboboxWidget
+            [multi]="true"
+            focusMode="activedescendant"
+            selectionMode="explicit"
+            [tabindex]="-1"
+            [activeDescendant]="listbox.activeDescendant()"
+            [value]="selected()"
+            (valueChange)="setSelected($event)"
+            class="max-h-64 overflow-y-auto outline-none"
+          >
+            @for (option of visibleOptions(); track option) {
+              <div
+                ngOption
+                [value]="option"
+                [label]="option"
+                class="flex min-h-10 cursor-pointer items-center gap-2 rounded px-2 py-2 text-control"
+                [class.bg-brand-subtle]="selected().includes(option)"
+                [class.text-brand-strong]="selected().includes(option)"
+              >
+                <span class="flex-1">{{ option }}</span>
+                @if (selected().includes(option)) {
+                  <app-icon class="text-brand-strong" name="check" [size]="16" />
+                }
+              </div>
+            } @empty {
+              <p class="px-2 py-3 text-sm text-content-muted">Keine Treffer</p>
+            }
+          </div>
+        </div>
+      </ng-template>
+    </ng-template>
+  }
+</div>

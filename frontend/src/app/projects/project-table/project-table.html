@@ -1,0 +1,104 @@
+<section class="space-y-6">
+  <header>
+    <h1 class="text-2xl font-semibold tracking-tight">Projekte</h1>
+    <p class="mt-1 text-sm text-content-muted">
+      Verfolge Projektstatus, Prioritäten und Fortschritt.
+    </p>
+  </header>
+
+  <section class="rounded-card border border-border bg-surface">
+    <app-data-table-toolbar (apply)="applyFilters()" (reset)="resetFilters()">
+      <div data-table-searches>
+        <app-text-field
+          label="Projekte suchen"
+          placeholder="Projekt, Kunde oder Verantwortliche…"
+          [(value)]="searchTerm"
+        />
+      </div>
+      <div data-table-filters class="flex flex-wrap items-end gap-3">
+        <div>
+          <app-multi-select
+            label="Projektstatus"
+            [options]="statusOptions"
+            [(selected)]="selectedStatuses"
+          />
+        </div>
+        <div>
+          <app-multi-select
+            label="Priorität"
+            [options]="priorityOptions"
+            [(selected)]="selectedPriorities"
+          />
+        </div>
+      </div>
+    </app-data-table-toolbar>
+
+    <app-data-table
+      [framed]="false"
+      [rows]="rows()"
+      [columns]="columns"
+      [total]="total()"
+      [totalPages]="totalPages()"
+      [page]="result.value().number"
+      [pageSize]="result.value().size"
+      [sort]="query().sort"
+      [direction]="query().direction"
+      [loading]="loading()"
+      [error]="error()"
+      caption="Projekte: gefilterte Projektübersicht"
+      emptyMessage="Keine Projekte gefunden."
+      [trackBy]="trackProject"
+      (sortChange)="toggleSort($event)"
+      (pageChange)="setPage($event)"
+      (pageSizeChange)="setPageSize($event)"
+    >
+      <ng-template appDataTableCell="status" let-project>
+        <span
+          class="rounded-pill px-2.5 py-1 text-xs font-medium"
+          [class.bg-success-subtle]="
+            project.status === 'Aktiv' || project.status === 'Abgeschlossen'
+          "
+          [class.text-success]="project.status === 'Aktiv' || project.status === 'Abgeschlossen'"
+          [class.bg-warning-subtle]="project.status === 'Planung'"
+          [class.text-warning]="project.status === 'Planung'"
+          [class.bg-surface-muted]="project.status === 'Pausiert'"
+          [class.text-content-secondary]="project.status === 'Pausiert'"
+        >
+          {{ project.status }}
+        </span>
+      </ng-template>
+
+      <ng-template appDataTableCell="priority" let-project>
+        <span
+          class="rounded-pill px-2.5 py-1 text-xs font-medium"
+          [class.bg-danger-subtle]="project.priority === 'Hoch'"
+          [class.text-danger]="project.priority === 'Hoch'"
+          [class.bg-warning-subtle]="project.priority === 'Mittel'"
+          [class.text-warning]="project.priority === 'Mittel'"
+          [class.bg-surface-muted]="project.priority === 'Niedrig'"
+          [class.text-content-secondary]="project.priority === 'Niedrig'"
+        >
+          {{ project.priority }}
+        </span>
+      </ng-template>
+
+      <ng-template appDataTableCell="progress" let-project>
+        <div class="flex min-w-28 items-center gap-2">
+          <div
+            class="h-2 flex-1 overflow-hidden rounded-pill bg-surface-muted"
+            role="progressbar"
+            [attr.aria-label]="'Projektfortschritt ' + project.name"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            [attr.aria-valuenow]="project.progress"
+          >
+            <div class="h-full rounded-pill bg-brand" [style.width.%]="project.progress"></div>
+          </div>
+          <span class="w-10 text-right text-xs text-content-muted">
+            {{ formatProgress(project.progress) }}
+          </span>
+        </div>
+      </ng-template>
+    </app-data-table>
+  </section>
+</section>

@@ -1,0 +1,45 @@
+<div ngTabs class="overflow-hidden rounded-card border border-border bg-surface">
+  <div
+    ngTabList
+    [orientation]="orientation()"
+    [selectionMode]="selectionMode()"
+    [(selectedTab)]="selectedTab"
+    class="flex border-border"
+    [class.flex-col]="orientation() === 'vertical'"
+    [class.border-b]="orientation() === 'horizontal'"
+    [class.border-r]="orientation() === 'vertical'"
+  >
+    @for (tab of tabs(); track tab.value) {
+      <button
+        ngTab
+        type="button"
+        [value]="tab.value"
+        [disabled]="tab.disabled ?? false"
+        class="inline-flex min-h-control flex-1 items-center justify-center border-transparent px-4 py-2 text-control font-medium text-content-muted hover:bg-surface-subtle hover:text-content focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-[-2px] disabled:cursor-not-allowed disabled:opacity-50"
+        [class.border-b-2]="orientation() === 'horizontal'"
+        [class.border-r-2]="orientation() === 'vertical'"
+        [class.border-b-brand]="orientation() === 'horizontal' && selectedTab() === tab.value"
+        [class.border-r-brand]="orientation() === 'vertical' && selectedTab() === tab.value"
+        [class.text-brand-strong]="selectedTab() === tab.value"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  @for (tab of tabs(); track tab.value) {
+    <section
+      ngTabPanel
+      [value]="tab.value"
+      [preserveContent]="true"
+      [class.hidden]="selectedTab() !== tab.value"
+      class="p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-[-2px]"
+    >
+      <ng-template ngTabContent>
+        @if (panelTemplate(tab.value); as panel) {
+          <ng-container [ngTemplateOutlet]="panel" />
+        }
+      </ng-template>
+    </section>
+  }
+</div>
