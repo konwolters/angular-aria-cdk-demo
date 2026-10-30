@@ -26,7 +26,8 @@ class DeploymentTest {
 
     @Test
     void servesAngularRoutesUnderTheContextPath() throws Exception {
-        for (String route : new String[]{"/", "/customers", "/orders", "/projects", "/tabs"}) {
+        for (String route : new String[]{"/", "/showcase", "/components", "/components/text-field",
+                "/components/data-table-combined"}) {
             var response = get("/aria-demo" + route);
             assertThat(response.statusCode()).as(route).isEqualTo(200);
             assertThat(response.body()).contains("<app-root>", "<base href=\"/aria-demo/\"");
@@ -56,7 +57,7 @@ class DeploymentTest {
 
     @Test
     void doesNotReturnSpaHtmlForUnknownPaths() throws Exception {
-        for (String path : new String[]{"/api/missing", "/missing.js", "/missing", "/customers/missing.js"}) {
+        for (String path : new String[]{"/api/missing", "/missing.js", "/missing", "/components/missing.js"}) {
             var response = get("/aria-demo" + path);
             assertThat(response.statusCode()).as(path).isEqualTo(404);
             assertThat(response.body()).doesNotContain("<app-root");

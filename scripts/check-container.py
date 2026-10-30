@@ -57,7 +57,7 @@ try:
     else:
         raise RuntimeError("Application did not become ready")
 
-    for route in ("/", "/customers", "/orders", "/projects", "/tabs"):
+    for route in ("/", "/showcase", "/components", "/components/text-field", "/components/data-table-combined"):
         with urlopen(base + "/aria-demo" + route, timeout=10) as response:
             html = response.read().decode()
             assert response.status == 200
@@ -73,6 +73,14 @@ try:
         with urlopen(url, timeout=10) as response:
             assert response.status == 200
             assert "text/html" not in response.headers["Content-Type"]
+
+    for path in ("component-source/text-field/text-field.ts", "component-source/text-field/text-field.html"):
+        with urlopen(base + "/aria-demo/" + path, timeout=10) as response:
+            content = response.read().decode()
+            assert response.status == 200
+            assert "<app-root" not in content
+            expected = "TextFieldComponent" if path.endswith(".ts") else "<label"
+            assert expected in content
 
     for endpoint in ("customers", "orders", "projects"):
         with urlopen(base + f"/aria-demo/api/{endpoint}", timeout=10) as response:
