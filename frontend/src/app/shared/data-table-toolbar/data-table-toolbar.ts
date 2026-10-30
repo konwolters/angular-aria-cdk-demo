@@ -8,13 +8,15 @@ import { ButtonComponent } from '../button/button';
 })
 export class DataTableToolbarComponent {
   readonly resetLabel = input('Zurücksetzen');
+  readonly showReset = input(true);
+  readonly applyDisabled = input(false);
 
   readonly apply = output<void>();
   readonly reset = output<void>();
 
   protected submit(event: Event): void {
     event.preventDefault();
-    this.apply.emit();
+    if (!this.applyDisabled()) this.apply.emit();
   }
 
   protected resetFilters(): void {

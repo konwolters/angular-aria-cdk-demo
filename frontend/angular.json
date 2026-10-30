@@ -27,6 +27,17 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*.ts",
+                "input": "src/app/shared",
+                "output": "component-source",
+                "ignore": ["**/*.spec.ts"]
+              },
+              {
+                "glob": "**/*.html",
+                "input": "src/app/shared",
+                "output": "component-source"
               }
             ],
             "styles": ["src/tailwind.css", "src/styles.scss"]

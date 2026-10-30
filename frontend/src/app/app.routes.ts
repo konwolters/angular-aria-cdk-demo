@@ -1,30 +1,18 @@
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: '', pathMatch: 'full', redirectTo: 'customers' },
+  { path: '', pathMatch: 'full', redirectTo: 'showcase' },
   {
-    path: 'customers',
+    path: 'showcase',
     loadComponent: () =>
-      import('./customers/customer-table/customer-table').then(
-        (module) => module.CustomerTableComponent,
-      ),
+      import('./showcase/import-showcase').then((module) => module.ImportShowcaseComponent),
   },
+  { path: 'components', pathMatch: 'full', redirectTo: 'components/button' },
+  { path: 'components/field-messages', pathMatch: 'full', redirectTo: 'components/text-field' },
   {
-    path: 'orders',
+    path: 'components/:slug',
     loadComponent: () =>
-      import('./orders/order-table/order-table').then((module) => module.OrderTableComponent),
+      import('./components/component-example-page').then((module) => module.ComponentExamplePage),
   },
-  {
-    path: 'projects',
-    loadComponent: () =>
-      import('./projects/project-table/project-table').then(
-        (module) => module.ProjectTableComponent,
-      ),
-  },
-  {
-    path: 'tabs',
-    loadComponent: () =>
-      import('./tabs/tabs-page/tabs-page').then((module) => module.TabsPageComponent),
-  },
-  { path: '**', redirectTo: 'customers' },
+  { path: '**', redirectTo: 'showcase' },
 ];

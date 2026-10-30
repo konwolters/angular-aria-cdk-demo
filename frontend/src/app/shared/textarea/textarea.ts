@@ -2,19 +2,26 @@ import {
   Component,
   afterRenderEffect,
   computed,
+  inject,
   input,
   model,
   output,
   signal,
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
+import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
 
 @Component({
   selector: 'app-textarea',
+  imports: [FieldMessagesComponent],
   templateUrl: './textarea.html',
   host: { class: 'block' },
 })
 export class TextareaComponent implements FormValueControl<string> {
+  protected readonly messagesId = inject(ControlIdService).next();
+  readonly hint = input('');
+  readonly hideLabel = input(false);
+  readonly maxLength = input<number>();
   readonly label = input.required<string>();
   readonly placeholder = input('');
   readonly rows = input(4);

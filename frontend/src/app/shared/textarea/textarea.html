@@ -1,6 +1,6 @@
 <div class="block">
   <label class="block text-sm font-medium">
-    <span class="flex items-center gap-2">
+    <span class="flex items-center gap-2" [class.sr-only]="hideLabel()">
       <span>{{ label() }}</span>
       @if (isChanged()) {
         <span
@@ -14,7 +14,9 @@
       [value]="value()"
       [placeholder]="placeholder()"
       [rows]="rows()"
-      [disabled]="disabled() || readonly()"
+      [disabled]="disabled()"
+      [attr.maxlength]="maxLength()"
+      [attr.aria-describedby]="messagesId"
       [readonly]="readonly()"
       [required]="required()"
       [tabindex]="readonly() ? -1 : null"
@@ -24,11 +26,16 @@
       [class.bg-surface-muted]="readonly()"
       [class.cursor-not-allowed]="readonly()"
       [class.opacity-50]="disabled()"
-      [class.cursor-not-allowed]="readonly()"
       (input)="updateValue($event)"
       (blur)="touch.emit()"
     ></textarea>
   </label>
+  <app-field-messages
+    [id]="messagesId"
+    [hint]="hint()"
+    [errors]="errors()"
+    [showErrors]="invalid() && touched() && !readonly()"
+  />
   @if (isChanged()) {
     <span class="mt-1 block text-xs font-normal text-content-muted">
       {{ previousValueLabel() }}: {{ originalValue() }}

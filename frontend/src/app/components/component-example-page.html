@@ -1,0 +1,749 @@
+<div class="mx-auto max-w-5xl space-y-8">
+  <header>
+    <p class="text-xs font-semibold uppercase tracking-wider text-content-subtle">Komponenten</p>
+    <h1 class="mt-2 text-3xl font-semibold">{{ example().name }}</h1>
+    <p class="mt-2 text-content-muted">{{ example().description }}</p>
+  </header>
+
+  <app-tabs class="documentation-tabs" [tabs]="pageTabs" [(selectedTab)]="selectedPageTab">
+    <ng-template appTabPanel="examples">
+      <div class="space-y-8 pt-6">
+        @for (item of example().examples; track item.id) {
+          <section class="overflow-hidden border-b border-border bg-surface">
+            <div class="border-b border-border px-5 py-4">
+              <h2 class="font-semibold">{{ item.title }}</h2>
+            </div>
+            <div
+              class="flex gap-1 border-b border-border px-4 pt-3"
+              role="tablist"
+              [attr.aria-label]="item.title + ' Beispiel'"
+            >
+              <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="tabFor(item.id) === 'preview'"
+                (click)="setTab(item.id, 'preview')"
+                class="rounded-t-control px-4 py-2 text-xs font-semibold tracking-wide"
+                [class.bg-canvas]="tabFor(item.id) === 'preview'"
+              >
+                VORSCHAU
+              </button>
+              <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="tabFor(item.id) === 'html'"
+                (click)="setTab(item.id, 'html')"
+                class="rounded-t-control px-4 py-2 text-xs font-semibold tracking-wide"
+                [class.bg-canvas]="tabFor(item.id) === 'html'"
+              >
+                HTML
+              </button>
+              <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="tabFor(item.id) === 'typescript'"
+                (click)="setTab(item.id, 'typescript')"
+                class="rounded-t-control px-4 py-2 text-xs font-semibold tracking-wide"
+                [class.bg-canvas]="tabFor(item.id) === 'typescript'"
+              >
+                TYPESCRIPT
+              </button>
+            </div>
+
+            @if (tabFor(item.id) === 'preview') {
+              <div class="min-h-40 space-y-4 p-6 sm:p-8">
+                @switch (slug().get('slug')) {
+                  @case ('button') {
+                    @switch (item.id) {
+                      @case ('primary') {
+                        <button appButton type="button" (click)="toast.show('Gespeichert')">
+                          Speichern
+                        </button>
+                      }
+                      @case ('variants') {
+                        <div class="flex flex-wrap gap-3">
+                          <button appButton>Primär</button
+                          ><button appButton variant="secondary">Sekundär</button
+                          ><button appButton variant="ghost">Ghost</button
+                          ><button appButton variant="link">Link</button
+                          ><button appButton variant="danger">Gefahr</button>
+                        </div>
+                      }
+                      @case ('sizes') {
+                        <div class="flex flex-wrap items-center gap-3">
+                          <button appButton size="small" variant="secondary">Klein</button
+                          ><button appButton size="medium" variant="secondary">Mittel</button
+                          ><button appButton size="large" variant="secondary">Groß</button>
+                        </div>
+                      }
+                      @case ('icon') {
+                        <div class="flex flex-wrap gap-3">
+                          <button appButton icon="plus">Hinzufügen</button
+                          ><button appButton icon="arrow-right" iconPosition="end">Weiter</button>
+                        </div>
+                      }
+                      @case ('states') {
+                        <div class="flex gap-3">
+                          <button appButton [disabled]="true">Nicht verfügbar</button
+                          ><button appButton [active]="true">Ausgewählt</button>
+                        </div>
+                      }
+                    }
+                  }
+                  @case ('text-field') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-text-field label="Vorname" [(value)]="firstName" />
+                      }
+                      @case ('hint') {
+                        <app-text-field
+                          label="E-Mail"
+                          hint="Wir verwenden die Adresse nur für Rückfragen."
+                        />
+                      }
+                      @case ('changed') {
+                        <app-text-field
+                          label="Name"
+                          value="Neuer Name"
+                          initialValue="Alter Name"
+                          [changed]="true"
+                          previousValueLabel="Wert vorher"
+                        />
+                      }
+                      @case ('error') {
+                        <app-text-field
+                          label="Name"
+                          [value]="name()"
+                          [invalid]="true"
+                          [touched]="true"
+                          [errors]="nameErrors"
+                        />
+                      }
+                      @case ('disabled') {
+                        <app-text-field label="Kundennummer" value="K-1042" [disabled]="true" />
+                      }
+                      @case ('readonly') {
+                        <app-text-field label="E-Mail" value="alex@example.com" [readonly]="true" />
+                      }
+                      @case ('prefix') {
+                        <app-text-field label="Betrag" prefix="€" />
+                      }
+                    }
+                  }
+                  @case ('textarea') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-textarea label="Notiz" [(value)]="note" />
+                      }
+                      @case ('hint') {
+                        <app-textarea
+                          label="Kommentar"
+                          hint="Maximal 255 Zeichen."
+                          [maxLength]="255"
+                        />
+                      }
+                      @case ('changed') {
+                        <app-textarea
+                          label="Beschreibung"
+                          value="Aktuelle Fassung"
+                          initialValue="Vorherige Fassung"
+                          [changed]="true"
+                        />
+                      }
+                      @case ('error') {
+                        <app-textarea
+                          label="Kommentar"
+                          [value]="comment()"
+                          [invalid]="true"
+                          [touched]="true"
+                          [errors]="commentErrors"
+                        />
+                      }
+                      @case ('disabled') {
+                        <div class="grid gap-4 md:grid-cols-2">
+                          <app-textarea
+                            label="Archivnotiz"
+                            value="Abgeschlossen"
+                            [disabled]="true"
+                          /><app-textarea label="Protokoll" value="Nur lesbar" [readonly]="true" />
+                        </div>
+                      }
+                    }
+                  }
+                  @case ('select') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-select label="Status" [options]="statuses" [(value)]="status" />
+                      }
+                      @case ('search') {
+                        <app-select
+                          label="Depot"
+                          [options]="depots"
+                          [(value)]="depot"
+                          [searchable]="true"
+                        />
+                      }
+                      @case ('hint') {
+                        <app-select
+                          label="Depot"
+                          [options]="depots"
+                          hint="Bitte ein bevorzugtes Depot wählen."
+                        />
+                      }
+                      @case ('changed') {
+                        <app-select
+                          label="Depot"
+                          [options]="depots"
+                          value="d1"
+                          initialValue="d2"
+                          [changed]="true"
+                        />
+                      }
+                      @case ('error') {
+                        <app-select
+                          label="Depot"
+                          [options]="depots"
+                          [invalid]="true"
+                          [touched]="true"
+                          [errors]="feedbackErrors"
+                        />
+                      }
+                      @case ('disabled') {
+                        <div class="grid gap-4 md:grid-cols-2">
+                          <app-select
+                            label="Status"
+                            [options]="statuses"
+                            value="active"
+                            [disabled]="true"
+                          /><app-select
+                            label="Typ"
+                            [options]="statuses"
+                            value="archived"
+                            [readonly]="true"
+                          />
+                        </div>
+                      }
+                    }
+                  }
+                  @case ('multi-select') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-multi-select
+                          label="Teams"
+                          [options]="teams"
+                          [(value)]="selectedTeams"
+                        />
+                      }
+                      @case ('search') {
+                        <app-multi-select
+                          label="Depots"
+                          [options]="depots"
+                          [searchable]="true"
+                          [maxDisplayedValues]="2"
+                        />
+                      }
+                      @case ('hint') {
+                        <app-multi-select
+                          label="Teams"
+                          [options]="teams"
+                          hint="Mehrere Teams können gewählt werden."
+                        />
+                      }
+                      @case ('changed') {
+                        <app-multi-select
+                          label="Teams"
+                          [options]="teams"
+                          [value]="['a', 'b']"
+                          [initialValue]="['a']"
+                          [changed]="true"
+                        />
+                      }
+                      @case ('error') {
+                        <app-multi-select
+                          label="Teams"
+                          [options]="teams"
+                          [invalid]="true"
+                          [touched]="true"
+                          [errors]="feedbackErrors"
+                        />
+                      }
+                      @case ('disabled') {
+                        <div class="grid gap-4 md:grid-cols-2">
+                          <app-multi-select
+                            label="Teams"
+                            [options]="teams"
+                            [value]="['a']"
+                            [disabled]="true"
+                          /><app-multi-select
+                            label="Rollen"
+                            [options]="teams"
+                            [value]="['b']"
+                            [readonly]="true"
+                          />
+                        </div>
+                      }
+                    }
+                  }
+                  @case ('tabs') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-tabs [tabs]="tabs" [(selectedTab)]="activeTab"
+                          ><ng-template appTabPanel="general">Allgemeine Einstellungen</ng-template
+                          ><ng-template appTabPanel="details">Details</ng-template></app-tabs
+                        >
+                      }
+                      @case ('disabled') {
+                        <app-tabs [tabs]="disabledTabs" [(selectedTab)]="activeTab"
+                          ><ng-template appTabPanel="general"
+                            >Allgemeine Einstellungen</ng-template
+                          ></app-tabs
+                        >
+                      }
+                      @case ('keyboard') {
+                        <app-tabs
+                          [tabs]="tabs"
+                          [(selectedTab)]="activeTab"
+                          selectionMode="explicit"
+                          orientation="vertical"
+                          ><ng-template appTabPanel="general">Allgemeine Einstellungen</ng-template
+                          ><ng-template appTabPanel="details">Details</ng-template></app-tabs
+                        >
+                      }
+                    }
+                  }
+                  @case ('stepper') {
+                    @switch (item.id) {
+                      @case ('first') {
+                        <app-stepper [steps]="steps" current="file" [completed]="[]" />
+                      }
+                      @case ('progress') {
+                        <app-stepper
+                          [steps]="steps"
+                          current="group"
+                          [completed]="['file', 'review']"
+                        />
+                      }
+                    }
+                  }
+                  @case ('file-picker') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-file-picker
+                          label="CSV-Datei"
+                          [(value)]="file"
+                          accept=".csv,text/csv"
+                          [maxBytes]="1048576"
+                        />
+                      }
+                      @case ('disabled') {
+                        <app-file-picker label="Importdatei" [disabled]="true" />
+                      }
+                      @case ('types') {
+                        <app-file-picker
+                          label="Dokument"
+                          accept=".pdf,application/pdf"
+                          [maxBytes]="5242880"
+                        />
+                      }
+                    }
+                  }
+                  @case ('data-table-toolbar') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-data-table-toolbar (apply)="applyFilters()" (reset)="resetFilters()">
+                          <div data-table-searches>
+                            <app-text-field label="Suche" [(value)]="query" />
+                          </div>
+                          <span data-table-summary>12 Einträge</span>
+                          <button data-table-actions appButton type="button">Neu</button>
+                        </app-data-table-toolbar>
+                      }
+                      @case ('no-reset') {
+                        <app-data-table-toolbar [showReset]="false" [applyDisabled]="!hasChanges()">
+                          <div data-table-searches>
+                            <app-text-field label="Suche" />
+                          </div>
+                        </app-data-table-toolbar>
+                      }
+                      @case ('multiple') {
+                        <app-data-table-toolbar>
+                          <div data-table-searches class="flex flex-wrap items-end gap-3">
+                            <app-text-field label="Name" />
+                            <app-select label="Status" [options]="statuses" />
+                          </div>
+                        </app-data-table-toolbar>
+                      }
+                    }
+                  }
+                  @case ('data-table') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-data-table
+                          [rows]="rows"
+                          [columns]="columns"
+                          [pagination]="false"
+                          caption="Kontakte"
+                        />
+                      }
+                      @case ('sorting') {
+                        <app-data-table
+                          [rows]="sortedRows()"
+                          [columns]="sortableColumns"
+                          [pagination]="false"
+                          [sort]="sort()"
+                          [direction]="direction()"
+                          (sortChange)="sortBy($event)"
+                          caption="Sortierbare Kontakte"
+                        />
+                      }
+                      @case ('pagination') {
+                        <app-data-table
+                          [rows]="pageRows()"
+                          [columns]="columns"
+                          [total]="3"
+                          [totalPages]="3"
+                          [pageSize]="1"
+                          [page]="page()"
+                          (pageChange)="page.set($event)"
+                          caption="Kontakte mit Pagination"
+                        />
+                      }
+                      @case ('empty') {
+                        <app-data-table
+                          [rows]="[]"
+                          [columns]="columns"
+                          emptyMessage="Keine passenden Einträge."
+                          caption="Leere Tabelle"
+                        />
+                      }
+                      @case ('loading') {
+                        <app-data-table
+                          [rows]="[]"
+                          [columns]="columns"
+                          [loading]="true"
+                          caption="Ladende Tabelle"
+                        />
+                      }
+                      @case ('table-error') {
+                        <app-data-table
+                          [rows]="[]"
+                          [columns]="columns"
+                          error="Die Daten konnten nicht geladen werden."
+                          caption="Fehlerhafte Tabelle"
+                        />
+                      }
+                      @case ('selection') {
+                        <app-data-table
+                          [rows]="people"
+                          [columns]="selectableColumns"
+                          [pagination]="false"
+                          [trackBy]="trackPerson"
+                          caption="Einzelauswahl"
+                        >
+                          <ng-template appDataTableCell="select" let-row>
+                            <input
+                              type="checkbox"
+                              [attr.aria-label]="row.name + ' auswählen'"
+                              [checked]="selectedIds().includes(row.id)"
+                              [disabled]="row.disabled"
+                              (change)="togglePerson(row, $event)"
+                            />
+                          </ng-template>
+                        </app-data-table>
+                      }
+                    }
+                  }
+                  @case ('data-table-combined') {
+                    <app-data-table-toolbar
+                      (apply)="applyCombinedFilters()"
+                      (reset)="resetCombinedFilters()"
+                    >
+                      <div data-table-searches>
+                        <app-text-field label="Suche" [(value)]="combinedQuery" />
+                      </div>
+                      <div data-table-filters>
+                        <app-select
+                          label="Rolle"
+                          [options]="roleOptions"
+                          [(value)]="combinedRole"
+                        />
+                      </div>
+                      <span data-table-summary>{{ filteredContacts().length }} Treffer</span>
+                    </app-data-table-toolbar>
+                    <app-data-table
+                      [rows]="filteredContacts()"
+                      [columns]="columns"
+                      [pagination]="false"
+                      [framed]="false"
+                      caption="Gefilterte Kontakte"
+                    />
+                  }
+                  @case ('inline-message') {
+                    @switch (item.id) {
+                      @case ('info') {
+                        <app-inline-message severity="info" title="Hinweis"
+                          >Weitere Informationen.</app-inline-message
+                        >
+                      }
+                      @case ('success') {
+                        <app-inline-message severity="success" title="Gespeichert"
+                          >Die Änderungen wurden übernommen.</app-inline-message
+                        >
+                      }
+                      @case ('warning') {
+                        <app-inline-message severity="warning" title="Achtung"
+                          >Bitte die Auswirkungen prüfen.</app-inline-message
+                        >
+                      }
+                      @case ('error') {
+                        <app-inline-message severity="error"
+                          >Die Anfrage konnte nicht abgeschlossen werden.</app-inline-message
+                        >
+                      }
+                    }
+                  }
+                  @case ('diff-view') {
+                    @switch (item.id) {
+                      @case ('changed') {
+                        <app-diff-view [entries]="changes" />
+                      }
+                      @case ('added') {
+                        <app-diff-view [entries]="addedChanges" />
+                      }
+                      @case ('removed') {
+                        <app-diff-view [entries]="removedChanges" />
+                      }
+                      @case ('labels') {
+                        <app-diff-view
+                          [entries]="changes"
+                          beforeLabel="Aktuell"
+                          afterLabel="Vorgeschlagen"
+                        />
+                      }
+                      @case ('unchanged') {
+                        <app-diff-view [entries]="unchangedChanges" />
+                      }
+                    }
+                  }
+                  @case ('side-drawer') {
+                    <button appButton type="button" (click)="drawerOpen.set(true)">
+                      Drawer öffnen
+                    </button>
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <app-side-drawer [(open)]="drawerOpen" title="Details"
+                          ><p>Ergänzende Informationen.</p></app-side-drawer
+                        >
+                      }
+                      @case ('form') {
+                        <app-side-drawer [(open)]="drawerOpen" title="Bearbeiten"
+                          ><app-text-field label="Name" />
+                          <div dialog-footer>
+                            <button appButton>Speichern</button>
+                          </div></app-side-drawer
+                        >
+                      }
+                      @case ('close') {
+                        <app-side-drawer
+                          [(open)]="drawerOpen"
+                          title="Hinweis"
+                          [closeOnEscape]="false"
+                          [closeOnBackdrop]="false"
+                          >Schließen über die Aktion im Drawer.</app-side-drawer
+                        >
+                      }
+                    }
+                  }
+                  @case ('modal') {
+                    @switch (item.id) {
+                      @case ('basic') {
+                        <button appButton type="button" (click)="basicModalOpen.set(true)">
+                          Dialog öffnen
+                        </button>
+                        <app-modal [(open)]="basicModalOpen" title="Information"
+                          >Weitere Informationen.</app-modal
+                        >
+                      }
+                      @case ('form') {
+                        <button appButton type="button" (click)="formModalOpen.set(true)">
+                          Dialog öffnen
+                        </button>
+                        <app-modal [(open)]="formModalOpen" title="Bearbeiten">
+                          <app-text-field label="Name" />
+                          <div dialog-footer class="mt-5 flex justify-end">
+                            <button appButton>Übernehmen</button>
+                          </div>
+                        </app-modal>
+                      }
+                      @case ('close') {
+                        <button appButton type="button" (click)="closeModalOpen.set(true)">
+                          Dialog öffnen
+                        </button>
+                        <app-modal
+                          [(open)]="closeModalOpen"
+                          title="Aktion läuft"
+                          [closeOnEscape]="false"
+                          [closeOnBackdrop]="false"
+                          >Bitte warten…</app-modal
+                        >
+                      }
+                    }
+                  }
+                  @case ('toast') {
+                    @switch (item.id) {
+                      @case ('success') {
+                        <button
+                          appButton
+                          type="button"
+                          (click)="toast.show('Änderungen gespeichert')"
+                        >
+                          Speichern
+                        </button>
+                      }
+                      @case ('multiple') {
+                        <button appButton type="button" (click)="showMultipleToasts()">
+                          Meldungen anzeigen
+                        </button>
+                      }
+                    }
+                    <app-toast-outlet />
+                  }
+                }
+              </div>
+            } @else {
+              <div
+                class="flex items-center justify-between border-b border-border bg-canvas px-5 py-2"
+              >
+                <span class="text-xs font-medium text-content-muted">{{
+                  tabFor(item.id) === 'html' ? 'HTML' : 'TYPESCRIPT'
+                }}</span>
+                <div class="flex items-center gap-3">
+                  <span class="text-xs text-content-muted" role="status" aria-live="polite">{{
+                    copyStatuses()[item.id] ?? ''
+                  }}</span>
+                  <button
+                    appButton
+                    type="button"
+                    size="small"
+                    variant="secondary"
+                    (click)="copyCode(item)"
+                  >
+                    Code kopieren
+                  </button>
+                </div>
+              </div>
+              <pre
+                class="min-h-40 overflow-x-auto bg-[#edf2f7] p-6 text-sm leading-7 text-content-secondary"
+                style="font-family: Consolas, 'Liberation Mono', Menlo, monospace; tab-size: 2"
+              ><code style="font-family: inherit" [innerHTML]="highlightedCode(item)"></code></pre>
+            }
+          </section>
+        }
+      </div>
+    </ng-template>
+    <ng-template appTabPanel="api">
+      @if (api(); as documentation) {
+        <div class="space-y-6 pt-6">
+          @if (documentation.notes) {
+            <p class="text-sm text-content-muted">{{ documentation.notes }}</p>
+          }
+          @for (
+            group of [
+              { title: 'Inputs und Models', entries: documentation.inputs },
+              { title: 'Outputs', entries: documentation.outputs },
+              { title: 'Content und Direktiven', entries: documentation.slots },
+              { title: 'Methoden', entries: documentation.methods },
+            ];
+            track group.title
+          ) {
+            @if (group.entries?.length) {
+              <section class="overflow-hidden border-b border-border bg-surface">
+                <h2 class="border-b border-border px-5 py-4 font-semibold">{{ group.title }}</h2>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left text-sm">
+                    <thead class="bg-canvas text-xs text-content-muted">
+                      <tr>
+                        <th scope="col" class="px-5 py-3">Name</th>
+                        <th scope="col" class="px-5 py-3">Typ</th>
+                        <th scope="col" class="px-5 py-3">Standard</th>
+                        <th scope="col" class="px-5 py-3">Beschreibung</th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-border">
+                      @for (entry of group.entries; track entry.name) {
+                        <tr>
+                          <th scope="row" class="px-5 py-3 font-medium">
+                            <code>{{ entry.name }}</code>
+                          </th>
+                          <td class="px-5 py-3">
+                            <code>{{ entry.type }}</code>
+                          </td>
+                          <td class="px-5 py-3">
+                            <code>{{ entry.defaultValue }}</code>
+                          </td>
+                          <td class="px-5 py-3 text-content-secondary">{{ entry.description }}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            }
+          }
+        </div>
+      }
+    </ng-template>
+    <ng-template appTabPanel="source">
+      <section class="space-y-4 pt-6" aria-label="Komponentenquellcode">
+        <p class="text-sm text-content-muted">
+          Originaldateien der Komponente; Inline-Templates stehen in der TypeScript-Datei.
+        </p>
+        <div class="flex flex-wrap gap-2" aria-label="Quelldatei auswählen">
+          @for (file of sourceFiles(); track file) {
+            <button
+              appButton
+              type="button"
+              size="small"
+              variant="secondary"
+              [active]="currentSource() === file"
+              [attr.aria-pressed]="currentSource() === file"
+              (click)="selectSource(file)"
+            >
+              {{ file }}
+            </button>
+          }
+        </div>
+        <div
+          class="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-canvas px-5 py-3"
+        >
+          <span class="text-sm font-medium">{{ currentSource() }}</span>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-content-muted" role="status" aria-live="polite">{{
+              sourceCopyStatus()
+            }}</span>
+            <button
+              appButton
+              type="button"
+              size="small"
+              variant="secondary"
+              [disabled]="sourceLoading() || !!sourceError()"
+              (click)="copySource()"
+            >
+              Code kopieren
+            </button>
+          </div>
+        </div>
+        @if (sourceLoading()) {
+          <p class="text-sm text-content-muted" role="status">Quellcode wird geladen…</p>
+        } @else if (sourceError()) {
+          <p class="text-sm text-danger" role="alert">{{ sourceError() }}</p>
+        } @else {
+          <pre
+            class="max-h-[70vh] overflow-auto whitespace-pre-wrap break-words bg-[#edf2f7] p-6 text-sm leading-7 text-content-secondary"
+            style="font-family: Consolas, 'Liberation Mono', Menlo, monospace; tab-size: 2"
+          ><code [innerHTML]="highlightedSource()"></code></pre>
+        }
+      </section>
+    </ng-template>
+  </app-tabs>
+</div>

@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DataTableCellDirective } from './data-table-cell.directive';
+import { DataTableHeaderDirective } from './data-table-header.directive';
 import { DataTableColumn, DataTableComponent } from './data-table';
 
 interface DemoRow {
@@ -9,7 +10,7 @@ interface DemoRow {
 }
 
 @Component({
-  imports: [DataTableCellDirective, DataTableComponent],
+  imports: [DataTableCellDirective, DataTableHeaderDirective, DataTableComponent],
   template: `
     <app-data-table
       [rows]="rows()"
@@ -26,6 +27,7 @@ interface DemoRow {
       <ng-template appDataTableCell="name" let-row>
         <strong>{{ row.name }}</strong>
       </ng-template>
+      <ng-template appDataTableHeader="custom"><span>Eigener Spaltenkopf</span></ng-template>
     </app-data-table>
   `,
 })
@@ -36,10 +38,39 @@ class DataTableHostComponent {
   readonly trackRow = (row: DemoRow): number => row.id;
   readonly columns: readonly DataTableColumn<DemoRow>[] = [
     { key: 'name', header: 'Name', value: (row) => row.name, sortable: true },
+    { key: 'custom', header: 'Fallback', value: () => '' },
   ];
 }
 
 describe('DataTableComponent', () => {
+  it('can hide all paging controls for local lists and comparisons', () => {
+    const fixture = TestBed.createComponent(DataTableComponent);
+    fixture.componentRef.setInput('rows', []);
+    fixture.componentRef.setInput('columns', [{ key: 'name', header: 'Name', value: () => '' }]);
+    fixture.componentRef.setInput('pagination', false);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('footer')).toBeNull();
+    expect(fixture.nativeElement.querySelector('table')).not.toBeNull();
+  });
+
+  it('emits first and last page targets', () => {
+    const fixture = TestBed.createComponent(DataTableComponent);
+    fixture.componentRef.setInput('rows', []);
+    fixture.componentRef.setInput('columns', []);
+    fixture.componentRef.setInput('page', 2);
+    fixture.componentRef.setInput('totalPages', 10);
+    fixture.detectChanges();
+    const pages: number[] = [];
+    fixture.componentInstance.pageChange.subscribe((page) => pages.push(page));
+    (
+      fixture.nativeElement.querySelector('[aria-label="Erste Seite"]') as HTMLButtonElement
+    ).click();
+    (
+      fixture.nativeElement.querySelector('[aria-label="Letzte Seite"]') as HTMLButtonElement
+    ).click();
+    expect(pages).toEqual([0, 9]);
+  });
+
   it('renders projected cells and emits sorting and pagination events', async () => {
     await TestBed.configureTestingModule({ imports: [DataTableHostComponent] }).compileComponents();
 
@@ -47,6 +78,10 @@ describe('DataTableComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('strong')?.textContent).toBe('First row');
+    expect(fixture.nativeElement.querySelector('thead').textContent).toContain(
+      'Eigener Spaltenkopf',
+    );
+    expect(fixture.nativeElement.querySelector('thead').textContent).not.toContain('Fallback');
     expect(
       fixture.nativeElement.querySelectorAll(
         'button[aria-current="page"], nav button[aria-label^="Seite "]',

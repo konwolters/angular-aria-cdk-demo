@@ -51,8 +51,8 @@ Vorrang. So kann eine Versionsansicht exakt die vom Änderungsprotokoll geliefer
 Die automatische Erkennung zeigt ein Badge nur dann, wenn der ursprüngliche Wert nicht leer ist;
 bei leeren Ausgangswerten kann die Historie `changed` explizit setzen.
 
-`readonly` verhindert die Bearbeitung und Fokussierung, zeigt die Felder grau hinterlegt und setzt
-den Mauszeiger auf „nicht erlaubt“. Die Selects bleiben auch bei Tastatur- und Mausklicks geschlossen.
+`readonly` verhindert die Bearbeitung und Fokussierung. Textfelder und Textareas behalten dabei die
+native Readonly-Semantik (nicht `disabled`). Die Selects bleiben geschlossen.
 
 Für den Zusatztext unter dem Feld ist `previousValueLabel` frei wählbar. Standard ist `Wert vorher`;
 mit `previousValueLabel="Version 3"` erscheint `Version 3: <ursprünglicher Wert>`. Das Badge kann
@@ -201,7 +201,12 @@ readonly departments: readonly SelectOption[] = [
 />
 ```
 
-`SelectOption` hat `value: string`, `label: string` und optional `disabled: boolean`.
+`SelectOption` hat `value: string`, `label: string` und optional `disabled: boolean` und
+`shortLabel: string` (Kurztext für die Multi-Select-Zusammenfassung).
+
+Mit `[searchable]="true"` wird der Select zur durchsuchbaren Einzelauswahl. Suchtext und
+ausgewählter Wert sind getrennt: Freitext wird nicht als Wert übernommen.
+`emptyMessage` definiert den Leerzustand (Standard `Keine Treffer`).
 
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
@@ -229,14 +234,15 @@ Seitengrößenauswahl der Tabelle verwendet denselben Select.
 
 Import: `frontend/src/app/shared/multi-select/multi-select.ts`
 
-Multi-Select mit Angular Aria und optionaler Suche. Im Gegensatz zu `app-select` ist `selected` ein
-Array und die Komponente verwendet ein Model-Binding statt `FormValueControl`.
+Multi-Select mit Angular Aria und optionaler Suche. `value` ist ein Array technischer Werte;
+die Komponente implementiert `FormValueControl<string[]>` und unterstützt `[formField]`.
+Die bisherige `selected`-API wurde durch `value` ersetzt; alle Demo-Aufrufer sind migriert.
 
 ```html
 <app-multi-select
   label="Servicebereiche"
   [options]="serviceAreas"
-  [(selected)]="selectedAreas"
+  [(value)]="selectedAreas"
   [searchable]="true"
   [maxDisplayedValues]="1"
 />
@@ -248,7 +254,7 @@ Versionsansicht:
 <app-multi-select
   label="Servicebereiche"
   [options]="serviceAreas"
-  [selected]="currentAreas()"
+  [value]="currentAreas()"
   [initialValue]="previousAreas()"
   [changed]="changedFields().has('serviceAreas')"
   [readonly]="true"
@@ -259,8 +265,8 @@ Versionsansicht:
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `label` | `string` | erforderlich | Sichtbares Label und zugänglicher Name |
-| `options` | `readonly string[]` | `[]` | Mögliche Werte |
-| `selected` | `ModelSignal<string[]>` | `[]` | Ausgewählte Werte; mit `[(selected)]` zweiseitig bindbar |
+| `options` | `readonly (string \| SelectOption)[]` | `[]` | Werte und Labels; Strings bleiben als Kurzform unterstützt |
+| `value` | `ModelSignal<string[]>` | `[]` | Ausgewählte technische Werte, zweiseitig bindbar und Signal-Forms-kompatibel |
 | `searchable` | `boolean` | `false` | Zeigt ein Suchfeld im Auslöser |
 | `maxDisplayedValues` | `number` | `2` | Maximale Inline-Anzahl; danach wird die Auswahl zusammengefasst |
 | `labelSize` | `small \| medium` | `small` | Größe des Labels |
@@ -269,6 +275,10 @@ Versionsansicht:
 | `changedLabel` | `string` | `GEÄNDERT` | Badge neben dem Label |
 | `previousValueLabel` | `string` | `Wert vorher` | Text vor den ursprünglichen Werten |
 | `readonly` | `boolean` | `false` | Verhindert Öffnen und Ändern |
+
+Zusätzlich: `placeholder` (Standard `Alle`), `disabled`, `required`, `invalid`, `touched`,
+`errors` und `touch`, analog zum Single-Select. `shortLabel` wird nur in der kompakten
+Auswahlzusammenfassung verwendet; das vollständige Label bleibt für die zugängliche Benennung erhalten.
 
 ## `app-icon`
 
@@ -321,10 +331,14 @@ einem Suchfeld ebenfalls die Suche aus.
 | Input / Output | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `resetLabel` | `string` | `Zurücksetzen` | Text der Reset-Schaltfläche |
+| `showReset` | `boolean` | `true` | Zeigt die Reset-Schaltfläche |
+| `applyDisabled` | `boolean` | `false` | Deaktiviert die Suchaktion |
 | `apply`, `reset` | `Output<void>` | — | Suche übernehmen bzw. Filter zurücksetzen |
 
 Suchfelder und Filter werden über Content Projection mit `data-table-searches` bzw.
-`data-table-filters` eingesetzt. Die Toolbar löst Aktionen aus, verwaltet aber keine Feldwerte.
+`data-table-filters` eingesetzt. `data-table-summary` nimmt Treffer-/Auswahlzahlen auf,
+`data-table-actions` weitere Schaltflächen (immer `type="button"`, sofern sie nicht suchen sollen).
+Die Toolbar löst Aktionen aus, verwaltet aber keine Feldwerte.
 
 ## `app-data-table`
 
@@ -377,6 +391,7 @@ Spaltenschlüssel einer Spalte zu. Im Template ist die Zeile über `let-row` ver
 | `rows` | `readonly T[]` | erforderlich | Aktuelle Tabellenzeilen |
 | `columns` | `readonly DataTableColumn<T>[]` | erforderlich | Spaltendefinitionen |
 | `framed` | `boolean` | `true` | Zeigt Rahmen und Kartenhintergrund |
+| `pagination` | `boolean` | `true` | Zeigt Paging und Ergebniszähler; für lokale Detail-/Vergleichslisten abschaltbar |
 | `total` | `number` | `0` | Gesamtzahl aller gefilterten Zeilen |
 | `totalPages` | `number` | `0` | Anzahl der Seiten |
 | `page` | `number` | `0` | Aktuelle nullbasierte Seite; `0` ist die erste Seite |
@@ -400,6 +415,12 @@ den einfachen Textwert; für formatierte Zellen kann `appDataTableCell` verwende
 Die Tabelle verwendet ein festes Layout, sodass sich Spaltenbreiten nicht mit den geladenen
 Zellinhalten ändern. Ihre Breiten werden im verfügbaren Tabellenraum gleichmäßig verteilt.
 
+Paging umfasst erste, vorherige, nummerierte, nächste und letzte Seite.
+Mit `ng-template[appDataTableHeader]="spaltenschlüssel"` lassen sich eigene Header projizieren
+(Import: `shared/data-table/data-table-header.directive`). Ein eigener Header ersetzt auch den
+eingebauten Sortierbutton der Spalte. Zeilenauswahl ist über Zelltemplates möglich;
+die Auswahl über stabile IDs gehört der aufrufenden Komponente.
+
 ### Server-Abfrage
 
 `ServerTableService.search<T>(endpoint, query)` akzeptiert die API-URL und ein
@@ -420,8 +441,7 @@ Abfrage bleibt der letzte geladene Tabellenwert sichtbar.
 
 ## `app-modal`
 
-Ein zentrierter Dialog mit Content Projection, Fokusfalle, Escape-Schließen und Schließen per
-Backdrop-Klick.
+Ein zentrierter CDK-Dialog mit Content Projection, Fokusverwaltung und Fokuswiederherstellung.
 
 Import: `frontend/src/app/shared/modal/modal.ts`
 
@@ -438,8 +458,7 @@ Import: `frontend/src/app/shared/modal/modal.ts`
 
 ## `app-side-drawer`
 
-Ein von rechts einfahrender Dialogbereich mit Content Projection, Fokusfalle, Escape-Schließen und
-Schließen per Backdrop-Klick.
+Ein rechts angeordneter CDK-Dialogbereich mit Content Projection und Fokusverwaltung.
 
 Import: `frontend/src/app/shared/side-drawer/side-drawer.ts`
 
@@ -484,6 +503,79 @@ readonly selectedTab = signal('overview');
 | `selectedTab` | `ModelSignal<string>` | erforderlich | Aktiver Tab; mit `[(selectedTab)]` zweiseitig bindbar |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Ausrichtung der Tab-Leiste |
 | `selectionMode` | `'follow' \| 'explicit'` | `'follow'` | Auswahl bei Tastaturfokus oder expliziter Aktivierung |
+
+## Gemeinsames Feldfeedback
+
+`TextField`, `Textarea`, `Select` und `MultiSelect` unterstützen `hint` und `hideLabel`.
+Das Label bleibt bei `hideLabel` für assistive Technik vorhanden. Hinweise und Fehlermeldungen
+werden über eine pro Instanz eindeutige `aria-describedby`-ID mit dem Control verbunden.
+Fehler erscheinen bei `invalid && touched`, nicht in Readonly-Ansichten. Feld- und Serverfehler
+werden über `errors` als Angular-Validierungsfehler mit `message` geliefert; fachliche Prüfungen
+bleiben außerhalb der Controls. Zusätzliche manuelle Fehlerlisten am einzelnen Control sind nicht nötig.
+
+`TextField` und `Textarea` unterstützen `maxLength` (optional), auch aus Signal-Forms-Schemata.
+Eine Längenbegrenzung ersetzt keine Validierung auf dem Server.
+
+## Gemeinsame Dialogsteuerung
+
+`Modal` und `SideDrawer` unterstützen zusätzlich:
+
+| API | Standard | Bedeutung |
+| --- | --- | --- |
+| `closeOnEscape` | `true` | Escape als Schließanfrage zulassen |
+| `closeOnBackdrop` | `true` | Backdrop als Schließanfrage zulassen |
+| `closeOnRequest` | `true` | Nach Schließanfrage automatisch `open` auf `false` setzen |
+| `closeRequested` | Output | Grund: `escape`, `backdrop` oder `button` |
+| `[dialog-header]` | Projektionsbereich | Ergänzungen zum Titel |
+| `[dialog-footer]` | Projektionsbereich | Aktionen, beim Drawer getrennt vom scrollenden Inhalt |
+
+Mit `[closeOnRequest]="false"` kann die aufrufende Komponente Schließanfragen selbst behandeln.
+Nur das oberste Dialogfenster
+behandelt Schließanfragen. Programmatisches `open.set(false)` schließt ohne Anfrage.
+Die strukturellen CDK-Overlay-Styles werden in `src/styles.scss` eingebunden.
+
+## Neue Workflow-Bausteine
+
+Interaktive Beispiele unter `/components` (Navigation: **Komponenten**).
+
+### `app-file-picker`
+
+Import: `shared/file-picker/file-picker.ts`. Einzeldatei über natives Dateifeld oder Drag-and-drop.
+`value` ist `File | null` als Model; `label` ist standardmäßig `Datei`, `accept` ist standardmäßig
+`.csv,text/csv`, `maxBytes` standardmäßig 10 MiB, `disabled` standardmäßig `false`.
+`rejected` liefert eine verständliche Fehlermeldung. Bei Ablehnung bleibt eine bereits gültige
+Auswahl erhalten. `remove()` leert die Auswahl; dieselbe Datei kann erneut ausgewählt werden.
+Prüft Dateiname/MIME und Größe als Eingabehilfe, nicht den Dateiinhalt. Serverseitige Prüfung,
+CSV-Parsing und Upload implementiert die Anwendung. Kein Signal-Forms-Control.
+
+### `app-stepper`
+
+Import: `shared/stepper/stepper.ts`. Reine Fortschrittsanzeige mit erforderlichen `steps`
+(`readonly { value, label }[]`) und `current` (Schlüssel), optional `completed` (Schlüsselliste)
+und `label` (Standard `Fortschritt`). Der aktuelle Schritt hat `aria-current="step"`.
+Keine automatische Navigation und keine fachliche Validierung.
+
+### `app-inline-message`
+
+Import: `shared/inline-message/inline-message.ts`. `title` optional, `severity` ist
+`info | success | warning | error` (Standard `info`). Fehler werden mit `role="alert"`,
+andere Meldungen mit `role="status"` ausgezeichnet. Inhalt und `[message-actions]` sind projizierbar.
+
+### Toasts
+
+Import: `shared/toast/toast.ts`. Einmal `<app-toast-outlet />` im gewünschten Anwendungskontext
+platzieren. `inject(ToastService).show(text)` liefert eine ID, `dismiss(id)` entfernt genau diese
+Meldung. Meldungen werden höflich angekündigt und bleiben bis zum expliziten Schließen sichtbar.
+Die Demo platziert den Outlet auf der Komponentenseite; für anwendungsweite Meldungen in die Shell verschieben.
+
+### `app-diff-view`
+
+Import: `shared/diff-view/diff-view.ts`. Erforderliches `entries` ist eine Liste von
+`{ key, label, before: string | null, after: string | null, changed?: boolean }`.
+`null` bedeutet nicht vorhanden, `''` bedeutet vorhandener leerer Wert. Status: Neu, Entfernt,
+Geändert oder Unverändert. `changed` kann den Vergleich überschreiben. Optionale Inputs:
+`caption`, `beforeLabel` (Aktueller Stand), `afterLabel` (Beantragter Stand).
+Fachliche Formatierung und das Berechnen der Vergleichseinträge übernimmt die Anwendung.
 
 ## Styles und Tokens
 

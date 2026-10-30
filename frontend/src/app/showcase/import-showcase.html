@@ -1,0 +1,222 @@
+<section class="mx-auto max-w-7xl space-y-6">
+  <header>
+    <p class="text-xs font-semibold uppercase tracking-wider text-brand-strong">Showcase</p>
+    <h1 class="mt-2 text-2xl font-semibold tracking-tight">Datenimport</h1>
+    <p class="mt-1 text-sm text-content-muted">
+      Kontakte einlesen, prüfen und einem Depot zuordnen.
+    </p>
+  </header>
+
+  <app-stepper [steps]="steps" [current]="stage()" [completed]="completed()" />
+
+  @if (stage() === 'file') {
+    <section class="bg-surface">
+      <h2 class="text-lg font-semibold">Kontakte importieren</h2>
+      <p class="mt-1 text-sm text-content-muted">
+        CSV mit den Spalten „Name“ und „E-Mail“ auswählen. Komma oder Semikolon als Trennzeichen.
+      </p>
+      <div class="mt-5 max-w-2xl">
+        <app-file-picker
+          label="CSV-Datei"
+          [(value)]="file"
+          accept=".csv,text/csv"
+          [maxBytes]="10485760"
+          [disabled]="loading()"
+        />
+      </div>
+      @if (error()) {
+        <app-inline-message
+          class="mt-4"
+          severity="error"
+          title="Datei konnte nicht eingelesen werden"
+          >{{ error() }}</app-inline-message
+        >
+      }
+      <div class="mt-5 flex flex-wrap gap-3">
+        <button appButton type="button" [disabled]="!file() || loading()" (click)="loadFile()">
+          {{ loading() ? 'Wird eingelesen…' : 'Datei einlesen' }}
+        </button>
+        <button
+          appButton
+          type="button"
+          variant="secondary"
+          [disabled]="loading()"
+          (click)="useDemo()"
+        >
+          Mit Beispieldaten starten
+        </button>
+      </div>
+    </section>
+  } @else {
+    @if (stage() === 'done') {
+      <app-inline-message severity="success" title="Demo-Übernahme abgeschlossen">
+        Die ausgewählten Datensätze wurden für diese Sitzung als übernommen markiert. Weitere
+        Datensätze können weiterhin bearbeitet werden. Über „Details ansehen“ bleiben auch bereits
+        übernommene Datensätze mit ihren Tabs sichtbar.
+      </app-inline-message>
+    } @else {
+      <app-inline-message severity="info" title="Datensätze prüfen">
+        Öffne bei einem Datensatz „Details bearbeiten“: Dort findest du die Tabs für Stammdaten,
+        Zuordnung und Änderungen. Ergänze fehlende Angaben und ein Depot; nur vollständige
+        Datensätze lassen sich auswählen.
+      </app-inline-message>
+    }
+    <section class="bg-surface">
+      <div class="flex flex-wrap items-center justify-between gap-3 py-5">
+        <div>
+          <h2 class="text-lg font-semibold">Importübersicht</h2>
+          <p class="text-sm text-content-muted">
+            {{ rows().length }} Datensätze · {{ selected().length }} ausgewählt
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button appButton type="button" variant="secondary" (click)="reset()">
+            Neuer Import
+          </button>
+          <button
+            appButton
+            type="button"
+            [disabled]="selected().length === 0"
+            (click)="confirmOpen.set(true)"
+          >
+            Auswahl übernehmen
+          </button>
+        </div>
+      </div>
+      <app-data-table-toolbar (apply)="applyFilters()" (reset)="resetFilters()">
+        <div data-table-searches>
+          <app-text-field label="Suche" placeholder="Name oder E-Mail" [(value)]="query" />
+        </div>
+        <div data-table-filters>
+          <app-select label="Status" [options]="statuses" [(value)]="statusFilter" />
+        </div>
+      </app-data-table-toolbar>
+      <app-data-table
+        [framed]="false"
+        [rows]="pageRows()"
+        [columns]="columns"
+        [total]="filteredRows().length"
+        [totalPages]="totalPages()"
+        [page]="page()"
+        [pageSize]="pageSize()"
+        [sort]="sort()"
+        [direction]="direction()"
+        [trackBy]="trackRow"
+        caption="Importdatensätze"
+        emptyMessage="Keine passenden Datensätze gefunden."
+        (sortChange)="sortBy($event)"
+        (pageChange)="page.set($event)"
+        (pageSizeChange)="pageSize.set($event); page.set(0)"
+      >
+        <ng-template appDataTableCell="select" let-row>
+          <input
+            type="checkbox"
+            [attr.aria-label]="row.name + ' auswählen'"
+            [checked]="selected().includes(row.id)"
+            [disabled]="row.imported || !isValid(row)"
+            (change)="toggle(row, $event)"
+          />
+        </ng-template>
+        <ng-template appDataTableCell="actions" let-row>
+          <button appButton type="button" variant="link" size="small" (click)="edit(row)">
+            {{ row.imported ? 'Details ansehen' : 'Details bearbeiten' }}
+          </button>
+        </ng-template>
+      </app-data-table>
+    </section>
+  }
+</section>
+
+<app-side-drawer [(open)]="drawerOpen" title="Datensatz prüfen">
+  @if (editing(); as row) {
+    <p class="mt-2 text-sm text-content-muted">
+      @if (row.imported) {
+        Dieser Datensatz wurde bereits übernommen und ist nur lesbar.
+      } @else {
+        Änderungen gelten zunächst nur für diesen Demo-Import.
+      }
+    </p>
+    <div class="mt-5">
+      <app-tabs [tabs]="tabs" [(selectedTab)]="activeTab">
+        <ng-template appTabPanel="details">
+          <div class="space-y-4 pt-4">
+            <app-text-field
+              label="Name"
+              [(value)]="draftName"
+              [initialValue]="row.name"
+              [invalid]="!draftName().trim()"
+              [touched]="attempted()"
+              [errors]="nameErrors"
+              [readonly]="row.imported"
+            />
+            <app-text-field
+              label="E-Mail"
+              type="email"
+              [(value)]="draftEmail"
+              [initialValue]="row.email"
+              [invalid]="!validEmail(draftEmail())"
+              [touched]="attempted()"
+              [errors]="emailErrors"
+              [readonly]="row.imported"
+            />
+            <app-textarea
+              label="Notiz"
+              [(value)]="draftNote"
+              [initialValue]="row.note"
+              [readonly]="row.imported"
+            />
+          </div>
+        </ng-template>
+        <ng-template appTabPanel="assignment">
+          <div class="space-y-4 pt-4">
+            <app-select
+              label="Depot"
+              [options]="depots"
+              [(value)]="draftDepot"
+              [initialValue]="row.depot"
+              [readonly]="row.imported"
+              hint="Ein Depot ist für die Übernahme erforderlich."
+            />
+            @if (attempted() && !draftDepot()) {
+              <p class="text-sm text-danger" role="alert">Bitte ein Depot auswählen.</p>
+            }
+            <app-multi-select
+              label="Teams"
+              [options]="teams"
+              [(value)]="draftTeams"
+              [initialValue]="row.teams"
+              [readonly]="row.imported"
+              hint="Die Teamzuordnung ist optional."
+            />
+          </div>
+        </ng-template>
+        <ng-template appTabPanel="changes"
+          ><div class="pt-4">
+            <app-diff-view [entries]="changes()" beforeLabel="Vorher" afterLabel="Entwurf" /></div
+        ></ng-template>
+      </app-tabs>
+    </div>
+  }
+  <div dialog-footer class="mt-6 flex justify-end gap-2">
+    <button appButton type="button" variant="secondary" (click)="drawerOpen.set(false)">
+      Schließen
+    </button>
+    @if (!editing()?.imported) {
+      <button appButton type="button" (click)="save()">Änderungen übernehmen</button>
+    }
+  </div>
+</app-side-drawer>
+
+<app-modal [(open)]="confirmOpen" title="Auswahl übernehmen?">
+  <p class="mt-3 text-sm text-content-secondary">
+    {{ selected().length }} ausgewählte Datensätze werden in dieser Demo als übernommen markiert. Es
+    werden keine Daten übertragen.
+  </p>
+  <div dialog-footer class="mt-6 flex justify-end gap-2">
+    <button appButton type="button" variant="secondary" (click)="confirmOpen.set(false)">
+      Abbrechen
+    </button>
+    <button appButton type="button" (click)="confirm()">Übernehmen</button>
+  </div>
+</app-modal>
+<app-toast-outlet />

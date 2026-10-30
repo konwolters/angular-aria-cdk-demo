@@ -18,14 +18,14 @@
           <app-multi-select
             label="Bestellstatus"
             [options]="statusOptions"
-            [(selected)]="selectedStatuses"
+            [(value)]="selectedStatuses"
           />
         </div>
         <div>
           <app-multi-select
             label="Zahlungsart"
             [options]="paymentMethods"
-            [(selected)]="selectedPaymentMethods"
+            [(value)]="selectedPaymentMethods"
           />
         </div>
       </div>

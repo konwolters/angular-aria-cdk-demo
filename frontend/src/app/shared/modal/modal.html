@@ -1,27 +1,19 @@
-@if (open()) {
-  <div class="fixed inset-0 z-40 grid place-items-center bg-overlay p-4" (click)="close()">
-    <section
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
-      class="w-full max-w-md rounded-dialog border border-border bg-surface p-6"
-      cdkTrapFocus
-      [cdkTrapFocusAutoCapture]="true"
-      (click)="$event.stopPropagation()"
-    >
-      <div class="flex items-start justify-between">
-        <h2 id="modal-title" class="text-lg font-semibold">{{ title() }}</h2>
-        <button
-          appButton
-          type="button"
-          variant="ghost"
-          size="small"
-          icon="close"
-          aria-label="Dialog schließen"
-          (click)="close()"
-        ></button>
-      </div>
-      <ng-content />
-    </section>
-  </div>
-}
+<ng-template #dialogContent>
+  <section class="max-h-[95dvh] overflow-y-auto rounded-dialog border border-border bg-surface p-6">
+    <header class="flex items-start justify-between gap-3">
+      <h2 [id]="titleId" class="text-lg font-semibold">{{ title() }}</h2>
+      <ng-content select="[dialog-header]" />
+      <button
+        appButton
+        type="button"
+        variant="ghost"
+        size="small"
+        icon="close"
+        aria-label="Dialog schließen"
+        (click)="requestClose()"
+      ></button>
+    </header>
+    <ng-content />
+    <footer><ng-content select="[dialog-footer]" /></footer>
+  </section>
+</ng-template>

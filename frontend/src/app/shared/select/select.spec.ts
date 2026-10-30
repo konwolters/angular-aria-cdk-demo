@@ -19,6 +19,46 @@ class SelectHostComponent {
 }
 
 describe('SelectComponent', () => {
+  it('renders a dropdown arrow for searchable selection and opens on icon click', async () => {
+    const fixture = TestBed.createComponent(SelectComponent);
+    fixture.componentRef.setInput('label', 'Depot');
+    fixture.componentRef.setInput('options', [{ value: 'd1', label: 'Hauptdepot' }]);
+    fixture.componentRef.setInput('searchable', true);
+    fixture.detectChanges();
+    (fixture.nativeElement.querySelector('app-icon') as HTMLElement).click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(document.activeElement).toBe(fixture.nativeElement.querySelector('input'));
+    expect(document.querySelector('[ngOption]')?.textContent).toContain('Hauptdepot');
+  });
+
+  it('filters searchable options without accepting free text or offering a clear button', async () => {
+    const fixture = TestBed.createComponent(SelectComponent);
+    fixture.componentRef.setInput('label', 'Depot');
+    fixture.componentRef.setInput('options', [
+      { value: 'd1', label: '10001' },
+      { value: 'd2', label: '20002' },
+    ]);
+    fixture.componentRef.setInput('searchable', true);
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    input.click();
+    input.value = '200';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.value()).toBe('');
+    const options = [...document.querySelectorAll('[ngOption]')] as HTMLElement[];
+    expect(options.map((option) => option.textContent?.trim())).toEqual(['20002']);
+    options[0].click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(fixture.componentInstance.value()).toBe('d2');
+    expect(
+      fixture.nativeElement.querySelector('button[aria-label$="Auswahl entfernen"]'),
+    ).toBeNull();
+  });
+
   it('marks a changed prefilled value and shows the previous option label', async () => {
     await TestBed.configureTestingModule({ imports: [SelectComponent] }).compileComponents();
 

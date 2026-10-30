@@ -1,27 +1,19 @@
-@if (open()) {
-  <div class="fixed inset-0 z-40 bg-overlay" (click)="close()">
-    <aside
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="drawer-title"
-      class="absolute inset-y-0 right-0 w-full max-w-xl overflow-y-auto border-l border-border bg-surface p-6"
-      cdkTrapFocus
-      [cdkTrapFocusAutoCapture]="true"
-      (click)="$event.stopPropagation()"
-    >
-      <div class="flex items-center justify-between">
-        <h2 id="drawer-title" class="text-lg font-semibold">{{ title() }}</h2>
-        <button
-          appButton
-          type="button"
-          variant="ghost"
-          size="small"
-          icon="close"
-          aria-label="Drawer schließen"
-          (click)="close()"
-        ></button>
-      </div>
-      <ng-content />
-    </aside>
-  </div>
-}
+<ng-template #dialogContent>
+  <aside class="flex h-dvh flex-col border-l border-border bg-surface p-6">
+    <header class="flex items-center justify-between gap-3">
+      <h2 [id]="titleId" class="text-lg font-semibold">{{ title() }}</h2>
+      <ng-content select="[dialog-header]" />
+      <button
+        appButton
+        type="button"
+        variant="ghost"
+        size="small"
+        icon="close"
+        aria-label="Drawer schließen"
+        (click)="requestClose()"
+      ></button>
+    </header>
+    <div class="min-h-0 flex-1 overflow-y-auto"><ng-content /></div>
+    <footer><ng-content select="[dialog-footer]" /></footer>
+  </aside>
+</ng-template>

@@ -7,21 +7,59 @@ import {
   Component,
   computed,
   input,
+  inject,
   model,
+  output,
   signal,
   viewChild,
 } from '@angular/core';
+import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
+import { SelectOption } from '../select/select';
+import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
 
 @Component({
   selector: 'app-multi-select',
-  imports: [Combobox, ComboboxPopup, ComboboxWidget, IconComponent, Listbox, Option, OverlayModule],
+  imports: [
+    Combobox,
+    ComboboxPopup,
+    ComboboxWidget,
+    IconComponent,
+    Listbox,
+    Option,
+    OverlayModule,
+    FieldMessagesComponent,
+  ],
   templateUrl: './multi-select.html',
   host: { class: 'block' },
 })
-export class MultiSelectComponent {
+export class MultiSelectComponent implements FormValueControl<string[]> {
+  protected readonly messagesId = inject(ControlIdService).next();
+  readonly disabled = input(false);
+  readonly required = input(false);
+  readonly invalid = input(false);
+  readonly touched = input(false);
+  readonly touch = output<void>();
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly hint = input('');
+  readonly hideLabel = input(false);
+  readonly placeholder = input('Alle');
   readonly label = input.required<string>();
-  readonly options = input<readonly string[]>([]);
-  readonly selected = model<string[]>([]);
+  readonly options = input<readonly (string | SelectOption)[]>([]);
+  readonly value = model<string[]>([]);
+  protected readonly normalizedOptions = computed(() =>
+    this.options().map((option) =>
+      typeof option === 'string' ? { value: option, label: option } : option,
+    ),
+  );
+  protected labelFor(value: string, short = false): string {
+    const option = this.normalizedOptions().find((option) => option.value === value);
+    return (short ? option?.shortLabel : undefined) ?? option?.label ?? value;
+  }
+  protected readonly originalLabels = computed(() =>
+    this.originalValues()
+      .map((value) => this.labelFor(value))
+      .join(', '),
+  );
   readonly searchable = input(false);
   readonly maxDisplayedValues = input(2);
   readonly initialValue = input<readonly string[]>();
@@ -38,33 +76,41 @@ export class MultiSelectComponent {
   protected readonly combobox = viewChild(Combobox);
   protected readonly visibleOptions = computed(() => {
     const term = this.searchTerm().trim().toLocaleLowerCase();
-    const selected = this.selected();
+    const selected = this.value();
 
-    return this.options().filter(
+    return this.normalizedOptions().filter(
       (option) =>
-        selected.includes(option) || term.length === 0 || option.toLocaleLowerCase().includes(term),
+        selected.includes(option.value) ||
+        term.length === 0 ||
+        option.label.toLocaleLowerCase().includes(term) ||
+        option.value.toLocaleLowerCase().includes(term),
     );
   });
   protected readonly selectionSummary = computed(() => {
-    const values = this.selected();
+    const values = this.value();
     const displayLimit = Math.max(0, this.maxDisplayedValues());
     const displayValue =
-      values.length > displayLimit ? `${values.length} ausgewählt` : values.join(', ');
+      values.length > displayLimit
+        ? `${values.length} ausgewählt`
+        : values.map((value) => this.labelFor(value, true)).join(', ');
 
     return {
       displayValue,
-      accessibleLabel: values.length > 0 ? `${this.label()}: ${values.join(', ')}` : this.label(),
+      accessibleLabel:
+        values.length > 0
+          ? `${this.label()}: ${values.map((value) => this.labelFor(value)).join(', ')}`
+          : this.label(),
     };
   });
   protected readonly originalValues = computed(
-    () => this.initialValue() ?? this.capturedInitialValue() ?? this.selected(),
+    () => this.initialValue() ?? this.capturedInitialValue() ?? this.value(),
   );
   protected readonly isChanged = computed(() => {
     const changed = this.changed();
     if (changed !== undefined) return changed;
 
     const original = this.originalValues();
-    const selected = this.selected();
+    const selected = this.value();
     return (
       original.length > 0 &&
       (original.length !== selected.length || original.some((value) => !selected.includes(value)))
@@ -74,7 +120,7 @@ export class MultiSelectComponent {
   constructor() {
     afterRenderEffect(() => {
       if (this.initialValue() === undefined && this.capturedInitialValue() === null) {
-        this.capturedInitialValue.set([...this.selected()]);
+        this.capturedInitialValue.set([...this.value()]);
       }
 
       if (this.expanded()) {
@@ -87,8 +133,14 @@ export class MultiSelectComponent {
     this.searchTerm.set((event.target as HTMLInputElement).value);
   }
 
+  protected openSearch(input: HTMLInputElement): void {
+    if (this.readonly() || this.disabled()) return;
+    input.focus();
+    this.onExpandedChange(true);
+  }
+
   protected onExpandedChange(expanded: boolean): void {
-    this.expanded.set(expanded && !this.readonly());
+    this.expanded.set(expanded && !this.readonly() && !this.disabled());
   }
 
   protected preventReadonlyFocus(event: MouseEvent): void {
@@ -98,11 +150,12 @@ export class MultiSelectComponent {
   protected close(): void {
     this.expanded.set(false);
     this.searchTerm.set('');
+    this.touch.emit();
   }
 
   protected setSelected(values: string[]): void {
-    if (this.readonly()) return;
-    this.selected.set(values);
+    if (this.readonly() || this.disabled()) return;
+    this.value.set(values);
     this.searchTerm.set('');
   }
 }

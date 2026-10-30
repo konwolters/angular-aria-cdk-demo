@@ -26,7 +26,9 @@
                   : 'none'
               "
             >
-              @if (column.sortable) {
+              @if (headerTemplate(column.key); as header) {
+                <ng-container [ngTemplateOutlet]="header" />
+              } @else if (column.sortable) {
                 <button
                   appButton
                   type="button"
@@ -77,63 +79,87 @@
     <p role="alert" class="p-5 text-sm text-danger">{{ error() }}</p>
   }
 
-  <footer
-    class="grid gap-3 border-t border-border px-5 py-4 text-xs text-content-muted sm:grid-cols-[1fr_auto_1fr] sm:items-center"
-  >
-    <span role="status" aria-live="polite">
-      {{ firstRow() }}–{{ lastRow() }} von {{ total() }} Ergebnissen
-    </span>
+  @if (pagination()) {
+    <footer
+      class="grid gap-3 border-t border-border px-5 py-4 text-xs text-content-muted sm:grid-cols-[1fr_auto_1fr] sm:items-center"
+    >
+      <span role="status" aria-live="polite">
+        {{ firstRow() }}–{{ lastRow() }} von {{ total() }} Ergebnissen
+      </span>
 
-    <nav aria-label="Tabellenseiten" class="flex items-center justify-center gap-1">
-      <button
-        appButton
-        type="button"
-        variant="secondary"
-        size="small"
-        icon="arrow-left"
-        aria-label="Vorherige Seite"
-        [disabled]="page() === 0 || loading()"
-        (click)="pageChange.emit(page() - 1)"
-      ></button>
-
-      @for (pageNumber of visiblePages(); track pageNumber) {
+      <nav aria-label="Tabellenseiten" class="flex items-center justify-center gap-1">
         <button
           appButton
           type="button"
           variant="secondary"
           size="small"
-          [attr.aria-label]="'Seite ' + (pageNumber + 1)"
-          [attr.aria-current]="page() === pageNumber ? 'page' : null"
-          [active]="page() === pageNumber"
-          [disabled]="loading()"
-          (click)="pageChange.emit(pageNumber)"
+          aria-label="Erste Seite"
+          [disabled]="page() === 0 || loading()"
+          (click)="pageChange.emit(0)"
         >
-          {{ pageNumber + 1 }}
+          «
         </button>
-      }
+        <button
+          appButton
+          type="button"
+          variant="secondary"
+          size="small"
+          icon="arrow-left"
+          aria-label="Vorherige Seite"
+          [disabled]="page() === 0 || loading()"
+          (click)="pageChange.emit(page() - 1)"
+        ></button>
 
-      <button
-        appButton
-        type="button"
-        variant="secondary"
-        size="small"
-        icon="arrow-right"
-        aria-label="Nächste Seite"
-        [disabled]="page() + 1 >= totalPages() || loading()"
-        (click)="pageChange.emit(page() + 1)"
-      ></button>
-    </nav>
+        @for (pageNumber of visiblePages(); track pageNumber) {
+          <button
+            appButton
+            type="button"
+            variant="secondary"
+            size="small"
+            [attr.aria-label]="'Seite ' + (pageNumber + 1)"
+            [attr.aria-current]="page() === pageNumber ? 'page' : null"
+            [active]="page() === pageNumber"
+            [disabled]="loading()"
+            (click)="pageChange.emit(pageNumber)"
+          >
+            {{ pageNumber + 1 }}
+          </button>
+        }
 
-    <div class="flex sm:justify-self-end">
-      <div class="w-28">
-        <app-select
-          label="Zeilen pro Seite"
-          [options]="pageSizeSelectOptions()"
-          [value]="pageSize().toString()"
-          [changed]="false"
-          (valueChange)="updatePageSize($event)"
-        />
+        <button
+          appButton
+          type="button"
+          variant="secondary"
+          size="small"
+          icon="arrow-right"
+          aria-label="Nächste Seite"
+          [disabled]="page() + 1 >= totalPages() || loading()"
+          (click)="pageChange.emit(page() + 1)"
+        ></button>
+        <button
+          appButton
+          type="button"
+          variant="secondary"
+          size="small"
+          aria-label="Letzte Seite"
+          [disabled]="page() + 1 >= totalPages() || loading()"
+          (click)="pageChange.emit(totalPages() - 1)"
+        >
+          »
+        </button>
+      </nav>
+
+      <div class="flex sm:justify-self-end">
+        <div class="w-28">
+          <app-select
+            label="Zeilen pro Seite"
+            [options]="pageSizeSelectOptions()"
+            [value]="pageSize().toString()"
+            [changed]="false"
+            (valueChange)="updatePageSize($event)"
+          />
+        </div>
       </div>
-    </div>
-  </footer>
+    </footer>
+  }
 </section>

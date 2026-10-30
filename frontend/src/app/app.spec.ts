@@ -16,14 +16,13 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should render navigation for all table areas', () => {
+  it('renders navigation for the import showcase and component reference', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const navigation = compiled.querySelector('nav[aria-label="Hauptnavigation"]');
-    expect(navigation?.textContent).toContain('Customers');
-    expect(navigation?.textContent).toContain('Orders');
-    expect(navigation?.textContent).toContain('Projects');
+    expect(navigation?.textContent).toContain('Datenimport');
+    expect(navigation?.textContent).toContain('Komponenten');
     expect(navigation?.textContent).toContain('Tabs');
   });
 });

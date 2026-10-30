@@ -1,24 +1,13 @@
-import { CdkTrapFocus } from '@angular/cdk/a11y';
-import { Component, input, model } from '@angular/core';
+import { Component } from '@angular/core';
 import { ButtonComponent } from '../button/button';
+import { DialogModule } from '@angular/cdk/dialog';
+import { DialogBase } from '../dialog/dialog-base';
 
 @Component({
   selector: 'app-modal',
-  imports: [ButtonComponent, CdkTrapFocus],
+  imports: [ButtonComponent, DialogModule],
   templateUrl: './modal.html',
-  host: {
-    '(document:keydown.escape)': 'closeOnEscape()',
-  },
 })
-export class ModalComponent {
-  readonly open = model(false);
-  readonly title = input.required<string>();
-
-  close(): void {
-    this.open.set(false);
-  }
-
-  closeOnEscape(): void {
-    if (this.open()) this.close();
-  }
+export class ModalComponent extends DialogBase {
+  protected readonly drawer = false;
 }

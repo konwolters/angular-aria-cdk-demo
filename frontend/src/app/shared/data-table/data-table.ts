@@ -1,6 +1,7 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, computed, contentChildren, input, output, TemplateRef } from '@angular/core';
 import { DataTableCellDirective } from './data-table-cell.directive';
+import { DataTableHeaderDirective } from './data-table-header.directive';
 import { ButtonComponent } from '../button/button';
 import { IconName } from '../icon/icon';
 import { SelectComponent, SelectOption } from '../select/select';
@@ -21,6 +22,7 @@ export class DataTableComponent<T> {
   readonly rows = input.required<readonly T[]>();
   readonly columns = input.required<readonly DataTableColumn<T>[]>();
   readonly framed = input(true);
+  readonly pagination = input(true);
   readonly total = input(0);
   readonly totalPages = input(0);
   readonly page = input(0);
@@ -40,6 +42,10 @@ export class DataTableComponent<T> {
   readonly pageSizeChange = output<number>();
 
   protected readonly cellTemplates = contentChildren(DataTableCellDirective);
+  protected readonly headerTemplates = contentChildren(DataTableHeaderDirective);
+  protected headerTemplate(key: string): TemplateRef<unknown> | undefined {
+    return this.headerTemplates().find((header) => header.appDataTableHeader() === key)?.template;
+  }
   protected readonly pageSizeSelectOptions = computed<SelectOption[]>(() =>
     this.pageSizeOptions().map((size) => ({ value: String(size), label: String(size) })),
   );

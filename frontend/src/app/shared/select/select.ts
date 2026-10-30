@@ -7,6 +7,7 @@ import {
   computed,
   ElementRef,
   input,
+  inject,
   model,
   output,
   signal,
@@ -14,6 +15,7 @@ import {
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
 import { IconComponent } from '../icon/icon';
+import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
 
 const BELOW_FIRST_POSITIONS: ConnectedPosition[] = [
   { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 6 },
@@ -29,15 +31,41 @@ export interface SelectOption {
   value: string;
   label: string;
   disabled?: boolean;
+  shortLabel?: string;
 }
 
 @Component({
   selector: 'app-select',
-  imports: [Combobox, ComboboxPopup, ComboboxWidget, IconComponent, Listbox, Option, OverlayModule],
+  imports: [
+    Combobox,
+    ComboboxPopup,
+    ComboboxWidget,
+    IconComponent,
+    Listbox,
+    Option,
+    OverlayModule,
+    FieldMessagesComponent,
+  ],
   templateUrl: './select.html',
   host: { class: 'block' },
 })
 export class SelectComponent implements FormValueControl<string> {
+  protected readonly messagesId = inject(ControlIdService).next();
+  protected readonly combobox = viewChild(Combobox);
+  protected readonly searchTerm = signal('');
+  readonly searchable = input(false);
+  readonly emptyMessage = input('Keine Treffer');
+  readonly hint = input('');
+  readonly hideLabel = input(false);
+  protected readonly visibleOptions = computed(() => {
+    const term = this.searchTerm().trim().toLocaleLowerCase();
+    return this.options().filter(
+      (option) =>
+        !term ||
+        option.label.toLocaleLowerCase().includes(term) ||
+        option.value.toLocaleLowerCase().includes(term),
+    );
+  });
   protected readonly overlayPositions = signal(BELOW_FIRST_POSITIONS);
 
   readonly label = input.required<string>();
@@ -92,8 +120,14 @@ export class SelectComponent implements FormValueControl<string> {
     });
   }
 
+  protected openSearch(input: HTMLInputElement): void {
+    if (this.readonly() || this.disabled()) return;
+    input.focus();
+    this.onExpandedChange(true);
+  }
+
   protected onExpandedChange(expanded: boolean): void {
-    this.expanded.set(expanded && !this.readonly());
+    this.expanded.set(expanded && !this.readonly() && !this.disabled());
     if (expanded && !this.readonly()) this.updateOverlayPosition();
   }
 
@@ -125,13 +159,14 @@ export class SelectComponent implements FormValueControl<string> {
   }
 
   protected selectOption(values: string[]): void {
-    if (this.readonly()) return;
+    if (this.readonly() || this.disabled()) return;
     this.value.set(values[0] ?? '');
     this.close();
   }
 
   protected close(): void {
     this.expanded.set(false);
+    this.searchTerm.set('');
     this.touch.emit();
   }
 }

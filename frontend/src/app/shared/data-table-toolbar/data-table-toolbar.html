@@ -3,9 +3,15 @@
 
   <ng-content select="[data-table-filters]" />
 
-  <button appButton type="submit" variant="primary">Suchen</button>
+  <ng-content select="[data-table-actions]" />
+  <button appButton type="submit" variant="primary" [disabled]="applyDisabled()">Suchen</button>
 
-  <button appButton type="button" variant="secondary" icon="refresh" (click)="resetFilters()">
-    {{ resetLabel() }}
-  </button>
+  @if (showReset()) {
+    <button appButton type="button" variant="secondary" icon="refresh" (click)="resetFilters()">
+      {{ resetLabel() }}
+    </button>
+  }
+  <div class="basis-full text-xs text-content-muted empty:hidden">
+    <ng-content select="[data-table-summary]" />
+  </div>
 </form>

@@ -28,13 +28,6 @@
             placeholder="Customer Experience"
             [formField]="teamForm.name"
           />
-          @if (teamForm.name().touched() && teamForm.name().invalid()) {
-            <ul class="mt-1 space-y-1 text-xs text-danger">
-              @for (error of teamForm.name().errors(); track error.kind) {
-                <li>{{ error.message }}</li>
-              }
-            </ul>
-          }
         </div>
 
         <div>
@@ -44,13 +37,6 @@
             placeholder="customer-experience"
             [formField]="teamForm.slug"
           />
-          @if (teamForm.slug().touched() && teamForm.slug().invalid()) {
-            <ul class="mt-1 space-y-1 text-xs text-danger">
-              @for (error of teamForm.slug().errors(); track error.kind) {
-                <li>{{ error.message }}</li>
-              }
-            </ul>
-          }
         </div>
 
         <div class="md:col-span-2">
@@ -63,13 +49,6 @@
             <span>Mindestens 20 Zeichen</span>
             <span>{{ teamForm.description().value().length }} Zeichen</span>
           </div>
-          @if (teamForm.description().touched() && teamForm.description().invalid()) {
-            <ul class="mt-1 space-y-1 text-xs text-danger">
-              @for (error of teamForm.description().errors(); track error.kind) {
-                <li>{{ error.message }}</li>
-              }
-            </ul>
-          }
         </div>
       </div>
     </section>
@@ -89,9 +68,6 @@
             [options]="departmentOptions"
             [formField]="teamForm.department"
           />
-          @if (teamForm.department().touched() && teamForm.department().invalid()) {
-            <p class="mt-1 text-xs text-danger">{{ teamForm.department().errors()[0].message }}</p>
-          }
         </div>
 
         <div>
@@ -101,13 +77,6 @@
             placeholder="name&#64;beispiel.de"
             [formField]="teamForm.ownerEmail"
           />
-          @if (teamForm.ownerEmail().touched() && teamForm.ownerEmail().invalid()) {
-            <ul class="mt-1 space-y-1 text-xs text-danger">
-              @for (error of teamForm.ownerEmail().errors(); track error.kind) {
-                <li>{{ error.message }}</li>
-              }
-            </ul>
-          }
         </div>
 
         <div>
