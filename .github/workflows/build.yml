@@ -49,8 +49,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    outputs:
-      image: ${{ steps.image.outputs.name }}
     steps:
       - uses: actions/checkout@v5
       - name: Derive image name
@@ -81,4 +79,3 @@ jobs:
         env:
           IMAGE: ${{ steps.image.outputs.name }}:${{ github.sha }}
         run: python3 scripts/check-container.py "$IMAGE" --platform linux/arm64
-
