@@ -6,7 +6,7 @@ Ein kleines Spring-Boot-Backend ermöglicht serverseitiges Filtern, Sortieren un
 
 ## Starten
 
-Voraussetzungen: Node.js 22.22.3+ (oder 24.15+), Java 17+ und Maven.
+Voraussetzungen: Node.js 22.22.3+ (oder 24.15+), Java 25+ und Maven.
 
 Backend:
 
