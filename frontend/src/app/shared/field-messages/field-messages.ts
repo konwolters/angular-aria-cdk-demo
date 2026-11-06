@@ -11,20 +11,7 @@ export class ControlIdService {
 
 @Component({
   selector: 'app-field-messages',
-  template: `
-    <div [id]="id()" class="text-xs" [class.mt-1]="hint() || (showErrors() && errors().length > 0)">
-      @if (hint()) {
-        <p class="text-content-muted">{{ hint() }}</p>
-      }
-      @if (showErrors()) {
-        <ul class="text-danger" aria-live="polite">
-          @for (error of errors(); track $index) {
-            <li>{{ error.message || 'Ungültiger Wert' }}</li>
-          }
-        </ul>
-      }
-    </div>
-  `,
+  templateUrl: './field-messages.html',
 })
 export class FieldMessagesComponent {
   readonly id = input.required<string>();

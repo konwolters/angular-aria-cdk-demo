@@ -73,6 +73,11 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('GEÄNDERT');
+    const badge = [...fixture.nativeElement.querySelectorAll('span')].find(
+      (element) => (element as HTMLElement).textContent?.trim() === 'GEÄNDERT',
+    ) as HTMLElement;
+    expect(badge.classList.contains('bg-brand')).toBe(true);
+    expect(badge.classList.contains('text-on-brand')).toBe(true);
     expect(fixture.nativeElement.textContent).toContain('Wert vorher: Design');
   });
 

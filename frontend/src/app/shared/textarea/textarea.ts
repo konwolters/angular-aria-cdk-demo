@@ -9,11 +9,12 @@ import {
   signal,
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
-import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/field-messages';
+import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 @Component({
   selector: 'app-textarea',
-  imports: [FieldMessagesComponent],
+  imports: [FieldWrapperComponent],
   templateUrl: './textarea.html',
   host: { class: 'block' },
 })

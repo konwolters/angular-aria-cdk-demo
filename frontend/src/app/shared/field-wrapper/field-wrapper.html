@@ -1,0 +1,36 @@
+@if (controlId()) {
+  <label [for]="controlId()" class="block text-sm font-medium">
+    <span class="flex items-center gap-2" [class.sr-only]="hideLabel()">
+      <ng-container *ngTemplateOutlet="labelContent" />
+    </span>
+  </label>
+} @else {
+  <div
+    class="mb-1 flex items-center gap-2 font-medium text-content-secondary"
+    [class.text-xs]="labelSize() === 'small'"
+    [class.text-sm]="labelSize() === 'medium'"
+    [class.sr-only]="hideLabel()"
+  >
+    <ng-container *ngTemplateOutlet="labelContent" />
+  </div>
+}
+<ng-template #labelContent>
+  <span>{{ label() }}</span>
+  @if (changed()) {
+    <span class="rounded bg-brand px-1.5 py-0.5 text-xs font-semibold tracking-wide text-on-brand">
+      {{ changedLabel() }}
+    </span>
+  }
+</ng-template>
+<ng-content />
+<app-field-messages
+  [id]="messagesId()"
+  [hint]="hint()"
+  [errors]="errors()"
+  [showErrors]="showErrors()"
+/>
+@if (changed()) {
+  <span class="mt-1 block text-xs font-normal text-content-muted"
+    >{{ previousValueLabel() }}: {{ previousValue() }}</span
+  >
+}

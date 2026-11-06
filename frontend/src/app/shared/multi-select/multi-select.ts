@@ -15,7 +15,8 @@ import {
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
 import { SelectOption } from '../select/select';
-import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/field-messages';
+import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 @Component({
   selector: 'app-multi-select',
@@ -27,7 +28,7 @@ import { ControlIdService, FieldMessagesComponent } from '../field-messages/fiel
     Listbox,
     Option,
     OverlayModule,
-    FieldMessagesComponent,
+    FieldWrapperComponent,
   ],
   templateUrl: './multi-select.html',
   host: { class: 'block' },

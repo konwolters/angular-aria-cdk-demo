@@ -25,6 +25,22 @@ export class TeamEditorComponent {}
 
 Die konkreten Imports und Dateipfade stehen bei den jeweiligen Komponenten weiter unten.
 
+## Gemeinsamer Feldrahmen
+
+`TextField`, `Textarea`, `Select` und `MultiSelect` verwenden intern den gemeinsamen
+`FieldWrapperComponent` aus `frontend/src/app/shared/field-wrapper/`. Er stellt Label,
+Änderungs-Badge, vorherigen Wert sowie über `FieldMessagesComponent` Hinweis und Fehlermeldungen
+einheitlich dar. Der Wrapper ist ein interner Baustein: Aufrufende verwenden weiterhin die
+jeweilige Feldkomponente und deren bestehende Inputs; ein zusätzlicher Wrapper im eigenen Template
+ist nicht nötig.
+
+Die Feldkomponenten bleiben für ihren Wert, Signal Forms, Zustände und ihre jeweilige Tastatur- und
+Auswahllogik verantwortlich. Sie übergeben dem Wrapper den anzuzeigenden Zustand und eine eindeutige
+ID für die Meldungen. Textfeld und Textarea verbinden das native Label über `for` mit dem jeweiligen
+Eingabeelement; die Select-Varianten vergeben ihren zugänglichen Namen am Combobox-Element. Alle
+vier verknüpfen Hinweise und Fehlermeldungen über `aria-describedby` mit dem Bedienelement.
+Beim Erweitern oder Ändern des Feldrahmens müssen diese Verknüpfungen erhalten bleiben.
+
 ## Änderungsverfolgung und Readonly-Felder
 
 `TextFieldComponent`, `TextareaComponent`, `SelectComponent` und `MultiSelectComponent` können

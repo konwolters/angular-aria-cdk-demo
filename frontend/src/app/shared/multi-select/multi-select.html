@@ -1,32 +1,50 @@
 <div class="relative">
-  <div
-    class="mb-1 flex items-center gap-2 font-medium text-content-secondary"
-    [class.text-xs]="labelSize() === 'small'"
-    [class.text-sm]="labelSize() === 'medium'"
-    [class.sr-only]="hideLabel()"
+  <app-field-wrapper
+    [label]="label()"
+    [hideLabel]="hideLabel()"
+    [changed]="isChanged()"
+    [changedLabel]="changedLabel()"
+    [previousValueLabel]="previousValueLabel()"
+    [previousValue]="originalLabels()"
+    [messagesId]="messagesId"
+    [hint]="hint()"
+    [errors]="errors()"
+    [showErrors]="invalid() && touched() && !readonly()"
+    [labelSize]="labelSize()"
   >
-    <span>{{ label() }}</span>
-    @if (isChanged()) {
-      <span
-        class="rounded bg-brand px-1.5 py-0.5 text-xs font-semibold tracking-wide text-on-brand"
-      >
-        {{ changedLabel() }}
-      </span>
-    }
-  </div>
-  <div #origin class="w-dropdown">
-    @if (searchable()) {
-      <div
-        class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control focus-within:border-focus"
-        [class.bg-surface-muted]="readonly()"
-        [class.cursor-not-allowed]="readonly()"
-        (click)="openSearch(searchInput)"
-      >
-        <input
-          #searchInput
+    <div #origin class="w-dropdown">
+      @if (searchable()) {
+        <div
+          class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control focus-within:border-focus"
+          [class.bg-surface-muted]="readonly()"
+          [class.cursor-not-allowed]="readonly()"
+          (click)="openSearch(searchInput)"
+        >
+          <input
+            #searchInput
+            #combobox="ngCombobox"
+            ngCombobox
+            [(value)]="searchTerm"
+            [expanded]="expanded()"
+            (expandedChange)="onExpandedChange($event)"
+            [readonly]="readonly()"
+            [disabled]="disabled() || readonly()"
+            [attr.aria-describedby]="messagesId"
+            [attr.aria-required]="required()"
+            [attr.aria-invalid]="invalid()"
+            (blur)="touch.emit()"
+            [tabindex]="readonly() ? -1 : undefined"
+            [attr.aria-label]="selectionSummary().accessibleLabel + ', suchen'"
+            [placeholder]="selectionSummary().displayValue || placeholder()"
+            class="h-full min-w-0 flex-1 bg-transparent text-content-secondary outline-none placeholder:text-content-subtle"
+            [class.cursor-not-allowed]="readonly()"
+          />
+          <app-icon name="chevron-down" [size]="16" />
+        </div>
+      } @else {
+        <div
           #combobox="ngCombobox"
           ngCombobox
-          [(value)]="searchTerm"
           [expanded]="expanded()"
           (expandedChange)="onExpandedChange($event)"
           [readonly]="readonly()"
@@ -36,100 +54,69 @@
           [attr.aria-invalid]="invalid()"
           (blur)="touch.emit()"
           [tabindex]="readonly() ? -1 : undefined"
-          [attr.aria-label]="selectionSummary().accessibleLabel + ', suchen'"
-          [placeholder]="selectionSummary().displayValue || placeholder()"
-          class="h-full min-w-0 flex-1 bg-transparent text-content-secondary outline-none placeholder:text-content-subtle"
+          (mousedown)="preventReadonlyFocus($event)"
+          [attr.aria-label]="selectionSummary().accessibleLabel"
+          class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control hover:bg-surface-subtle focus:border-focus"
+          [class.cursor-pointer]="!readonly()"
+          [class.bg-surface-muted]="readonly()"
           [class.cursor-not-allowed]="readonly()"
-        />
-        <app-icon name="chevron-down" [size]="16" />
-      </div>
-    } @else {
-      <div
-        #combobox="ngCombobox"
-        ngCombobox
-        [expanded]="expanded()"
-        (expandedChange)="onExpandedChange($event)"
-        [readonly]="readonly()"
-        [disabled]="disabled() || readonly()"
-        [attr.aria-describedby]="messagesId"
-        [attr.aria-required]="required()"
-        [attr.aria-invalid]="invalid()"
-        (blur)="touch.emit()"
-        [tabindex]="readonly() ? -1 : undefined"
-        (mousedown)="preventReadonlyFocus($event)"
-        [attr.aria-label]="selectionSummary().accessibleLabel"
-        class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control hover:bg-surface-subtle focus:border-focus"
-        [class.cursor-pointer]="!readonly()"
-        [class.bg-surface-muted]="readonly()"
-        [class.cursor-not-allowed]="readonly()"
-      >
-        @if (value().length > 0) {
-          <span class="min-w-0 flex-1 truncate text-content-secondary">
-            {{ selectionSummary().displayValue }}
-          </span>
-        } @else {
-          <span class="min-w-0 flex-1 text-content-subtle">{{ placeholder() }}</span>
-        }
-        <app-icon name="chevron-down" [size]="16" />
-      </div>
-    }
-  </div>
-
-  @if (isChanged()) {
-    <span class="mt-1 block text-xs text-content-muted">
-      {{ previousValueLabel() }}: {{ originalLabels() }}
-    </span>
-  }
-
-  @if (combobox(); as trigger) {
-    <ng-template
-      [cdkConnectedOverlay]="{ origin, usePopover: 'inline', matchWidth: true }"
-      [cdkConnectedOverlayOpen]="expanded() && !disabled() && !readonly()"
-      [cdkConnectedOverlayOffsetY]="6"
-      (overlayOutsideClick)="close()"
-    >
-      <ng-template ngComboboxPopup [combobox]="trigger">
-        <div class="w-dropdown rounded-control border border-border bg-surface p-1 text-control">
-          <div
-            #listbox="ngListbox"
-            ngListbox
-            ngComboboxWidget
-            [multi]="true"
-            focusMode="activedescendant"
-            selectionMode="explicit"
-            [tabindex]="-1"
-            [activeDescendant]="listbox.activeDescendant()"
-            [value]="value()"
-            (valueChange)="setSelected($event)"
-            class="max-h-64 overflow-y-auto outline-none"
-          >
-            @for (option of visibleOptions(); track option.value) {
-              <div
-                ngOption
-                [value]="option.value"
-                [label]="option.label"
-                [disabled]="option.disabled ?? false"
-                class="flex min-h-10 cursor-pointer items-center gap-2 rounded-control px-3 py-2 text-control data-[active=true]:bg-surface-muted"
-                [class.bg-brand-subtle]="value().includes(option.value)"
-                [class.text-brand-strong]="value().includes(option.value)"
-              >
-                <span class="flex-1">{{ option.label }}</span>
-                @if (value().includes(option.value)) {
-                  <app-icon class="text-brand-strong" name="check" [size]="16" />
-                }
-              </div>
-            } @empty {
-              <p class="px-2 py-3 text-sm text-content-muted">Keine Treffer</p>
-            }
-          </div>
+        >
+          @if (value().length > 0) {
+            <span class="min-w-0 flex-1 truncate text-content-secondary">
+              {{ selectionSummary().displayValue }}
+            </span>
+          } @else {
+            <span class="min-w-0 flex-1 text-content-subtle">{{ placeholder() }}</span>
+          }
+          <app-icon name="chevron-down" [size]="16" />
         </div>
+      }
+    </div>
+
+    @if (combobox(); as trigger) {
+      <ng-template
+        [cdkConnectedOverlay]="{ origin, usePopover: 'inline', matchWidth: true }"
+        [cdkConnectedOverlayOpen]="expanded() && !disabled() && !readonly()"
+        [cdkConnectedOverlayOffsetY]="6"
+        (overlayOutsideClick)="close()"
+      >
+        <ng-template ngComboboxPopup [combobox]="trigger">
+          <div class="w-dropdown rounded-control border border-border bg-surface p-1 text-control">
+            <div
+              #listbox="ngListbox"
+              ngListbox
+              ngComboboxWidget
+              [multi]="true"
+              focusMode="activedescendant"
+              selectionMode="explicit"
+              [tabindex]="-1"
+              [activeDescendant]="listbox.activeDescendant()"
+              [value]="value()"
+              (valueChange)="setSelected($event)"
+              class="max-h-64 overflow-y-auto outline-none"
+            >
+              @for (option of visibleOptions(); track option.value) {
+                <div
+                  ngOption
+                  [value]="option.value"
+                  [label]="option.label"
+                  [disabled]="option.disabled ?? false"
+                  class="flex min-h-10 cursor-pointer items-center gap-2 rounded-control px-3 py-2 text-control data-[active=true]:bg-surface-muted"
+                  [class.bg-brand-subtle]="value().includes(option.value)"
+                  [class.text-brand-strong]="value().includes(option.value)"
+                >
+                  <span class="flex-1">{{ option.label }}</span>
+                  @if (value().includes(option.value)) {
+                    <app-icon class="text-brand-strong" name="check" [size]="16" />
+                  }
+                </div>
+              } @empty {
+                <p class="px-2 py-3 text-sm text-content-muted">Keine Treffer</p>
+              }
+            </div>
+          </div>
+        </ng-template>
       </ng-template>
-    </ng-template>
-  }
-  <app-field-messages
-    [id]="messagesId"
-    [hint]="hint()"
-    [errors]="errors()"
-    [showErrors]="invalid() && touched() && !readonly()"
-  />
+    }
+  </app-field-wrapper>
 </div>

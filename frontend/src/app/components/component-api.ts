@@ -58,6 +58,8 @@ const changed: ApiEntry[] = [
   entry('previousValueLabel', 'string', "'Wert vorher'", 'Beschriftung des vorherigen Werts.'),
 ];
 const touch = output('touch', 'void', 'Wird beim Verlassen des Feldes ausgelöst.');
+const fieldWrapperNote =
+  'Label, Änderungsanzeige und Feldmeldungen werden intern durch den gemeinsamen FieldWrapper dargestellt. Ein zusätzlicher Wrapper bei der Verwendung ist nicht nötig.';
 const dialogInputs = [
   entry('open', 'model<boolean>', 'false', 'Öffnungszustand; unterstützt [(open)].'),
   entry('title', 'string', 'erforderlich', 'Titel und zugängliche Beschriftung.'),
@@ -116,7 +118,7 @@ export const componentApis: Record<string, ComponentApi> = {
       ...feedback,
     ],
     outputs: [output('valueChange', 'string', 'Wertänderung (Model).'), touch],
-    notes: 'Unterstützt Angular Signal Forms über FormValueControl.',
+    notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
   },
   textarea: {
     importCode: importFrom('TextareaComponent', 'textarea/textarea'),
@@ -130,7 +132,7 @@ export const componentApis: Record<string, ComponentApi> = {
       ...feedback,
     ],
     outputs: [output('valueChange', 'string', 'Wertänderung (Model).'), touch],
-    notes: 'Unterstützt Angular Signal Forms über FormValueControl.',
+    notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
   },
   select: {
     importCode: importFrom('SelectComponent, SelectOption', 'select/select'),
@@ -151,7 +153,7 @@ export const componentApis: Record<string, ComponentApi> = {
       ...feedback,
     ],
     outputs: [output('valueChange', 'string', 'Wertänderung (Model).'), touch],
-    notes: 'Unterstützt Angular Signal Forms über FormValueControl.',
+    notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
   },
   'multi-select': {
     importCode: importFrom('MultiSelectComponent', 'multi-select/multi-select'),
@@ -168,7 +170,7 @@ export const componentApis: Record<string, ComponentApi> = {
       ...feedback,
     ],
     outputs: [output('valueChange', 'string[]', 'Wertänderung (Model).'), touch],
-    notes: 'SelectOption wird aus select/select exportiert. Unterstützt Angular Signal Forms.',
+    notes: `SelectOption wird aus select/select exportiert. Unterstützt Angular Signal Forms. ${fieldWrapperNote}`,
   },
   tabs: {
     importCode: `${importFrom('TabsComponent, TabItem', 'tabs/tabs')}\n${importFrom('TabPanelTemplateDirective', 'tabs/tab-panel-template.directive')}`,

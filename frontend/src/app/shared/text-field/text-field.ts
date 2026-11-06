@@ -9,13 +9,14 @@ import {
   signal,
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
-import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/field-messages';
+import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 export type TextFieldType = 'text' | 'email' | 'search' | 'url' | 'tel' | 'password';
 
 @Component({
   selector: 'app-text-field',
-  imports: [FieldMessagesComponent],
+  imports: [FieldWrapperComponent],
   templateUrl: './text-field.html',
   host: { class: 'block' },
 })

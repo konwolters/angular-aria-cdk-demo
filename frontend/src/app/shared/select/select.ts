@@ -15,7 +15,8 @@ import {
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
 import { IconComponent } from '../icon/icon';
-import { ControlIdService, FieldMessagesComponent } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/field-messages';
+import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 const BELOW_FIRST_POSITIONS: ConnectedPosition[] = [
   { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 6 },
@@ -44,7 +45,7 @@ export interface SelectOption {
     Listbox,
     Option,
     OverlayModule,
-    FieldMessagesComponent,
+    FieldWrapperComponent,
   ],
   templateUrl: './select.html',
   host: { class: 'block' },
