@@ -74,13 +74,19 @@ try:
             assert response.status == 200
             assert "text/html" not in response.headers["Content-Type"]
 
-    for path in ("component-source/text-field/text-field.ts", "component-source/text-field/text-field.html"):
+    sources = {
+        "component-source/text-field/text-field.ts": "TextFieldComponent",
+        "component-source/text-field/text-field.html": "<app-field-wrapper",
+        "component-source/field-wrapper/field-wrapper.ts": "FieldWrapperComponent",
+        "component-source/field-wrapper/field-wrapper.html": "<label",
+        "component-source/field-messages/field-messages.html": "showErrors()",
+    }
+    for path, expected in sources.items():
         with urlopen(base + "/aria-demo/" + path, timeout=10) as response:
             content = response.read().decode()
             assert response.status == 200
             assert "<app-root" not in content
-            expected = "TextFieldComponent" if path.endswith(".ts") else "<label"
-            assert expected in content
+            assert expected in content, f"Unexpected component source at {path}"
 
     for endpoint in ("customers", "orders", "projects"):
         with urlopen(base + f"/aria-demo/api/{endpoint}", timeout=10) as response:
