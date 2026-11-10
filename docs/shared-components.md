@@ -107,7 +107,7 @@ mit `previousValueLabel="Version 3"` erscheint `Version 3: <ursprünglicher Wert
 Bei einem Multi-Select ist `initialValue` eine Liste. Die Listen werden als Auswahlmengen
 verglichen; die Reihenfolge der Werte ist dabei unerheblich.
 
-## `app-button`
+## `button[appButton]`
 
 Import: `frontend/src/app/shared/button/button.ts`
 
@@ -160,10 +160,12 @@ Signal Forms verwendet werden kann.
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `label` | `string` | erforderlich | Sichtbares und zugängliches Label |
+| `size` | `small \| medium` | `small` | Höhe des Eingabefelds |
 | `type` | `text \| email \| search \| url \| tel \| password` | `text` | HTML-Eingabetyp |
 | `monospace` | `boolean` | `false` | Zeigt die Eingabe in nichtproportionaler Schrift (Consolas mit Fallbacks) |
 | `placeholder` | `string` | leer | Platzhaltertext |
 | `prefix` | `string` | leer | Optionaler, nicht editierbarer Präfix im Feld |
+| `maxLength` | `number \| undefined` | `undefined` | Maximale Zeichenanzahl der Eingabe |
 | `value` | `ModelSignal<string>` | `''` | Feldwert; Signal-Forms-kompatibel |
 | `initialValue` | `string \| undefined` | automatisch erfasst | Ausgangswert für den Vergleich |
 | `changed` | `boolean \| undefined` | automatisch berechnet | Manueller Änderungsstatus; überschreibt den Vergleich, wenn gesetzt |
@@ -195,8 +197,10 @@ Mehrzeiliges Feld mit derselben Änderungsanzeige und Signal-Forms-Integration w
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `label` | `string` | erforderlich | Sichtbares Label |
+| `size` | `small \| medium` | `small` | Mindesthöhe des mehrzeiligen Felds |
 | `placeholder` | `string` | leer | Platzhaltertext |
 | `rows` | `number` | `4` | Native Zeilenanzahl |
+| `maxLength` | `number \| undefined` | `undefined` | Maximale Zeichenanzahl der Eingabe |
 | `value` | `ModelSignal<string>` | `''` | Feldwert; Signal-Forms-kompatibel |
 | `initialValue` | `string \| undefined` | automatisch erfasst | Ausgangswert für den Vergleich |
 | `changed` | `boolean \| undefined` | automatisch berechnet | Manueller Änderungsstatus; überschreibt den Vergleich, wenn gesetzt |
@@ -248,7 +252,10 @@ ausgewählter Wert sind getrennt: Freitext wird nicht als Wert übernommen.
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `label` | `string` | erforderlich | Sichtbares Label und zugänglicher Name |
+| `size` | `small \| medium` | `small` | Höhe des Selects |
 | `options` | `readonly SelectOption[]` | erforderlich | Auswahloptionen |
+| `searchable` | `boolean` | `false` | Aktiviert das Suchfeld; Freitext wird nicht als Wert übernommen |
+| `emptyMessage` | `string` | `Keine Treffer` | Anzeige bei fehlenden Suchtreffern |
 | `placeholder` | `string` | `Auswählen…` | Anzeige ohne Auswahl |
 | `labelSize` | `small \| medium` | `medium` | Größe des Labels |
 | `value` | `ModelSignal<string>` | `''` | Aktueller Wert; Signal-Forms-kompatibel |
@@ -303,6 +310,8 @@ Versionsansicht:
 | --- | --- | --- | --- |
 | `label` | `string` | erforderlich | Sichtbares Label und zugänglicher Name |
 | `options` | `readonly (string \| SelectOption)[]` | `[]` | Werte und Labels; Strings bleiben als Kurzform unterstützt |
+| `size` | `small \| medium` | `small` | Höhe des Multi-Selects |
+| `fullWidth` | `boolean` | `false` | Füllt die verfügbare Containerbreite statt der Standardbreite aus |
 | `value` | `ModelSignal<string[]>` | `[]` | Ausgewählte technische Werte, zweiseitig bindbar und Signal-Forms-kompatibel |
 | `searchable` | `boolean` | `false` | Zeigt ein Suchfeld im Auslöser |
 | `maxDisplayedValues` | `number` | `2` | Maximale Inline-Anzahl; danach wird die Auswahl zusammengefasst |
@@ -354,7 +363,7 @@ Import: `frontend/src/app/shared/data-table-toolbar/data-table-toolbar.ts`
     <app-text-field label="Kunde" placeholder="Name oder E-Mail" [(value)]="customerName" />
   </div>
   <div data-table-filters>
-    <app-multi-select label="Status" [options]="statuses" [(selected)]="selectedStatuses" />
+    <app-multi-select label="Status" [options]="statuses" [(value)]="selectedStatuses" />
   </div>
 </app-data-table-toolbar>
 ```
@@ -371,6 +380,7 @@ einem Suchfeld ebenfalls die Suche aus.
 | `showReset` | `boolean` | `true` | Zeigt die Reset-Schaltfläche |
 | `showApply` | `boolean` | `true` | Zeigt die Such-Schaltfläche; das Formular kann weiterhin mit Enter abgesendet werden |
 | `compactTop` | `boolean` | `false` | Reduziert den oberen Innenabstand der Leiste |
+| `buttonSize` | `small \| medium \| large` | `small` | Größe der Such- und Reset-Schaltflächen |
 | `applyDisabled` | `boolean` | `false` | Deaktiviert die Suchaktion |
 | `apply`, `reset` | `Output<void>` | — | Suche übernehmen bzw. Filter zurücksetzen |
 
@@ -450,11 +460,27 @@ Spaltenschlüssel einer Spalte zu. Im Template ist die Zeile über `let-row` ver
 | `pageChange` | `Output<number>` | — | Wird mit der neuen nullbasierten Seite ausgelöst |
 | `pageSizeChange` | `Output<number>` | — | Wird mit der neuen Seitengröße ausgelöst |
 
-`DataTableColumn<T>` besteht aus `key`, `header`, `value` und optional `sortable`. `value` liefert
-den einfachen Textwert; für formatierte Zellen kann `appDataTableCell` verwendet werden.
+### Spaltenkonfiguration: `DataTableColumn<T>`
 
-Die Tabelle verwendet ein festes Layout, sodass sich Spaltenbreiten nicht mit den geladenen
-Zellinhalten ändern. Ihre Breiten werden im verfügbaren Tabellenraum gleichmäßig verteilt.
+| Eigenschaft | Typ | Standard | Bedeutung |
+| --- | --- | --- | --- |
+| `key` | `string` | erforderlich | Eindeutiger Schlüssel für Spalte und Templates |
+| `header` | `string` | erforderlich | Sichtbare Spaltenüberschrift |
+| `value` | `(row: T) => string` | erforderlich | Einfacher Textwert; ein Zelltemplate ersetzt die Darstellung |
+| `sortable` | `boolean` | `false` | Zeigt einen Sortierbutton; die Seite übernimmt das Sortieren |
+| `width` | `string \| undefined` | `undefined` | Gewünschte CSS-Breite, z. B. `16rem` oder `25%`; keine starre Obergrenze |
+| `minWidth` | `string \| undefined` | `undefined` | CSS-Mindestbreite, z. B. `14rem` |
+
+```ts
+readonly customerColumns: readonly DataTableColumn<Customer>[] = [
+  { key: 'name', header: 'Name', value: customer => customer.name, width: '16rem', minWidth: '14rem' },
+  { key: 'status', header: 'Status', value: customer => customer.status, width: '6rem' },
+];
+```
+
+`width` und `minWidth` sind Eigenschaften einer Spalte im `columns`-Input, keine separaten
+Tabellen-Inputs. Die Tabelle verwendet automatisches Layout: Inhalte und Mindestbreiten können
+die gewünschte Breite vergrößern. Bei Platzmangel scrollt der Tabellenbereich horizontal.
 
 Paging umfasst erste, vorherige, nummerierte, nächste und letzte Seite.
 Mit `ng-template[appDataTableHeader]="spaltenschlüssel"` lassen sich eigene Header projizieren
@@ -568,6 +594,7 @@ Eine Längenbegrenzung ersetzt keine Validierung auf dem Server.
 | `closeOnBackdrop` | `true` | Backdrop als Schließanfrage zulassen |
 | `closeOnRequest` | `true` | Nach Schließanfrage automatisch `open` auf `false` setzen |
 | `closeRequested` | Output | Grund: `escape`, `backdrop` oder `button` |
+| `requestClose(reason?)` | Methode | Fordert das Schließen des obersten Dialogs an; Standardgrund `button` |
 | `[dialog-header]` | Projektionsbereich | Ergänzungen zum Titel |
 | `[dialog-footer]` | Projektionsbereich | Aktionen, beim Drawer getrennt vom scrollenden Inhalt |
 
@@ -585,6 +612,7 @@ Interaktive Beispiele unter `/components` (Navigation: **Komponenten**).
 Import: `shared/file-picker/file-picker.ts`. Einzeldatei über natives Dateifeld oder Drag-and-drop.
 `value` ist `File | null` als Model; `label` ist standardmäßig `Datei`, `accept` ist standardmäßig
 `.csv,text/csv`, `maxBytes` standardmäßig 10 MiB, `disabled` standardmäßig `false`.
+`buttonSize` ist `small | medium | large` (Standard `small`) und steuert den Auswahlbutton.
 `rejected` liefert eine verständliche Fehlermeldung. Bei Ablehnung bleibt eine bereits gültige
 Auswahl erhalten. `remove()` leert die Auswahl; dieselbe Datei kann erneut ausgewählt werden.
 Prüft Dateiname/MIME und Größe als Eingabehilfe, nicht den Dateiinhalt. Serverseitige Prüfung,
@@ -608,6 +636,8 @@ andere Meldungen mit `role="status"` ausgezeichnet. Inhalt und `[message-actions
 Import: `shared/toast/toast.ts`. Einmal `<app-toast-outlet />` im gewünschten Anwendungskontext
 platzieren. `inject(ToastService).show(text)` liefert eine ID, `dismiss(id)` entfernt genau diese
 Meldung. Meldungen werden höflich angekündigt und bleiben bis zum expliziten Schließen sichtbar.
+`messages` ist ein schreibgeschütztes `Signal<readonly ToastMessage[]>`; `ToastMessage` enthält
+`id: number` und `text: string`.
 Die Demo platziert den Outlet auf der Komponentenseite; für anwendungsweite Meldungen in die Shell verschieben.
 
 ### `app-diff-view`

@@ -11,6 +11,8 @@ export interface ComponentApi {
   outputs?: readonly ApiEntry[];
   slots?: readonly ApiEntry[];
   methods?: readonly ApiEntry[];
+  properties?: readonly ApiEntry[];
+  types?: readonly { name: string; entries: readonly ApiEntry[] }[];
   notes?: string;
 }
 
@@ -81,6 +83,28 @@ const dialogSlots = [
   slot('[dialog-header]', 'Zusätzlicher Inhalt im Kopf.'),
   slot('[dialog-footer]', 'Aktionen im Fuß.'),
 ];
+const dialogMethods = [
+  entry(
+    'requestClose(reason?)',
+    "(reason?: 'escape' | 'backdrop' | 'button') => void",
+    "'button'",
+    'Fordert das Schließen des obersten Dialogs an; berücksichtigt closeOnRequest und meldet closeRequested.',
+  ),
+];
+const selectOptionType = {
+  name: 'SelectOption',
+  entries: [
+    entry('value', 'string', 'erforderlich', 'Technischer Optionswert.'),
+    entry('label', 'string', 'erforderlich', 'Sichtbare und zugängliche Optionsbeschriftung.'),
+    entry('disabled', 'boolean', 'false', 'Deaktiviert die Option.'),
+    entry(
+      'shortLabel',
+      'string | undefined',
+      'undefined',
+      'Optionaler Kurztext für die Multi-Select-Zusammenfassung.',
+    ),
+  ],
+};
 
 export const componentApis: Record<string, ComponentApi> = {
   button: {
@@ -152,7 +176,7 @@ export const componentApis: Record<string, ComponentApi> = {
         'options',
         'readonly SelectOption[]',
         'erforderlich',
-        'Optionen mit value, label und optional disabled.',
+        'Optionen mit value, label und optional disabled sowie shortLabel; siehe Typbeschreibung SelectOption.',
       ),
       entry('value', 'model<string>', "''", 'Ausgewählter Wert; unterstützt [(value)].'),
       entry('placeholder', 'string', "'Auswählen…'", 'Text ohne Auswahl.'),
@@ -164,6 +188,7 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
     outputs: [output('valueChange', 'string', 'Wertänderung (Model).'), touch],
     notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
+    types: [selectOptionType],
   },
   'multi-select': {
     importCode: importFrom('MultiSelectComponent', 'multi-select/multi-select'),
@@ -183,6 +208,7 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
     outputs: [output('valueChange', 'string[]', 'Wertänderung (Model).'), touch],
     notes: `SelectOption wird aus select/select exportiert. Unterstützt Angular Signal Forms. ${fieldWrapperNote}`,
+    types: [selectOptionType],
   },
   tabs: {
     importCode: `${importFrom('TabsComponent, TabItem', 'tabs/tabs')}\n${importFrom('TabPanelTemplateDirective', 'tabs/tab-panel-template.directive')}`,
@@ -215,6 +241,21 @@ export const componentApis: Record<string, ComponentApi> = {
         'Paneltemplate; der Direktivenwert entspricht dem Tab-value.',
       ),
     ],
+    types: [
+      {
+        name: 'TabItem',
+        entries: [
+          entry(
+            'value',
+            'string',
+            'erforderlich',
+            'Eindeutiger Reiterschlüssel; wird auch vom Panel verwendet.',
+          ),
+          entry('label', 'string', 'erforderlich', 'Sichtbare Reiterbeschriftung.'),
+          entry('disabled', 'boolean', 'false', 'Deaktiviert den Reiter.'),
+        ],
+      },
+    ],
   },
   stepper: {
     importCode: importFrom('StepperComponent, StepItem', 'stepper/stepper'),
@@ -226,6 +267,20 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
     notes:
       'Reine Fortschrittsanzeige; Navigation und Validierung liegen bei der aufrufenden Seite.',
+    types: [
+      {
+        name: 'StepItem',
+        entries: [
+          entry(
+            'value',
+            'string',
+            'erforderlich',
+            'Eindeutiger Schrittwert; wird in current und completed referenziert.',
+          ),
+          entry('label', 'string', 'erforderlich', 'Sichtbare Schrittbeschriftung.'),
+        ],
+      },
+    ],
   },
   'file-picker': {
     importCode: importFrom('FilePickerComponent', 'file-picker/file-picker'),
@@ -240,6 +295,14 @@ export const componentApis: Record<string, ComponentApi> = {
     outputs: [
       output('valueChange', 'File | null', 'Änderung der Datei (Model).'),
       output('rejected', 'string', 'Fehlermeldung bei abgelehnter Datei.'),
+    ],
+    methods: [
+      entry(
+        'remove()',
+        '() => void',
+        '—',
+        'Leert die ausgewählte Datei, sofern die Komponente nicht deaktiviert ist.',
+      ),
     ],
   },
   'data-table-toolbar': {
@@ -271,7 +334,7 @@ export const componentApis: Record<string, ComponentApi> = {
         'columns',
         'readonly DataTableColumn<T>[]',
         'erforderlich',
-        'Spalten mit key, header, value und optional sortable.',
+        'Spalten mit key, header und value; optional sortable, width (gewünschte CSS-Breite) und minWidth (CSS-Mindestbreite). Zum Beispiel width: "16rem", minWidth: "14rem". Dies sind Eigenschaften einer Spalte, keine separaten Tabellen-Inputs.',
       ),
       entry('framed', 'boolean', 'true', 'Zeigt den äußeren Rahmen.'),
       entry('striped', 'boolean', 'true', 'Färbt jede zweite Datenzeile abwechselnd.'),
@@ -304,6 +367,44 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
     notes:
       'Sortierung und Pagination werden von der aufrufenden Seite umgesetzt. DataTableColumn unterstützt width und minWidth als CSS-Breiten; bei Platzmangel scrollt die Tabelle horizontal.',
+    types: [
+      {
+        name: 'DataTableColumn<T>',
+        entries: [
+          entry(
+            'key',
+            'string',
+            'erforderlich',
+            'Eindeutiger Spaltenschlüssel; ordnet Zell- und Headertemplates zu.',
+          ),
+          entry('header', 'string', 'erforderlich', 'Sichtbare Spaltenüberschrift.'),
+          entry(
+            'value',
+            '(row: T) => string',
+            'erforderlich',
+            'Liefert den Text einer Zelle; ein Zelltemplate ersetzt dessen Darstellung.',
+          ),
+          entry(
+            'sortable',
+            'boolean',
+            'false',
+            'Zeigt einen Sortierbutton; die aufrufende Seite sortiert die Daten.',
+          ),
+          entry(
+            'width',
+            'string | undefined',
+            'undefined',
+            'Gewünschte CSS-Spaltenbreite, z. B. 16rem oder 25%. Durch automatisches Tabellenlayout keine starre Obergrenze.',
+          ),
+          entry(
+            'minWidth',
+            'string | undefined',
+            'undefined',
+            'CSS-Mindestbreite, z. B. 14rem. Reicht der Platz nicht aus, scrollt der Tabellenbereich horizontal.',
+          ),
+        ],
+      },
+    ],
   },
   'inline-message': {
     importCode: importFrom('InlineMessageComponent', 'inline-message/inline-message'),
@@ -329,18 +430,47 @@ export const componentApis: Record<string, ComponentApi> = {
       entry('beforeLabel', 'string', "'Aktueller Stand'", 'Überschrift der Vorher-Spalte.'),
       entry('afterLabel', 'string', "'Beantragter Stand'", 'Überschrift der Nachher-Spalte.'),
     ],
+    types: [
+      {
+        name: 'DiffEntry',
+        entries: [
+          entry('key', 'string', 'erforderlich', 'Eindeutiger Vergleichsschlüssel.'),
+          entry('label', 'string', 'erforderlich', 'Sichtbare Feldbeschriftung.'),
+          entry(
+            'before',
+            'string | null',
+            'erforderlich',
+            'Vorheriger Wert; null bedeutet nicht vorhanden, ein leerer String ist ein vorhandener leerer Wert.',
+          ),
+          entry(
+            'after',
+            'string | null',
+            'erforderlich',
+            'Beantragter Wert; null bedeutet nicht vorhanden.',
+          ),
+          entry(
+            'changed',
+            'boolean | undefined',
+            'undefined',
+            'Überschreibt den automatisch berechneten Änderungsstatus.',
+          ),
+        ],
+      },
+    ],
   },
   'side-drawer': {
     importCode: importFrom('SideDrawerComponent', 'side-drawer/side-drawer'),
     inputs: dialogInputs,
     outputs: dialogOutputs,
     slots: dialogSlots,
+    methods: dialogMethods,
   },
   modal: {
     importCode: importFrom('ModalComponent', 'modal/modal'),
     inputs: dialogInputs,
     outputs: dialogOutputs,
     slots: dialogSlots,
+    methods: dialogMethods,
   },
   toast: {
     importCode: importFrom('ToastService, ToastOutletComponent', 'toast/toast'),
@@ -352,6 +482,28 @@ export const componentApis: Record<string, ComponentApi> = {
         'Zeigt eine Meldung und liefert ihre ID.',
       ),
       entry('dismiss(id)', '(id: number) => void', '—', 'Entfernt eine Meldung anhand ihrer ID.'),
+    ],
+    properties: [
+      entry(
+        'messages',
+        'Signal<readonly ToastMessage[]>',
+        '[]',
+        'Schreibgeschützte Liste der aktuell sichtbaren Meldungen im ToastService.',
+      ),
+    ],
+    types: [
+      {
+        name: 'ToastMessage',
+        entries: [
+          entry(
+            'id',
+            'number',
+            'erzeugt',
+            'Vom Service vergebene Meldungs-ID; wird an dismiss übergeben.',
+          ),
+          entry('text', 'string', 'erforderlich', 'Text der Meldung.'),
+        ],
+      },
     ],
     notes:
       'ToastOutletComponent zeigt die Meldungen des injizierbaren ToastService an. Meldungen werden explizit geschlossen.',
@@ -377,6 +529,7 @@ componentApis['data-table-combined'] = {
     ...(componentApis['data-table-toolbar'].slots ?? []),
     ...(componentApis['data-table'].slots ?? []),
   ],
+  types: componentApis['data-table'].types,
   notes:
     'Die Toolbar meldet Such- und Reset-Aktionen; die aufrufende Seite filtert die Daten und übergibt sie an die Tabelle. Die vollständigen Einzel-APIs stehen auch auf den jeweiligen Komponentenseiten.',
 };

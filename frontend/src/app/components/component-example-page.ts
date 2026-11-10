@@ -152,7 +152,7 @@ const examples: Record<string, ComponentDocumentation> = {
         'sizes',
         'Größen',
         '<button appButton size="small">Klein</button>\n<button appButton size="medium">Mittel</button>\n<button appButton size="large">Groß</button>',
-        '// size: small | medium | large (Standard: medium)',
+        '// size: small | medium | large (Standard: small).\n// Die Größe steuert hauptsächlich Höhe und Innenabstände.',
       ),
       sample(
         'icon',
@@ -187,13 +187,13 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'changed',
         'Geänderter Wert',
-        '<app-text-field label="Name" [value]="name" [initialValue]="originalName" [changed]="true" previousValueLabel="Wert vorher" />',
+        '<app-text-field label="Name" [value]="name()" [initialValue]="originalName" [changed]="true" previousValueLabel="Wert vorher" />',
         "import { signal } from '@angular/core';\n\nname = signal('Neuer Name');\noriginalName = 'Alter Name';\n// previousValueLabel ist optional; Standardwert: 'Wert vorher'.",
       ),
       sample(
         'error',
         'Validierungsfehler',
-        '<app-text-field label="Name" [value]="name" [invalid]="true" [touched]="true" [errors]="nameErrors" />',
+        '<app-text-field label="Name" [value]="name()" [invalid]="true" [touched]="true" [errors]="nameErrors" />',
         "import { signal } from '@angular/core';\n\nname = signal('');\nnameErrors = [{ kind: 'required', message: 'Bitte einen Namen eingeben.' }];",
       ),
       sample(
@@ -206,13 +206,19 @@ const examples: Record<string, ComponentDocumentation> = {
         'readonly',
         'Nur lesbar',
         '<app-text-field label="E-Mail" value="alex@example.com" [readonly]="true" />',
-        '// readonly bleibt fokussier- und kopierbar, aber nicht editierbar.',
+        '// readonly verhindert Änderungen und nimmt das Feld aus der Tab-Reihenfolge.\n// Der Text kann weiterhin mit der Maus markiert und kopiert werden.',
       ),
       sample(
         'prefix',
         'Mit Prefix',
         '<app-text-field label="Betrag" prefix="€" />',
         '// prefix eignet sich z. B. für Währung oder Einheiten.',
+      ),
+      sample(
+        'monospace',
+        'Monospace für Kennungen',
+        '<app-text-field label="ISIN" value="DE0000000001" [monospace]="true" [maxLength]="12" />',
+        '// monospace verwendet die zentrale Monospace-Schrift: Consolas mit Fallbacks.\n// Das Label bleibt in der normalen UI-Schrift.',
       ),
     ],
   },
@@ -235,20 +241,20 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'changed',
         'Geänderter Text',
-        '<app-textarea label="Beschreibung" [value]="description" [initialValue]="originalDescription" [changed]="true" />',
+        '<app-textarea label="Beschreibung" [value]="description()" [initialValue]="originalDescription" [changed]="true" />',
         "import { signal } from '@angular/core';\n\ndescription = signal('Aktuelle Fassung');\noriginalDescription = 'Vorherige Fassung';",
       ),
       sample(
         'error',
         'Validierungsfehler',
-        '<app-textarea label="Kommentar" [value]="comment" [invalid]="true" [touched]="true" [errors]="commentErrors" />',
+        '<app-textarea label="Kommentar" [value]="comment()" [invalid]="true" [touched]="true" [errors]="commentErrors" />',
         "import { signal } from '@angular/core';\n\ncomment = signal('');\ncommentErrors = [{ kind: 'required', message: 'Bitte einen Kommentar eingeben.' }];",
       ),
       sample(
         'disabled',
         'Deaktiviert und nur lesbar',
         '<app-textarea label="Archivnotiz" value="Abgeschlossen" [disabled]="true" />\n<app-textarea label="Protokoll" value="Nur lesbar" [readonly]="true" />',
-        '// disabled ist gesperrt; readonly bleibt fokussierbar.',
+        '// disabled sperrt die Eingabe; readonly verhindert Änderungen\n// und nimmt das Feld aus der Tab-Reihenfolge.',
       ),
     ],
   },
@@ -272,7 +278,7 @@ const examples: Record<string, ComponentDocumentation> = {
         'hint',
         'Mit Hinweis',
         '<app-select label="Depot" [options]="depots" hint="Bitte ein bevorzugtes Depot wählen." />',
-        '// hint erscheint nur, wenn ein Hinweistext übergeben wird.',
+        "depots = [{ value: 'd1', label: 'Hauptdepot' }, { value: 'd2', label: 'Zweitdepot' }];\n// hint erscheint nur, wenn ein Hinweistext übergeben wird.",
       ),
       sample(
         'changed',
@@ -284,7 +290,7 @@ const examples: Record<string, ComponentDocumentation> = {
         'error',
         'Fehler und deaktivierte Option',
         '<app-select label="Depot" [options]="depots" [invalid]="true" [touched]="true" [errors]="feedbackErrors" />',
-        "feedbackErrors = [{ kind: 'required', message: 'Bitte ein Depot auswählen.' }];\n// Optionen können { value, label, disabled } enthalten.",
+        "depots = [{ value: 'd1', label: 'Hauptdepot' }, { value: 'd2', label: 'Zweitdepot' }, { value: 'locked', label: 'Gesperrt', disabled: true }];\nfeedbackErrors = [{ kind: 'required', message: 'Bitte ein Depot auswählen.' }];",
       ),
       sample(
         'disabled',
@@ -308,13 +314,13 @@ const examples: Record<string, ComponentDocumentation> = {
         'search',
         'Mit Suche und begrenzter Anzeige',
         '<app-multi-select label="Depots" [options]="depots" [searchable]="true" [maxDisplayedValues]="2" />',
-        "depots = [{ value: 'd1', label: 'Hauptdepot' }, { value: 'd2', label: 'Zweitdepot' }];\n// searchable aktiviert Filterung; maxDisplayedValues begrenzt sichtbare Auswahlchips.",
+        "depots = [{ value: 'd1', label: 'Hauptdepot' }, { value: 'd2', label: 'Zweitdepot' }];\n// searchable aktiviert Filterung; maxDisplayedValues begrenzt\n// die einzeln angezeigten Werte der Auswahlzusammenfassung.",
       ),
       sample(
         'hint',
         'Mit Hinweis',
         '<app-multi-select label="Teams" [options]="teams" hint="Mehrere Teams können gewählt werden." />',
-        '// hint wird unter dem Auswahlfeld angezeigt.',
+        "teams = [{ value: 'a', label: 'Design' }, { value: 'b', label: 'Engineering' }];\n// hint wird unter dem Auswahlfeld angezeigt.",
       ),
       sample(
         'changed',
@@ -355,8 +361,8 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'keyboard',
         'Explizite Tastaturaktivierung',
-        '<app-tabs [tabs]="tabs" [(selectedTab)]="activeTab" selectionMode="explicit" orientation="vertical">\n  <ng-template appTabPanel="general">Allgemein</ng-template>\n</app-tabs>',
-        "import { signal } from '@angular/core';\n\ntabs = [{ value: 'general', label: 'Allgemein' }];\nactiveTab = signal('general');\n// Pfeiltasten fokussieren; Enter oder Leertaste aktiviert.",
+        '<app-tabs [tabs]="tabs" [(selectedTab)]="activeTab" selectionMode="explicit" orientation="vertical">\n  <ng-template appTabPanel="general">Allgemeine Einstellungen</ng-template>\n  <ng-template appTabPanel="details">Details</ng-template>\n</app-tabs>',
+        "import { signal } from '@angular/core';\n\ntabs = [{ value: 'general', label: 'Allgemein' }, { value: 'details', label: 'Details' }];\nactiveTab = signal('general');\n// Pfeiltasten fokussieren; Enter oder Leertaste aktiviert.",
       ),
     ],
   },
@@ -409,7 +415,7 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'basic',
         'Suche und Aktionen',
-        '<app-data-table-toolbar (apply)="applyFilters()" (reset)="resetFilters()">\n  <div data-table-searches><app-text-field label="Suche" [(value)]="query" /></div>\n  <span data-table-summary>12 Einträge</span>\n  <button data-table-actions appButton>Neu</button>\n</app-data-table-toolbar>',
+        '<app-data-table-toolbar (apply)="applyFilters()" (reset)="resetFilters()">\n  <div data-table-searches><app-text-field label="Suche" [(value)]="query" /></div>\n  <span data-table-summary>12 Einträge</span>\n  <button data-table-actions appButton type="button">Neu</button>\n</app-data-table-toolbar>',
         "import { signal } from '@angular/core';\n\nquery = signal('');\n\napplyFilters(): void { /* Filter übernehmen */ }\nresetFilters(): void { this.query.set(''); }",
       ),
       sample(
@@ -428,7 +434,8 @@ const examples: Record<string, ComponentDocumentation> = {
   },
   'data-table': {
     name: 'DataTable',
-    description: 'Datentabelle mit Sortierung, Ladezustand und Pagination.',
+    description:
+      'Datentabelle mit Sortierung, Ladezustand und Pagination. Spalten unterstützen width für die gewünschte Breite und minWidth für die Mindestbreite; bei Platzmangel scrollt die Tabelle horizontal.',
     examples: [
       sample(
         'basic',
@@ -443,16 +450,79 @@ const examples: Record<string, ComponentDocumentation> = {
         "import { DataTableColumn } from '../shared/data-table/data-table';\n\ninterface Person { name: string; role: string; email: string }\nrows: Person[] = [\n  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },\n  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },\n  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },\n];\ncolumns: DataTableColumn<Person>[] = [\n  { key: 'name', header: 'Name', value: row => row.name },\n  { key: 'role', header: 'Rolle', value: row => row.role },\n  { key: 'email', header: 'E-Mail', value: row => row.email },\n];",
       ),
       sample(
+        'column-widths',
+        'Spaltenbreiten und Mindestbreiten',
+        '<app-data-table [rows]="rows" [columns]="sizedColumns" [pagination]="false" caption="Kontakte mit Spaltenbreiten" />',
+        `import { DataTableColumn } from '../shared/data-table/data-table';
+
+interface Person { name: string; role: string; email: string }
+rows: Person[] = [
+  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },
+  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },
+  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },
+];
+// width ist die gewünschte Breite, minWidth verhindert zu schmale Spalten.
+// Beide sind optionale CSS-Werte pro Spalte (z. B. rem, px oder %).
+// Reicht der Platz nicht aus, scrollt die Tabelle horizontal.
+sizedColumns: DataTableColumn<Person>[] = [
+  { key: 'name', header: 'Name', value: row => row.name, width: '16rem', minWidth: '14rem' },
+  { key: 'role', header: 'Rolle', value: row => row.role, width: '10rem', minWidth: '8rem' },
+  { key: 'email', header: 'E-Mail', value: row => row.email, minWidth: '18rem' },
+];`,
+      ),
+      sample(
         'sorting',
         'Sortierbare Spalte',
-        '<app-data-table [rows]="rows" [columns]="columns" [sort]="sort" [direction]="direction" (sortChange)="sortBy($event)" />',
-        "import { signal } from '@angular/core';\nimport { DataTableColumn } from '../shared/data-table/data-table';\n\ninterface Person { name: string; role: string; email: string }\nrows: Person[] = [\n  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },\n  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },\n  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },\n];\ncolumns: DataTableColumn<Person>[] = [\n  { key: 'name', header: 'Name', value: row => row.name, sortable: true },\n  { key: 'role', header: 'Rolle', value: row => row.role },\n  { key: 'email', header: 'E-Mail', value: row => row.email },\n];\nsort = signal('name');\ndirection = signal<'asc' | 'desc'>('asc');\nsortBy(key: string): void { this.sort.set(key); }",
+        '<app-data-table [rows]="sortedRows()" [columns]="columns" [pagination]="false" [sort]="sort()" [direction]="direction()" (sortChange)="sortBy($event)" />',
+        `import { computed, signal } from '@angular/core';
+import { DataTableColumn } from '../shared/data-table/data-table';
+
+interface Person { name: string; role: string; email: string }
+rows: Person[] = [
+  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },
+  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },
+  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },
+];
+columns: DataTableColumn<Person>[] = [
+  { key: 'name', header: 'Name', value: row => row.name, sortable: true },
+  { key: 'role', header: 'Rolle', value: row => row.role },
+  { key: 'email', header: 'E-Mail', value: row => row.email },
+];
+sort = signal('name');
+direction = signal<'asc' | 'desc'>('asc');
+sortedRows = computed(() => [...this.rows].sort((a, b) =>
+  a.name.localeCompare(b.name, 'de') * (this.direction() === 'asc' ? 1 : -1)
+));
+sortBy(key: string): void {
+  this.direction.update(direction => this.sort() === key && direction === 'asc' ? 'desc' : 'asc');
+  this.sort.set(key);
+}`,
       ),
       sample(
         'pagination',
         'Pagination',
-        '<app-data-table [rows]="pageRows()" [columns]="columns" [total]="3" [totalPages]="3" [pageSize]="1" [page]="page()" (pageChange)="page.set($event)" />',
-        "import { computed, signal } from '@angular/core';\nimport { DataTableColumn } from '../shared/data-table/data-table';\n\ninterface Person { name: string; role: string; email: string }\nallRows: Person[] = [\n  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },\n  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },\n  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },\n];\npage = signal(0);\npageRows = computed(() => this.allRows.slice(this.page(), this.page() + 1));\ncolumns: DataTableColumn<Person>[] = [\n  { key: 'name', header: 'Name', value: row => row.name },\n  { key: 'role', header: 'Rolle', value: row => row.role },\n  { key: 'email', header: 'E-Mail', value: row => row.email },\n];",
+        '<app-data-table [rows]="pageRows()" [columns]="columns" [total]="allRows.length" [totalPages]="totalPages()" [pageSize]="pageSize()" [pageSizeOptions]="[1, 2, 3]" [page]="page()" (pageChange)="page.set($event)" (pageSizeChange)="pageSize.set($event); page.set(0)" />',
+        `import { computed, signal } from '@angular/core';
+import { DataTableColumn } from '../shared/data-table/data-table';
+
+interface Person { name: string; role: string; email: string }
+allRows: Person[] = [
+  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },
+  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },
+  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },
+];
+page = signal(0);
+pageSize = signal(1);
+totalPages = computed(() => Math.ceil(this.allRows.length / this.pageSize()));
+pageRows = computed(() => {
+  const start = this.page() * this.pageSize();
+  return this.allRows.slice(start, start + this.pageSize());
+});
+columns: DataTableColumn<Person>[] = [
+  { key: 'name', header: 'Name', value: row => row.name },
+  { key: 'role', header: 'Rolle', value: row => row.role },
+  { key: 'email', header: 'E-Mail', value: row => row.email },
+];`,
       ),
       sample(
         'empty',
@@ -600,7 +670,7 @@ protected resetCombinedFilters(): void {
         'labels',
         'Eigene Spaltenbeschriftungen',
         '<app-diff-view [entries]="changes" beforeLabel="Aktuell" afterLabel="Vorgeschlagen" />',
-        '// beforeLabel und afterLabel benennen die Vergleichsspalten.',
+        "changes = [{ key: 'name', label: 'Name', before: 'Alt', after: 'Neu' }];\n// beforeLabel und afterLabel benennen die Vergleichsspalten.",
       ),
       sample(
         'unchanged',
@@ -623,14 +693,14 @@ protected resetCombinedFilters(): void {
       sample(
         'form',
         'Formular mit Footer-Aktion',
-        '<app-side-drawer [(open)]="drawerOpen" title="Bearbeiten">\n  <app-text-field label="Name" />\n  <div dialog-footer><button appButton>Speichern</button></div>\n</app-side-drawer>',
-        "import { signal } from '@angular/core';\n\ndrawerOpen = signal(false);\n// Footer-Inhalt wird über dialog-footer projiziert.",
+        '<button appButton type="button" (click)="formDrawerOpen.set(true)">Drawer öffnen</button>\n<app-side-drawer [(open)]="formDrawerOpen" title="Bearbeiten">\n  <app-text-field label="Name" />\n  <div dialog-footer><button appButton type="button" (click)="formDrawerOpen.set(false)">Speichern</button></div>\n</app-side-drawer>',
+        "import { signal } from '@angular/core';\n\nformDrawerOpen = signal(false);\n// Footer-Inhalt wird über dialog-footer projiziert.\n// Fachliches Speichern implementiert die aufrufende Anwendung.",
       ),
       sample(
         'close',
         'Schließverhalten konfigurieren',
-        '<app-side-drawer [(open)]="drawerOpen" title="Hinweis" [closeOnEscape]="false" [closeOnBackdrop]="false">Inhalt</app-side-drawer>',
-        "import { signal } from '@angular/core';\n\ndrawerOpen = signal(false);\n// Escape und Backdrop lassen sich unabhängig konfigurieren.",
+        '<button appButton type="button" (click)="closeDrawerOpen.set(true)">Drawer öffnen</button>\n<app-side-drawer [(open)]="closeDrawerOpen" title="Hinweis" [closeOnEscape]="false" [closeOnBackdrop]="false">Schließen über die Aktion im Drawer.</app-side-drawer>',
+        "import { signal } from '@angular/core';\n\ncloseDrawerOpen = signal(false);\n// Escape und Backdrop lassen sich unabhängig konfigurieren.",
       ),
     ],
   },
@@ -647,7 +717,7 @@ protected resetCombinedFilters(): void {
       sample(
         'form',
         'Dialog mit Aktionen',
-        '<button appButton (click)="formModalOpen.set(true)">Dialog öffnen</button>\n<app-modal [(open)]="formModalOpen" title="Bearbeiten">\n  <app-text-field label="Name" />\n  <div dialog-footer class="mt-5 flex justify-end">\n    <button appButton>Übernehmen</button>\n  </div>\n</app-modal>',
+        '<button appButton type="button" (click)="formModalOpen.set(true)">Dialog öffnen</button>\n<app-modal [(open)]="formModalOpen" title="Bearbeiten">\n  <app-text-field label="Name" />\n  <div dialog-footer class="mt-5 flex justify-end">\n    <button appButton type="button" (click)="formModalOpen.set(false)">Übernehmen</button>\n  </div>\n</app-modal>',
         "import { signal } from '@angular/core';\n\nformModalOpen = signal(false);\n// dialog-footer platziert die Aktionen im Dialogfuß.",
       ),
       sample(
@@ -660,13 +730,13 @@ protected resetCombinedFilters(): void {
   },
   toast: {
     name: 'Toast',
-    description: 'Kurzlebige Rückmeldung außerhalb des aktuellen Inhaltsflusses.',
+    description: 'Explizit schließbare Rückmeldung außerhalb des aktuellen Inhaltsflusses.',
     examples: [
       sample(
         'success',
         'Erfolgsmeldung',
         '<button appButton (click)="toasts.show(\'Änderungen gespeichert\')">Speichern</button>\n<app-toast-outlet />',
-        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast';\n\ntoasts = inject(ToastService);\n// Der Toast verschwindet automatisch.",
+        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast';\n\ntoasts = inject(ToastService);\n// Die Meldung bleibt sichtbar, bis sie geschlossen wird.\n// show(text) liefert eine ID für toasts.dismiss(id).",
       ),
       sample(
         'multiple',
@@ -712,6 +782,20 @@ export class ComponentExamplePage {
   protected readonly api = computed(
     () => componentApis[this.slug().get('slug') ?? ''] ?? componentApis['button'],
   );
+  protected readonly apiGroups = computed(() => {
+    const documentation = this.api();
+    return [
+      { title: 'Inputs und Models', entries: documentation.inputs },
+      { title: 'Outputs', entries: documentation.outputs },
+      { title: 'Content und Direktiven', entries: documentation.slots },
+      { title: 'Methoden', entries: documentation.methods },
+      { title: 'Öffentliche Eigenschaften', entries: documentation.properties },
+      ...(documentation.types ?? []).map((type) => ({
+        title: `Typ: ${type.name}`,
+        entries: type.entries,
+      })),
+    ];
+  });
   protected readonly pageTabs = [
     { value: 'examples', label: 'Beispiele' },
     { value: 'api', label: 'API' },
@@ -787,6 +871,8 @@ export class ComponentExamplePage {
   protected readonly selectedTeams = signal<string[]>(['a']);
   protected readonly selectedIds = signal<string[]>([]);
   protected readonly page = signal(0);
+  protected readonly pageSize = signal(1);
+  protected readonly totalPages = computed(() => Math.ceil(this.rows.length / this.pageSize()));
   protected readonly sort = signal('name');
   protected readonly direction = signal<'asc' | 'desc'>('asc');
   protected readonly file = signal<File | null>(null);
@@ -806,6 +892,8 @@ export class ComponentExamplePage {
     { value: 'c', label: 'Extern', disabled: true },
   ];
   protected readonly drawerOpen = signal(false);
+  protected readonly formDrawerOpen = signal(false);
+  protected readonly closeDrawerOpen = signal(false);
   protected readonly basicModalOpen = signal(false);
   protected readonly formModalOpen = signal(false);
   protected readonly closeModalOpen = signal(false);
@@ -838,7 +926,10 @@ export class ComponentExamplePage {
         (!role || contact.role === role),
     );
   });
-  protected readonly pageRows = computed(() => this.rows.slice(this.page(), this.page() + 1));
+  protected readonly pageRows = computed(() => {
+    const start = this.page() * this.pageSize();
+    return this.rows.slice(start, start + this.pageSize());
+  });
   protected readonly sortedRows = computed(() =>
     [...this.rows].sort(
       (a, b) => a.name.localeCompare(b.name, 'de') * (this.direction() === 'asc' ? 1 : -1),
@@ -853,6 +944,11 @@ export class ComponentExamplePage {
     { key: 'role', header: 'Rolle', value: (row) => row.role },
     { key: 'email', header: 'E-Mail', value: (row) => row.email },
   ];
+  protected readonly sizedColumns = this.columns.map((column) => ({
+    ...column,
+    width: column.key === 'name' ? '16rem' : column.key === 'role' ? '10rem' : undefined,
+    minWidth: column.key === 'name' ? '14rem' : column.key === 'role' ? '8rem' : '18rem',
+  }));
   protected readonly sortableColumns: DataTableColumn<{
     name: string;
     role: string;
