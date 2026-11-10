@@ -12,6 +12,7 @@ export interface DataTableColumn<T> {
   value: (row: T) => string;
   sortable?: boolean;
   width?: string;
+  minWidth?: string;
 }
 
 @Component({

@@ -23,7 +23,7 @@ describe('ButtonComponent', () => {
     const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
     expect(button.tagName).toBe('BUTTON');
     expect(button.classList.contains('border-border-strong')).toBe(true);
-    expect(button.classList.contains('h-8')).toBe(true);
+    expect(button.classList.contains('min-h-8')).toBe(true);
     expect(button.querySelector('app-icon')).not.toBeNull();
   });
 });

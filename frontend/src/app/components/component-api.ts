@@ -302,7 +302,8 @@ export const componentApis: Record<string, ComponentApi> = {
       ),
       slot('ng-template[appDataTableHeader]', 'Kopftemplate für den angegebenen Spaltenschlüssel.'),
     ],
-    notes: 'Sortierung und Pagination werden von der aufrufenden Seite umgesetzt.',
+    notes:
+      'Sortierung und Pagination werden von der aufrufenden Seite umgesetzt. DataTableColumn unterstützt width und minWidth als CSS-Breiten; bei Platzmangel scrollt die Tabelle horizontal.',
   },
   'inline-message': {
     importCode: importFrom('InlineMessageComponent', 'inline-message/inline-message'),

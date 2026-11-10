@@ -40,7 +40,7 @@
             [attr.aria-required]="required()"
             [attr.aria-invalid]="invalid()"
             (blur)="touch.emit()"
-            class="h-full min-w-0 flex-1 bg-transparent text-sm text-content-secondary outline-none"
+            class="h-full min-w-0 flex-1 bg-transparent text-control text-content-secondary outline-none placeholder:text-content-subtle"
             [class.cursor-not-allowed]="readonly() || disabled()"
           />
           <app-icon name="chevron-down" [size]="16" />
@@ -59,7 +59,7 @@
           [attr.aria-required]="required()"
           [attr.aria-invalid]="invalid()"
           (blur)="touch.emit()"
-          class="inline-flex w-full items-center justify-between rounded-control border border-border-strong px-3 text-left text-control"
+          class="inline-flex w-full items-center justify-between rounded-control border border-border-strong px-3 text-left text-control text-content-secondary"
           [class.h-8]="size() === 'small'"
           [class.h-control]="size() === 'medium'"
           [class.bg-surface]="!readonly() && !disabled()"

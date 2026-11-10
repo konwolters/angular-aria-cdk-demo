@@ -1,4 +1,5 @@
 @use '@angular/cdk/overlay-prebuilt.css';
+@use '@fontsource-variable/inter/wght.css';
 
 :root {
   color-scheme: light;
@@ -10,10 +11,10 @@
   --ui-color-content: #0f172a;
   --ui-color-content-secondary: #475569;
   --ui-color-content-muted: #64748b;
-  --ui-color-content-subtle: #94a3b8;
+  --ui-color-content-subtle: #64748b;
   --ui-color-border: #e2e8f0;
-  --ui-color-border-strong: #cbd5e1;
-  --ui-color-border-hover: #94a3b8;
+  --ui-color-border-strong: #7c8a9c;
+  --ui-color-border-hover: #64748b;
   --ui-color-brand: #2563eb;
   --ui-color-brand-hover: #1d4ed8;
   --ui-color-brand-subtle: #eff6ff;
@@ -35,20 +36,21 @@
   --ui-size-spacing: 0.234375rem;
   --ui-size-control: 2.375rem;
   --ui-size-dropdown: 12.5rem;
-  --ui-font-size-xs: 0.625rem;
-  --ui-font-size-sm: 0.75rem;
-  --ui-font-size-base: 0.8125rem;
-  --ui-font-size-control: 0.6875rem;
-  --ui-font-size-lg: 0.9375rem;
-  --ui-font-size-xl: 1.0625rem;
-  --ui-font-size-2xl: 1.1875rem;
+  --ui-font-size-xs: 0.75rem;
+  --ui-font-size-sm: 0.8125rem;
+  --ui-font-size-base: 0.875rem;
+  --ui-font-size-control: 0.8125rem;
+  --ui-font-size-lg: 1rem;
+  --ui-font-size-xl: 1.125rem;
+  --ui-font-size-2xl: 1.25rem;
+  --ui-font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --ui-font-mono: Consolas, 'Liberation Mono', Menlo, monospace;
 }
 
 body {
   background-color: var(--ui-color-canvas);
   color: var(--ui-color-content);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--ui-font-sans);
   font-size: var(--ui-font-size-base);
 }
 

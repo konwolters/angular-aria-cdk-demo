@@ -7,19 +7,20 @@
   [attr.aria-busy]="loading()"
 >
   <div class="overflow-x-auto">
-    <table class="w-full min-w-[760px] table-fixed text-left text-sm">
+    <table class="w-full min-w-[760px] table-auto text-left text-sm">
       <caption class="sr-only">
         {{
           caption()
         }}
       </caption>
-      <thead class="bg-canvas text-xs uppercase tracking-wide text-content-muted">
+      <thead class="bg-canvas text-sm font-semibold text-content-secondary">
         <tr>
           @for (column of columns(); track column.key) {
             <th
               scope="col"
-              class="px-5 py-3"
+              class="px-3 py-2"
               [style.width]="column.width || null"
+              [style.min-width]="column.minWidth || null"
               [attr.aria-sort]="
                 sort() === column.key
                   ? direction() === 'asc'
@@ -54,7 +55,10 @@
         @for (row of rows(); track trackBy()(row)) {
           <tr class="hover:bg-canvas" [class]="striped() && $index % 2 === 1 ? 'bg-canvas/50' : ''">
             @for (column of columns(); track column.key) {
-              <td class="px-5 py-3.5 text-content-secondary">
+              <td
+                class="px-3 py-2 text-content-secondary"
+                [style.min-width]="column.minWidth || null"
+              >
                 @if (cellTemplate(column.key); as template) {
                   <ng-container
                     [ngTemplateOutlet]="template"
@@ -83,13 +87,16 @@
 
   @if (pagination()) {
     <footer
-      class="grid gap-3 border-t border-border px-5 py-4 text-xs text-content-muted sm:grid-cols-[1fr_auto_1fr] sm:items-center"
+      class="flex flex-wrap items-end justify-between gap-3 border-t border-border px-3 py-3 text-xs text-content-muted"
     >
       <span role="status" aria-live="polite">
         {{ firstRow() }}–{{ lastRow() }} von {{ total() }} Ergebnissen
       </span>
 
-      <nav aria-label="Tabellenseiten" class="flex items-center justify-center gap-1">
+      <nav
+        aria-label="Tabellenseiten"
+        class="flex max-w-full flex-wrap items-center justify-center gap-1"
+      >
         <button
           appButton
           type="button"
@@ -151,7 +158,7 @@
         </button>
       </nav>
 
-      <div class="flex sm:justify-self-end">
+      <div class="flex">
         <div class="w-28">
           <app-select
             label="Zeilen pro Seite"

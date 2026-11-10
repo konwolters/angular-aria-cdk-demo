@@ -12,14 +12,14 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   secondary:
     'border border-border-strong bg-surface text-content-secondary hover:border-border-hover hover:bg-surface-subtle',
   ghost: 'border border-transparent bg-transparent text-content-secondary hover:bg-surface-muted',
-  link: 'border border-transparent bg-transparent !text-sm text-brand-strong hover:text-brand-hover hover:underline',
+  link: 'border border-transparent bg-transparent text-brand-strong hover:text-brand-hover hover:underline',
   danger: 'border border-transparent bg-danger text-on-brand hover:bg-danger/90',
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {
-  small: 'h-8 px-2.5 text-xs',
-  medium: 'h-control px-3 text-control',
-  large: 'h-11 px-4 text-sm',
+  small: 'min-h-8 px-2.5 py-1 text-control',
+  medium: 'min-h-control px-3 py-1 text-control',
+  large: 'min-h-11 px-4 py-2 text-base',
 };
 
 @Component({

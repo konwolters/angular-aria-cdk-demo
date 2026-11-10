@@ -39,7 +39,7 @@
             [tabindex]="readonly() ? -1 : undefined"
             [attr.aria-label]="selectionSummary().accessibleLabel + ', suchen'"
             [placeholder]="selectionSummary().displayValue || placeholder()"
-            class="h-full min-w-0 flex-1 bg-transparent text-sm text-content-secondary outline-none placeholder:text-content-subtle"
+            class="h-full min-w-0 flex-1 bg-transparent text-control text-content-secondary outline-none placeholder:text-content-subtle"
             [class.cursor-not-allowed]="readonly() || disabled()"
           />
           <app-icon name="chevron-down" [size]="16" />

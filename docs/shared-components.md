@@ -47,6 +47,20 @@ Zeilenzahl steuert. `MultiSelect` verwendet standardmäßig eine feste Breite; m
 füllt es die verfügbare Breite seines Containers aus. Damit müssen keine internen Design-Tokens im
 Template überschrieben werden.
 
+## Kompakte Typografie und Layout
+
+Die globalen Design-Tokens verwenden eine kompakte, lesbare Darstellung: Eingaben, Selects,
+kleine/mittlere Buttons und Tabellenwerte haben 13 px, Zusatztexte 12 px und kleine
+Seitenüberschriften 16 px bei einer Browser-Basisschrift von 16 px. Die Größen sind in `rem`
+definiert und skalieren mit den Browsereinstellungen. Kompaktheit entsteht durch reduzierte
+Abstände, nicht durch unterschiedliche Schriftgrößen nebeneinanderliegender Bedienelemente.
+Inter Variable wird lokal über `@fontsource-variable/inter` mit ausgeliefert; es werden keine
+externen Font-Dienste benötigt. Platzhalter und Feldgrenzen verwenden kontrastreichere Tokens.
+
+Tabellen verwenden automatisches Spaltenlayout und einen eigenen horizontalen Scrollbereich.
+`width` beschreibt die gewünschte Spaltenbreite, `minWidth` eine optionale Mindestbreite;
+bei Platzmangel wächst die Tabelle statt Inhalte benachbarter Zellen zu überlagern.
+
 ## Änderungsverfolgung und Readonly-Felder
 
 `TextFieldComponent`, `TextareaComponent`, `SelectComponent` und `MultiSelectComponent` können
@@ -370,7 +384,8 @@ Die Toolbar löst Aktionen aus, verwaltet aber keine Feldwerte.
 Import: `frontend/src/app/shared/data-table/data-table.ts`
 
 `DataTableColumn<T>` besteht aus `key: string`, `header: string`, `value: (row: T) => string` und
-optional `sortable: boolean` und `width: string` (CSS-Spaltenbreite). Eigene Zellinhalte können mit `appDataTableCell` projiziert werden.
+optional `sortable: boolean`, `width: string` (gewünschte CSS-Spaltenbreite) und `minWidth: string`
+(CSS-Mindestbreite). Eigene Zellinhalte können mit `appDataTableCell` projiziert werden.
 Für projizierte Zellen importiert die aufrufende Komponente `DataTableCellDirective` aus
 `shared/data-table/data-table-cell.directive`.
 
