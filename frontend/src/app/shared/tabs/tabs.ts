@@ -17,6 +17,7 @@ export interface TabItem {
 export class TabsComponent {
   readonly tabs = input.required<readonly TabItem[]>();
   readonly selectedTab = model.required<string>();
+  readonly framed = input(true);
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly selectionMode = input<'follow' | 'explicit'>('follow');
 

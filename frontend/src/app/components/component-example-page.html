@@ -396,6 +396,15 @@
                           caption="Sortierbare Kontakte"
                         />
                       }
+                      @case ('striped') {
+                        <app-data-table
+                          [rows]="rows"
+                          [columns]="columns"
+                          [pagination]="false"
+                          [striped]="false"
+                          caption="Kontakte ohne abwechselnde Zeilenfarben"
+                        />
+                      }
                       @case ('pagination') {
                         <app-data-table
                           [rows]="pageRows()"

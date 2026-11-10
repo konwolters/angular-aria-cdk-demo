@@ -1,0 +1,40 @@
+<ol [attr.aria-label]="label()" class="grid gap-3 sm:grid-flow-col sm:auto-cols-fr">
+  @for (step of steps(); track step.value) {
+    <li
+      [attr.aria-current]="step.value === current() ? 'step' : null"
+      class="flex min-w-0 items-center gap-3 rounded-control border px-4 py-4 transition-colors"
+      [class.border-brand]="step.value === current()"
+      [class.bg-brand-subtle]="step.value === current()"
+      [class.border-border]="step.value !== current()"
+      [class.bg-surface]="step.value !== current()"
+    >
+      <span
+        class="grid h-8 w-8 shrink-0 place-items-center rounded-control text-sm font-semibold"
+        [class.bg-brand]="step.value === current()"
+        [class.text-on-brand]="step.value === current()"
+        [class.bg-brand-subtle]="step.value !== current() && completed().includes(step.value)"
+        [class.text-brand-strong]="step.value !== current() && completed().includes(step.value)"
+        [class.bg-canvas]="step.value !== current() && !completed().includes(step.value)"
+        [class.text-content-muted]="step.value !== current() && !completed().includes(step.value)"
+        aria-hidden="true"
+      >
+        @if (completed().includes(step.value) && step.value !== current()) {
+          <app-icon name="check" [size]="18" />
+        } @else {
+          {{ $index + 1 }}
+        }
+      </span>
+      <span class="min-w-0">
+        <span
+          class="block text-sm font-semibold"
+          [class.text-brand-strong]="step.value === current()"
+          [class.text-content-muted]="step.value !== current() && !completed().includes(step.value)"
+          >{{ step.label }}</span
+        >
+        @if (completed().includes(step.value) && step.value !== current()) {
+          <span class="sr-only"> – abgeschlossen</span>
+        }
+      </span>
+    </li>
+  }
+</ol>

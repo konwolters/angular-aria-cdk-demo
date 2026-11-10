@@ -2,6 +2,7 @@
 @source './app';
 
 @theme inline {
+  --font-mono: var(--ui-font-mono);
   --color-canvas: var(--ui-color-canvas);
   --color-surface: var(--ui-color-surface);
   --color-surface-subtle: var(--ui-color-surface-subtle);

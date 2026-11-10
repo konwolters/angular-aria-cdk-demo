@@ -19,13 +19,13 @@ import { ControlIdService } from '../field-messages/field-messages';
 import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 const BELOW_FIRST_POSITIONS: ConnectedPosition[] = [
-  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 6 },
-  { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -6 },
+  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
+  { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
 ];
 
 const ABOVE_FIRST_POSITIONS: ConnectedPosition[] = [
-  { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -6 },
-  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 6 },
+  { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom' },
+  { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
 ];
 
 export interface SelectOption {
@@ -57,6 +57,7 @@ export class SelectComponent implements FormValueControl<string> {
   readonly searchable = input(false);
   readonly emptyMessage = input('Keine Treffer');
   readonly hint = input('');
+  readonly size = input<'small' | 'medium'>('small');
   readonly hideLabel = input(false);
   protected readonly visibleOptions = computed(() => {
     const term = this.searchTerm().trim().toLocaleLowerCase();
@@ -76,7 +77,7 @@ export class SelectComponent implements FormValueControl<string> {
   readonly changed = input<boolean>();
   readonly changedLabel = input('GEÄNDERT');
   readonly previousValueLabel = input('Wert vorher');
-  readonly labelSize = input<'small' | 'medium'>('small');
+  readonly labelSize = input<'small' | 'medium'>('medium');
 
   readonly value = model('');
   readonly touched = input(false);

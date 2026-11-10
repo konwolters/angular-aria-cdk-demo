@@ -34,7 +34,7 @@ export const componentSources: Record<string, readonly string[]> = {
     'field-messages/field-messages.html',
   ],
   tabs: ['tabs/tabs.ts', 'tabs/tabs.html', 'tabs/tab-panel-template.directive.ts'],
-  stepper: ['stepper/stepper.ts'],
+  stepper: ['stepper/stepper.ts', 'stepper/stepper.html'],
   'file-picker': ['file-picker/file-picker.ts'],
   'data-table-toolbar': [
     'data-table-toolbar/data-table-toolbar.ts',

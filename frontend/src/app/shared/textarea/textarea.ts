@@ -21,6 +21,7 @@ import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 export class TextareaComponent implements FormValueControl<string> {
   protected readonly messagesId = inject(ControlIdService).next();
   readonly hint = input('');
+  readonly size = input<'small' | 'medium'>('small');
   readonly hideLabel = input(false);
   readonly maxLength = input<number>();
   readonly label = input.required<string>();

@@ -11,6 +11,7 @@ export interface DataTableColumn<T> {
   header: string;
   value: (row: T) => string;
   sortable?: boolean;
+  width?: string;
 }
 
 @Component({
@@ -22,6 +23,7 @@ export class DataTableComponent<T> {
   readonly rows = input.required<readonly T[]>();
   readonly columns = input.required<readonly DataTableColumn<T>[]>();
   readonly framed = input(true);
+  readonly striped = input(true);
   readonly pagination = input(true);
   readonly total = input(0);
   readonly totalPages = input(0);

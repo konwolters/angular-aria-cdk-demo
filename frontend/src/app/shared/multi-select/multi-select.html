@@ -12,12 +12,15 @@
     [showErrors]="invalid() && touched() && !readonly()"
     [labelSize]="labelSize()"
   >
-    <div #origin class="w-dropdown">
+    <div #origin [class.w-full]="fullWidth()" [class.w-dropdown]="!fullWidth()">
       @if (searchable()) {
         <div
-          class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control focus-within:border-focus"
-          [class.bg-surface-muted]="readonly()"
-          [class.cursor-not-allowed]="readonly()"
+          class="inline-flex w-full items-center gap-1 rounded-control border border-border-strong px-3 py-2 text-control focus-within:border-focus"
+          [class.h-8]="size() === 'small'"
+          [class.h-control]="size() === 'medium'"
+          [class.bg-surface]="!readonly() && !disabled()"
+          [class.bg-surface-muted]="readonly() || disabled()"
+          [class.cursor-not-allowed]="readonly() || disabled()"
           (click)="openSearch(searchInput)"
         >
           <input
@@ -36,8 +39,8 @@
             [tabindex]="readonly() ? -1 : undefined"
             [attr.aria-label]="selectionSummary().accessibleLabel + ', suchen'"
             [placeholder]="selectionSummary().displayValue || placeholder()"
-            class="h-full min-w-0 flex-1 bg-transparent text-content-secondary outline-none placeholder:text-content-subtle"
-            [class.cursor-not-allowed]="readonly()"
+            class="h-full min-w-0 flex-1 bg-transparent text-sm text-content-secondary outline-none placeholder:text-content-subtle"
+            [class.cursor-not-allowed]="readonly() || disabled()"
           />
           <app-icon name="chevron-down" [size]="16" />
         </div>
@@ -56,10 +59,14 @@
           [tabindex]="readonly() ? -1 : undefined"
           (mousedown)="preventReadonlyFocus($event)"
           [attr.aria-label]="selectionSummary().accessibleLabel"
-          class="inline-flex h-control w-dropdown items-center gap-1 rounded-control border border-border-strong bg-surface px-3 py-2 text-control hover:bg-surface-subtle focus:border-focus"
-          [class.cursor-pointer]="!readonly()"
-          [class.bg-surface-muted]="readonly()"
-          [class.cursor-not-allowed]="readonly()"
+          class="inline-flex w-full items-center gap-1 rounded-control border border-border-strong px-3 py-2 text-control focus:border-focus"
+          [class.h-8]="size() === 'small'"
+          [class.h-control]="size() === 'medium'"
+          [class.cursor-pointer]="!readonly() && !disabled()"
+          [class.bg-surface]="!readonly() && !disabled()"
+          [class.hover:bg-surface-subtle]="!readonly() && !disabled()"
+          [class.bg-surface-muted]="readonly() || disabled()"
+          [class.cursor-not-allowed]="readonly() || disabled()"
         >
           @if (value().length > 0) {
             <span class="min-w-0 flex-1 truncate text-content-secondary">
@@ -77,11 +84,10 @@
       <ng-template
         [cdkConnectedOverlay]="{ origin, usePopover: 'inline', matchWidth: true }"
         [cdkConnectedOverlayOpen]="expanded() && !disabled() && !readonly()"
-        [cdkConnectedOverlayOffsetY]="6"
         (overlayOutsideClick)="close()"
       >
         <ng-template ngComboboxPopup [combobox]="trigger">
-          <div class="w-dropdown rounded-control border border-border bg-surface p-1 text-control">
+          <div class="w-full rounded-control border border-border bg-surface p-1 text-control">
             <div
               #listbox="ngListbox"
               ngListbox

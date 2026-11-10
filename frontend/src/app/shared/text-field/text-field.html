@@ -12,7 +12,9 @@
   [controlId]="messagesId + '-control'"
 >
   <div
-    class="mt-1 flex h-control w-full overflow-hidden rounded-control border border-border-strong focus-within:border-focus"
+    class="mt-1 flex w-full overflow-hidden rounded-control border border-border-strong focus-within:border-focus"
+    [class.h-8]="size() === 'small'"
+    [class.h-control]="size() === 'medium'"
     [class.bg-surface]="!readonly()"
     [class.bg-surface-muted]="readonly()"
     [class.cursor-not-allowed]="readonly()"
@@ -37,7 +39,8 @@
       [required]="required()"
       [tabindex]="readonly() ? -1 : null"
       [attr.aria-invalid]="invalid() ? 'true' : null"
-      class="h-full min-w-0 flex-1 bg-transparent px-3 font-normal text-content-secondary outline-none"
+      class="h-full min-w-0 flex-1 bg-transparent px-3 text-sm font-normal text-content-secondary outline-none"
+      [class.font-mono]="monospace()"
       [class.cursor-not-allowed]="readonly()"
       [class.opacity-50]="disabled()"
       (input)="updateValue($event)"

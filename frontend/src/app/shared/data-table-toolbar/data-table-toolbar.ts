@@ -1,5 +1,5 @@
 import { Component, input, output } from '@angular/core';
-import { ButtonComponent } from '../button/button';
+import { ButtonComponent, ButtonSize } from '../button/button';
 
 @Component({
   selector: 'app-data-table-toolbar',
@@ -9,7 +9,10 @@ import { ButtonComponent } from '../button/button';
 export class DataTableToolbarComponent {
   readonly resetLabel = input('Zurücksetzen');
   readonly showReset = input(true);
+  readonly showApply = input(true);
+  readonly compactTop = input(false);
   readonly applyDisabled = input(false);
+  readonly buttonSize = input<ButtonSize>('small');
 
   readonly apply = output<void>();
   readonly reset = output<void>();

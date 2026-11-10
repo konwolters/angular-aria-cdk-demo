@@ -437,6 +437,12 @@ const examples: Record<string, ComponentDocumentation> = {
         "import { DataTableColumn } from '../shared/data-table/data-table';\n\ninterface Person { name: string; role: string; email: string }\nrows: Person[] = [\n  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },\n  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },\n  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },\n];\ncolumns: DataTableColumn<Person>[] = [\n  { key: 'name', header: 'Name', value: row => row.name },\n  { key: 'role', header: 'Rolle', value: row => row.role },\n  { key: 'email', header: 'E-Mail', value: row => row.email },\n];",
       ),
       sample(
+        'striped',
+        'Ohne abwechselnde Zeilenfarben',
+        '<app-data-table [rows]="rows" [columns]="columns" [pagination]="false" [striped]="false" />',
+        "import { DataTableColumn } from '../shared/data-table/data-table';\n\ninterface Person { name: string; role: string; email: string }\nrows: Person[] = [\n  { name: 'Ada Lovelace', role: 'Mathematik', email: 'ada@example.test' },\n  { name: 'Grace Hopper', role: 'Informatik', email: 'grace@example.test' },\n  { name: 'Linus Torvalds', role: 'Software', email: 'linus@example.test' },\n];\ncolumns: DataTableColumn<Person>[] = [\n  { key: 'name', header: 'Name', value: row => row.name },\n  { key: 'role', header: 'Rolle', value: row => row.role },\n  { key: 'email', header: 'E-Mail', value: row => row.email },\n];",
+      ),
+      sample(
         'sorting',
         'Sortierbare Spalte',
         '<app-data-table [rows]="rows" [columns]="columns" [sort]="sort" [direction]="direction" (sortChange)="sortBy($event)" />',

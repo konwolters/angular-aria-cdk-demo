@@ -1,4 +1,10 @@
-<div ngTabs class="overflow-hidden rounded-card border border-border bg-surface">
+<div
+  ngTabs
+  class="overflow-hidden bg-surface"
+  [class.rounded-card]="framed()"
+  [class.border]="framed()"
+  [class.border-border]="framed()"
+>
   <div
     ngTabList
     [orientation]="orientation()"

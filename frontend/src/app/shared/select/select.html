@@ -15,8 +15,12 @@
     <div #origin class="flex items-center gap-2">
       @if (searchable()) {
         <div
-          class="flex h-control min-w-0 w-full items-center gap-2 rounded-control border border-border-strong bg-surface px-3 focus-within:border-focus"
-          [class.bg-surface-muted]="readonly()"
+          class="flex min-w-0 w-full items-center gap-2 rounded-control border border-border-strong px-3 focus-within:border-focus"
+          [class.h-8]="size() === 'small'"
+          [class.h-control]="size() === 'medium'"
+          [class.bg-surface]="!readonly() && !disabled()"
+          [class.bg-surface-muted]="readonly() || disabled()"
+          [class.cursor-not-allowed]="readonly() || disabled()"
           (click)="openSearch(searchInput)"
         >
           <input
@@ -36,7 +40,8 @@
             [attr.aria-required]="required()"
             [attr.aria-invalid]="invalid()"
             (blur)="touch.emit()"
-            class="h-full min-w-0 flex-1 bg-transparent text-control text-content-secondary outline-none"
+            class="h-full min-w-0 flex-1 bg-transparent text-sm text-content-secondary outline-none"
+            [class.cursor-not-allowed]="readonly() || disabled()"
           />
           <app-icon name="chevron-down" [size]="16" />
         </div>
@@ -54,7 +59,12 @@
           [attr.aria-required]="required()"
           [attr.aria-invalid]="invalid()"
           (blur)="touch.emit()"
-          class="inline-flex h-control w-full items-center justify-between rounded-control border border-border-strong bg-surface px-3 text-left text-control"
+          class="inline-flex w-full items-center justify-between rounded-control border border-border-strong px-3 text-left text-control"
+          [class.h-8]="size() === 'small'"
+          [class.h-control]="size() === 'medium'"
+          [class.bg-surface]="!readonly() && !disabled()"
+          [class.bg-surface-muted]="readonly() || disabled()"
+          [class.cursor-not-allowed]="readonly() || disabled()"
         >
           <span>{{ selectedLabel() || placeholder() }}</span
           ><app-icon name="chevron-down" [size]="16" />

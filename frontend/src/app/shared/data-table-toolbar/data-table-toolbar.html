@@ -1,13 +1,35 @@
-<form class="flex flex-wrap items-end gap-3 border-b border-border p-5" (submit)="submit($event)">
+<form
+  class="flex flex-wrap items-end gap-3 border-b border-border px-5 pb-5"
+  [class.pt-1]="compactTop()"
+  [class.pt-5]="!compactTop()"
+  (submit)="submit($event)"
+>
   <ng-content select="[data-table-searches]" />
 
   <ng-content select="[data-table-filters]" />
 
   <ng-content select="[data-table-actions]" />
-  <button appButton type="submit" variant="primary" [disabled]="applyDisabled()">Suchen</button>
+  @if (showApply()) {
+    <button
+      appButton
+      type="submit"
+      variant="primary"
+      [size]="buttonSize()"
+      [disabled]="applyDisabled()"
+    >
+      Suchen
+    </button>
+  }
 
   @if (showReset()) {
-    <button appButton type="button" variant="secondary" icon="refresh" (click)="resetFilters()">
+    <button
+      appButton
+      type="button"
+      variant="secondary"
+      [size]="buttonSize()"
+      icon="refresh"
+      (click)="resetFilters()"
+    >
       {{ resetLabel() }}
     </button>
   }

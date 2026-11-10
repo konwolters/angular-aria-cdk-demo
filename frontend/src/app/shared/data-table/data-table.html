@@ -1,5 +1,6 @@
 <section
   [class.rounded-card]="framed()"
+  [class.overflow-hidden]="framed()"
   [class.border]="framed()"
   [class.border-border]="framed()"
   [class.bg-surface]="framed()"
@@ -18,6 +19,7 @@
             <th
               scope="col"
               class="px-5 py-3"
+              [style.width]="column.width || null"
               [attr.aria-sort]="
                 sort() === column.key
                   ? direction() === 'asc'
@@ -50,7 +52,7 @@
 
       <tbody class="divide-y divide-slate-100">
         @for (row of rows(); track trackBy()(row)) {
-          <tr class="hover:bg-canvas">
+          <tr class="hover:bg-canvas" [class]="striped() && $index % 2 === 1 ? 'bg-canvas/50' : ''">
             @for (column of columns(); track column.key) {
               <td class="px-5 py-3.5 text-content-secondary">
                 @if (cellTemplate(column.key); as template) {

@@ -10,7 +10,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { ControlIdService } from '../field-messages/field-messages';
-import { ButtonComponent } from '../button/button';
+import { ButtonComponent, ButtonSize } from '../button/button';
 import { IconComponent } from '../icon/icon';
 
 @Component({
@@ -60,6 +60,7 @@ import { IconComponent } from '../icon/icon';
         <p class="mb-4 mt-1 text-sm text-content-muted">oder vom Computer auswählen</p>
         <button
           appButton
+          [size]="buttonSize()"
           type="button"
           variant="secondary"
           [disabled]="disabled()"
@@ -103,6 +104,7 @@ import { IconComponent } from '../icon/icon';
 export class FilePickerComponent {
   protected readonly errorId = inject(ControlIdService).next();
   readonly label = input('Datei');
+  readonly buttonSize = input<ButtonSize>('small');
   readonly accept = input('.csv,text/csv');
   protected readonly acceptedTypes = computed(() => {
     const types = this.accept()

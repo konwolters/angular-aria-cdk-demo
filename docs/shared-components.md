@@ -41,6 +41,12 @@ Eingabeelement; die Select-Varianten vergeben ihren zugänglichen Namen am Combo
 vier verknüpfen Hinweise und Fehlermeldungen über `aria-describedby` mit dem Bedienelement.
 Beim Erweitern oder Ändern des Feldrahmens müssen diese Verknüpfungen erhalten bleiben.
 
+Die vier Feldkomponenten verwenden standardmäßig `size="small"`; mit `size="medium"` sind sie
+größer darstellbar. Für mehrzeilige Felder verändert die Größe die Mindesthöhe, während `rows` die
+Zeilenzahl steuert. `MultiSelect` verwendet standardmäßig eine feste Breite; mit `[fullWidth]="true"`
+füllt es die verfügbare Breite seines Containers aus. Damit müssen keine internen Design-Tokens im
+Template überschrieben werden.
+
 ## Änderungsverfolgung und Readonly-Felder
 
 `TextFieldComponent`, `TextareaComponent`, `SelectComponent` und `MultiSelectComponent` können
@@ -107,7 +113,7 @@ weiterhin für Formularverhalten, Tastaturbedienung und Barrierefreiheit.
 | Input | Typ | Standard |
 | --- | --- | --- |
 | `variant` | `primary \| secondary \| ghost \| link \| danger` | `primary` |
-| `size` | `small \| medium \| large` | `medium` |
+| `size` | `small \| medium \| large` | `small` |
 | `icon` | `IconName` | kein Icon |
 | `iconPosition` | `start \| end` | `start` |
 | `active` | `boolean` | `false` |
@@ -141,6 +147,7 @@ Signal Forms verwendet werden kann.
 | --- | --- | --- | --- |
 | `label` | `string` | erforderlich | Sichtbares und zugängliches Label |
 | `type` | `text \| email \| search \| url \| tel \| password` | `text` | HTML-Eingabetyp |
+| `monospace` | `boolean` | `false` | Zeigt die Eingabe in nichtproportionaler Schrift (Consolas mit Fallbacks) |
 | `placeholder` | `string` | leer | Platzhaltertext |
 | `prefix` | `string` | leer | Optionaler, nicht editierbarer Präfix im Feld |
 | `value` | `ModelSignal<string>` | `''` | Feldwert; Signal-Forms-kompatibel |
@@ -229,7 +236,7 @@ ausgewählter Wert sind getrennt: Freitext wird nicht als Wert übernommen.
 | `label` | `string` | erforderlich | Sichtbares Label und zugänglicher Name |
 | `options` | `readonly SelectOption[]` | erforderlich | Auswahloptionen |
 | `placeholder` | `string` | `Auswählen…` | Anzeige ohne Auswahl |
-| `labelSize` | `small \| medium` | `small` | Größe des Labels |
+| `labelSize` | `small \| medium` | `medium` | Größe des Labels |
 | `value` | `ModelSignal<string>` | `''` | Aktueller Wert; Signal-Forms-kompatibel |
 | `initialValue` | `string \| undefined` | automatisch erfasst | Ausgangswert für den Vergleich |
 | `changed` | `boolean \| undefined` | automatisch berechnet | Manueller Änderungsstatus; überschreibt den Vergleich, wenn gesetzt |
@@ -285,7 +292,7 @@ Versionsansicht:
 | `value` | `ModelSignal<string[]>` | `[]` | Ausgewählte technische Werte, zweiseitig bindbar und Signal-Forms-kompatibel |
 | `searchable` | `boolean` | `false` | Zeigt ein Suchfeld im Auslöser |
 | `maxDisplayedValues` | `number` | `2` | Maximale Inline-Anzahl; danach wird die Auswahl zusammengefasst |
-| `labelSize` | `small \| medium` | `small` | Größe des Labels |
+| `labelSize` | `small \| medium` | `medium` | Größe des Labels |
 | `initialValue` | `readonly string[] \| undefined` | beim ersten Rendern erfasst | Ursprüngliche Auswahl |
 | `changed` | `boolean \| undefined` | automatisch berechnet | Manueller Änderungsstatus; überschreibt den Vergleich, wenn gesetzt |
 | `changedLabel` | `string` | `GEÄNDERT` | Badge neben dem Label |
@@ -348,6 +355,8 @@ einem Suchfeld ebenfalls die Suche aus.
 | --- | --- | --- | --- |
 | `resetLabel` | `string` | `Zurücksetzen` | Text der Reset-Schaltfläche |
 | `showReset` | `boolean` | `true` | Zeigt die Reset-Schaltfläche |
+| `showApply` | `boolean` | `true` | Zeigt die Such-Schaltfläche; das Formular kann weiterhin mit Enter abgesendet werden |
+| `compactTop` | `boolean` | `false` | Reduziert den oberen Innenabstand der Leiste |
 | `applyDisabled` | `boolean` | `false` | Deaktiviert die Suchaktion |
 | `apply`, `reset` | `Output<void>` | — | Suche übernehmen bzw. Filter zurücksetzen |
 
@@ -361,7 +370,7 @@ Die Toolbar löst Aktionen aus, verwaltet aber keine Feldwerte.
 Import: `frontend/src/app/shared/data-table/data-table.ts`
 
 `DataTableColumn<T>` besteht aus `key: string`, `header: string`, `value: (row: T) => string` und
-optional `sortable: boolean`. Eigene Zellinhalte können mit `appDataTableCell` projiziert werden.
+optional `sortable: boolean` und `width: string` (CSS-Spaltenbreite). Eigene Zellinhalte können mit `appDataTableCell` projiziert werden.
 Für projizierte Zellen importiert die aufrufende Komponente `DataTableCellDirective` aus
 `shared/data-table/data-table-cell.directive`.
 
@@ -407,6 +416,7 @@ Spaltenschlüssel einer Spalte zu. Im Template ist die Zeile über `let-row` ver
 | `rows` | `readonly T[]` | erforderlich | Aktuelle Tabellenzeilen |
 | `columns` | `readonly DataTableColumn<T>[]` | erforderlich | Spaltendefinitionen |
 | `framed` | `boolean` | `true` | Zeigt Rahmen und Kartenhintergrund |
+| `striped` | `boolean` | `true` | Hebt jede zweite Datenzeile farblich hervor; mit `false` abschaltbar |
 | `pagination` | `boolean` | `true` | Zeigt Paging und Ergebniszähler; für lokale Detail-/Vergleichslisten abschaltbar |
 | `total` | `number` | `0` | Gesamtzahl aller gefilterten Zeilen |
 | `totalPages` | `number` | `0` | Anzahl der Seiten |
@@ -518,6 +528,7 @@ readonly selectedTab = signal('overview');
 | `tabs` | `readonly TabItem[]` | erforderlich | Tabs mit `value`, `label` und optional `disabled` |
 | `selectedTab` | `ModelSignal<string>` | erforderlich | Aktiver Tab; mit `[(selectedTab)]` zweiseitig bindbar |
 | `orientation` | `'horizontal' \| 'vertical'` | `'horizontal'` | Ausrichtung der Tab-Leiste |
+| `framed` | `boolean` | `true` | Zeigt den äußeren Rahmen |
 | `selectionMode` | `'follow' \| 'explicit'` | `'follow'` | Auswahl bei Tastaturfokus oder expliziter Aktivierung |
 
 ## Gemeinsames Feldfeedback

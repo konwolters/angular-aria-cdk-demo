@@ -42,6 +42,8 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
   readonly touch = output<void>();
   readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
   readonly hint = input('');
+  readonly size = input<'small' | 'medium'>('small');
+  readonly fullWidth = input(false);
   readonly hideLabel = input(false);
   readonly placeholder = input('Alle');
   readonly label = input.required<string>();
@@ -68,7 +70,7 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
   readonly readonly = input(false);
   readonly changedLabel = input('GEÄNDERT');
   readonly previousValueLabel = input('Wert vorher');
-  readonly labelSize = input<'small' | 'medium'>('small');
+  readonly labelSize = input<'small' | 'medium'>('medium');
 
   protected readonly expanded = signal(false);
   protected readonly searchTerm = signal('');

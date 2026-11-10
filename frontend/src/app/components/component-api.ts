@@ -58,6 +58,7 @@ const changed: ApiEntry[] = [
   entry('previousValueLabel', 'string', "'Wert vorher'", 'Beschriftung des vorherigen Werts.'),
 ];
 const touch = output('touch', 'void', 'Wird beim Verlassen des Feldes ausgelöst.');
+const controlSize = entry('size', "'small' | 'medium'", "'small'", 'Größe des Eingabefelds.');
 const fieldWrapperNote =
   'Label, Änderungsanzeige und Feldmeldungen werden intern durch den gemeinsamen FieldWrapper dargestellt. Ein zusätzlicher Wrapper bei der Verwendung ist nicht nötig.';
 const dialogInputs = [
@@ -91,7 +92,7 @@ export const componentApis: Record<string, ComponentApi> = {
         "'primary'",
         'Visuelle Variante.',
       ),
-      entry('size', "'small' | 'medium' | 'large'", "'medium'", 'Größe.'),
+      entry('size', "'small' | 'medium' | 'large'", "'small'", 'Größe.'),
       entry('icon', 'IconName | undefined', 'undefined', 'Optionales Icon.'),
       entry('iconPosition', "'start' | 'end'", "'start'", 'Position des Icons.'),
       entry('active', 'boolean', 'false', 'Markiert einen ausgewählten Zustand.'),
@@ -104,6 +105,13 @@ export const componentApis: Record<string, ComponentApi> = {
     importCode: importFrom('TextFieldComponent', 'text-field/text-field'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
+      controlSize,
+      entry(
+        'monospace',
+        'boolean',
+        'false',
+        'Stellt den Eingabewert in nichtproportionaler Schrift dar.',
+      ),
       entry('value', 'model<string>', "''", 'Aktueller Wert; unterstützt [(value)].'),
       entry(
         'type',
@@ -124,6 +132,7 @@ export const componentApis: Record<string, ComponentApi> = {
     importCode: importFrom('TextareaComponent', 'textarea/textarea'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
+      controlSize,
       entry('value', 'model<string>', "''", 'Aktueller Wert; unterstützt [(value)].'),
       entry('placeholder', 'string', "''", 'Platzhalter.'),
       entry('rows', 'number', '4', 'Anzahl sichtbarer Zeilen.'),
@@ -138,6 +147,7 @@ export const componentApis: Record<string, ComponentApi> = {
     importCode: importFrom('SelectComponent, SelectOption', 'select/select'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
+      controlSize,
       entry(
         'options',
         'readonly SelectOption[]',
@@ -148,7 +158,7 @@ export const componentApis: Record<string, ComponentApi> = {
       entry('placeholder', 'string', "'Auswählen…'", 'Text ohne Auswahl.'),
       entry('searchable', 'boolean', 'false', 'Aktiviert die Suche.'),
       entry('emptyMessage', 'string', "'Keine Treffer'", 'Text bei fehlenden Suchtreffern.'),
-      entry('labelSize', "'small' | 'medium'", "'small'", 'Größe der Beschriftung.'),
+      entry('labelSize', "'small' | 'medium'", "'medium'", 'Größe der Beschriftung.'),
       ...changed,
       ...feedback,
     ],
@@ -159,12 +169,14 @@ export const componentApis: Record<string, ComponentApi> = {
     importCode: importFrom('MultiSelectComponent', 'multi-select/multi-select'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
+      controlSize,
+      entry('fullWidth', 'boolean', 'false', 'Füllt die verfügbare Breite aus.'),
       entry('options', 'readonly (string | SelectOption)[]', '[]', 'Verfügbare Optionen.'),
       entry('value', 'model<string[]>', '[]', 'Ausgewählte Werte; unterstützt [(value)].'),
       entry('placeholder', 'string', "'Alle'", 'Text ohne Auswahl.'),
       entry('searchable', 'boolean', 'false', 'Aktiviert die Suche.'),
       entry('maxDisplayedValues', 'number', '2', 'Anzahl einzeln angezeigter Werte.'),
-      entry('labelSize', "'small' | 'medium'", "'small'", 'Größe der Beschriftung.'),
+      entry('labelSize', "'small' | 'medium'", "'medium'", 'Größe der Beschriftung.'),
       { ...changed[0], type: 'readonly string[] | undefined' },
       ...changed.slice(1),
       ...feedback,
@@ -188,6 +200,7 @@ export const componentApis: Record<string, ComponentApi> = {
         'Aktiver Reiter; unterstützt [(selectedTab)].',
       ),
       entry('orientation', "'horizontal' | 'vertical'", "'horizontal'", 'Ausrichtung der Reiter.'),
+      entry('framed', 'boolean', 'true', 'Zeigt den äußeren Rahmen.'),
       entry(
         'selectionMode',
         "'follow' | 'explicit'",
@@ -220,6 +233,7 @@ export const componentApis: Record<string, ComponentApi> = {
       entry('label', 'string', "'Datei'", 'Feldbeschriftung.'),
       entry('accept', 'string', "'.csv,text/csv'", 'Erlaubte Dateitypen.'),
       entry('maxBytes', 'number', '10485760', 'Maximale Dateigröße in Bytes.'),
+      entry('buttonSize', "'small' | 'medium' | 'large'", "'small'", 'Größe des Auswahlbuttons.'),
       entry('disabled', 'boolean', 'false', 'Deaktiviert Auswahl und Droparea.'),
       entry('value', 'model<File | null>', 'null', 'Ausgewählte Datei; unterstützt [(value)].'),
     ],
@@ -233,7 +247,10 @@ export const componentApis: Record<string, ComponentApi> = {
     inputs: [
       entry('resetLabel', 'string', "'Zurücksetzen'", 'Beschriftung der Reset-Aktion.'),
       entry('showReset', 'boolean', 'true', 'Zeigt die Reset-Aktion.'),
+      entry('showApply', 'boolean', 'true', 'Zeigt die Suchaktion.'),
+      entry('compactTop', 'boolean', 'false', 'Reduziert den oberen Innenabstand.'),
       entry('applyDisabled', 'boolean', 'false', 'Deaktiviert die Suchaktion.'),
+      entry('buttonSize', "'small' | 'medium' | 'large'", "'small'", 'Größe der Toolbar-Buttons.'),
     ],
     outputs: [
       output('apply', 'void', 'Wird beim Absenden ausgelöst.'),
@@ -257,6 +274,7 @@ export const componentApis: Record<string, ComponentApi> = {
         'Spalten mit key, header, value und optional sortable.',
       ),
       entry('framed', 'boolean', 'true', 'Zeigt den äußeren Rahmen.'),
+      entry('striped', 'boolean', 'true', 'Färbt jede zweite Datenzeile abwechselnd.'),
       entry('pagination', 'boolean', 'true', 'Zeigt die Seitensteuerung.'),
       entry('total', 'number', '0', 'Gesamtzahl der Ergebnisse.'),
       entry('totalPages', 'number', '0', 'Anzahl der Seiten.'),

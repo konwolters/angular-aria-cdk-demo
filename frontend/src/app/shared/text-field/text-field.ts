@@ -23,6 +23,8 @@ export type TextFieldType = 'text' | 'email' | 'search' | 'url' | 'tel' | 'passw
 export class TextFieldComponent implements FormValueControl<string> {
   protected readonly messagesId = inject(ControlIdService).next();
   readonly hint = input('');
+  readonly size = input<'small' | 'medium'>('small');
+  readonly monospace = input(false);
   readonly hideLabel = input(false);
   readonly maxLength = input<number>();
   readonly label = input.required<string>();
