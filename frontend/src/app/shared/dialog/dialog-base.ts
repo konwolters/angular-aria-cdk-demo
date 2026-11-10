@@ -11,7 +11,7 @@ import {
   TemplateRef,
   viewChild,
 } from '@angular/core';
-import { ControlIdService } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/control-id.service';
 
 export type CloseReason = 'escape' | 'backdrop' | 'button';
 
@@ -35,6 +35,7 @@ export abstract class DialogBase implements OnDestroy {
   constructor() {
     effect(() => {
       const content = this.content();
+      const width = this.dialogWidth();
       if (!this.open()) {
         this.ref?.close();
         this.ref = undefined;
@@ -43,7 +44,7 @@ export abstract class DialogBase implements OnDestroy {
           disableClose: true,
           ariaLabelledBy: this.titleId,
           backdropClass: 'bg-overlay',
-          width: this.drawer ? 'min(100vw, 48rem)' : 'min(calc(100vw - 2rem), 36rem)',
+          width,
           maxHeight: '100dvh',
           positionStrategy: this.drawer
             ? this.overlay.position().global().right('0').top('0')
@@ -67,8 +68,14 @@ export abstract class DialogBase implements OnDestroy {
             this.open.set(false);
           }
         });
+      } else if (this.ref) {
+        this.ref.updateSize(width);
       }
     });
+  }
+
+  protected dialogWidth(): string {
+    return 'min(calc(100vw - 2rem), 36rem)';
   }
 
   requestClose(reason: CloseReason = 'button'): void {

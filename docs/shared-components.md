@@ -245,6 +245,11 @@ readonly departments: readonly SelectOption[] = [
 `SelectOption` hat `value: string`, `label: string` und optional `disabled: boolean` und
 `shortLabel: string` (Kurztext für die Multi-Select-Zusammenfassung).
 
+Optionen mit `disabled: true` bleiben sichtbar, werden aber bei Single- und Multi-Selects
+grau hinterlegt und mit gedämpfter Schrift sowie einem Nicht-erlaubt-Mauszeiger dargestellt.
+Sie sind über `aria-disabled` gekennzeichnet, können nicht ausgewählt werden und reagieren
+nicht auf Mausklicks. Es erscheint kein zusätzlicher Text wie „Nicht verfügbar“.
+
 Mit `[searchable]="true"` wird der Select zur durchsuchbaren Einzelauswahl. Suchtext und
 ausgewählter Wert sind getrennt: Freitext wird nicht als Wert übernommen.
 `emptyMessage` definiert den Leerzustand (Standard `Keine Treffer`).
@@ -538,6 +543,7 @@ Import: `frontend/src/app/shared/side-drawer/side-drawer.ts`
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `title` | `string` | erforderlich | Drawer-Titel und zugängliche Beschriftung |
+| `width` | `string` | `48rem` | Gewünschte CSS-Breite, z. B. `56rem`; maximal die Fensterbreite, auch im geöffneten Zustand änderbar |
 | `open` | `ModelSignal<boolean>` | `false` | Sichtbarkeit; mit `[(open)]` zweiseitig bindbar |
 
 ## `app-tabs`
@@ -548,6 +554,10 @@ Import: `frontend/src/app/shared/tabs/tabs.ts`
 
 `TabItem` besteht aus `value`, `label` und optional `disabled`. Der Inhalt eines Panels wird über
 `ng-template[appTabPanel]` mit demselben `value` zugeordnet.
+
+Jedes unabhängige Tabset benötigt ein eigenes `selectedTab`-Signal. Mit `selectionMode="follow"`
+(Standard) aktivieren Pfeiltasten den fokussierten Reiter direkt. Bei `selectionMode="explicit"`
+wird der Inhalt erst durch Enter oder Leertaste aktiviert; die Pfeiltasten verschieben nur den Fokus.
 
 ```ts
 readonly tabs: readonly TabItem[] = [

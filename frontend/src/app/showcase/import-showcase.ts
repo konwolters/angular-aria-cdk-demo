@@ -15,7 +15,8 @@ import { TabPanelTemplateDirective } from '../shared/tabs/tab-panel-template.dir
 import { TabsComponent } from '../shared/tabs/tabs';
 import { TextFieldComponent } from '../shared/text-field/text-field';
 import { TextareaComponent } from '../shared/textarea/textarea';
-import { ToastOutletComponent, ToastService } from '../shared/toast/toast';
+import { ToastOutletComponent } from '../shared/toast/toast';
+import { ToastService } from '../shared/toast/toast.service';
 
 interface ImportRow {
   id: number;

@@ -48,7 +48,7 @@ const changed: ApiEntry[] = [
     'initialValue',
     'string | undefined',
     'undefined',
-    'Vergleichswert; ohne Angabe wird der Anfangswert erfasst.',
+    'Vergleichswert; ohne Angabe wird der Wert nach dem ersten Rendern erfasst. Ein leerer Anfangswert löst keine automatische Änderungsanzeige aus.',
   ),
   entry(
     'changed',
@@ -96,7 +96,12 @@ const selectOptionType = {
   entries: [
     entry('value', 'string', 'erforderlich', 'Technischer Optionswert.'),
     entry('label', 'string', 'erforderlich', 'Sichtbare und zugängliche Optionsbeschriftung.'),
-    entry('disabled', 'boolean', 'false', 'Deaktiviert die Option.'),
+    entry(
+      'disabled',
+      'boolean',
+      'false',
+      'Sperrt die Option für Maus und Tastatur; grauer Hintergrund, gedämpfte Schrift und Nicht-erlaubt-Mauszeiger, ohne zusätzlichen Hinweistext.',
+    ),
     entry(
       'shortLabel',
       'string | undefined',
@@ -180,14 +185,14 @@ export const componentApis: Record<string, ComponentApi> = {
       ),
       entry('value', 'model<string>', "''", 'Ausgewählter Wert; unterstützt [(value)].'),
       entry('placeholder', 'string', "'Auswählen…'", 'Text ohne Auswahl.'),
-      entry('searchable', 'boolean', 'false', 'Aktiviert die Suche.'),
+      entry('searchable', 'boolean', 'false', 'Aktiviert die Suche nach Label und Wert.'),
       entry('emptyMessage', 'string', "'Keine Treffer'", 'Text bei fehlenden Suchtreffern.'),
       entry('labelSize', "'small' | 'medium'", "'medium'", 'Größe der Beschriftung.'),
       ...changed,
       ...feedback,
     ],
     outputs: [output('valueChange', 'string', 'Wertänderung (Model).'), touch],
-    notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
+    notes: `Unterstützt Angular Signal Forms über FormValueControl. Bei readonly ist das Select nicht fokussierbar oder zu öffnen. ${fieldWrapperNote}`,
     types: [selectOptionType],
   },
   'multi-select': {
@@ -196,18 +201,33 @@ export const componentApis: Record<string, ComponentApi> = {
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
       controlSize,
       entry('fullWidth', 'boolean', 'false', 'Füllt die verfügbare Breite aus.'),
-      entry('options', 'readonly (string | SelectOption)[]', '[]', 'Verfügbare Optionen.'),
+      entry(
+        'options',
+        'readonly (string | SelectOption)[]',
+        '[]',
+        'Strings dienen zugleich als Wert und Label; SelectOption erlaubt abweichende Labels und gesperrte Optionen.',
+      ),
       entry('value', 'model<string[]>', '[]', 'Ausgewählte Werte; unterstützt [(value)].'),
       entry('placeholder', 'string', "'Alle'", 'Text ohne Auswahl.'),
-      entry('searchable', 'boolean', 'false', 'Aktiviert die Suche.'),
-      entry('maxDisplayedValues', 'number', '2', 'Anzahl einzeln angezeigter Werte.'),
+      entry(
+        'searchable',
+        'boolean',
+        'false',
+        'Aktiviert die Suche nach Label und Wert; ausgewählte Optionen bleiben sichtbar.',
+      ),
+      entry(
+        'maxDisplayedValues',
+        'number',
+        '2',
+        'Maximale Anzahl angezeigter Labels; darüber wird nur die Gesamtzahl angezeigt.',
+      ),
       entry('labelSize', "'small' | 'medium'", "'medium'", 'Größe der Beschriftung.'),
       { ...changed[0], type: 'readonly string[] | undefined' },
       ...changed.slice(1),
       ...feedback,
     ],
     outputs: [output('valueChange', 'string[]', 'Wertänderung (Model).'), touch],
-    notes: `SelectOption wird aus select/select exportiert. Unterstützt Angular Signal Forms. ${fieldWrapperNote}`,
+    notes: `SelectOption wird aus select/select exportiert. Unterstützt Angular Signal Forms. Bei readonly ist das Multi-Select nicht fokussierbar oder zu öffnen. ${fieldWrapperNote}`,
     types: [selectOptionType],
   },
   tabs: {
@@ -363,7 +383,10 @@ export const componentApis: Record<string, ComponentApi> = {
         'ng-template[appDataTableCell]',
         'Zelltemplate für den angegebenen Spaltenschlüssel; let-row enthält die Zeile.',
       ),
-      slot('ng-template[appDataTableHeader]', 'Kopftemplate für den angegebenen Spaltenschlüssel.'),
+      slot(
+        'ng-template[appDataTableHeader]',
+        'Kopftemplate für den angegebenen Spaltenschlüssel; ersetzt auch den eingebauten Sortierbutton.',
+      ),
     ],
     notes:
       'Sortierung und Pagination werden von der aufrufenden Seite umgesetzt. DataTableColumn unterstützt width und minWidth als CSS-Breiten; bei Platzmangel scrollt die Tabelle horizontal.',
@@ -460,7 +483,15 @@ export const componentApis: Record<string, ComponentApi> = {
   },
   'side-drawer': {
     importCode: importFrom('SideDrawerComponent', 'side-drawer/side-drawer'),
-    inputs: dialogInputs,
+    inputs: [
+      ...dialogInputs,
+      entry(
+        'width',
+        'string',
+        "'48rem'",
+        'Gewünschte CSS-Breite des Drawers, z. B. 56rem. Auf die Fensterbreite begrenzt; auch im geöffneten Zustand änderbar.',
+      ),
+    ],
     outputs: dialogOutputs,
     slots: dialogSlots,
     methods: dialogMethods,
@@ -473,15 +504,23 @@ export const componentApis: Record<string, ComponentApi> = {
     methods: dialogMethods,
   },
   toast: {
-    importCode: importFrom('ToastService, ToastOutletComponent', 'toast/toast'),
+    importCode: [
+      importFrom('ToastService', 'toast/toast.service'),
+      importFrom('ToastOutletComponent', 'toast/toast'),
+    ].join('\n'),
     methods: [
       entry(
         'show(text)',
         '(text: string) => number',
         '—',
-        'Zeigt eine Meldung und liefert ihre ID.',
+        'ToastService: Zeigt eine Meldung und liefert ihre ID.',
       ),
-      entry('dismiss(id)', '(id: number) => void', '—', 'Entfernt eine Meldung anhand ihrer ID.'),
+      entry(
+        'dismiss(id)',
+        '(id: number) => void',
+        '—',
+        'ToastService: Entfernt eine Meldung anhand ihrer ID.',
+      ),
     ],
     properties: [
       entry(
@@ -514,6 +553,8 @@ componentApis['data-table-combined'] = {
   importCode: [
     importFrom('DataTableToolbarComponent', 'data-table-toolbar/data-table-toolbar'),
     importFrom('DataTableComponent, DataTableColumn', 'data-table/data-table'),
+    importFrom('DataTableCellDirective', 'data-table/data-table-cell.directive'),
+    importFrom('DataTableHeaderDirective', 'data-table/data-table-header.directive'),
     importFrom('TextFieldComponent', 'text-field/text-field'),
     importFrom('SelectComponent', 'select/select'),
   ].join('\n'),

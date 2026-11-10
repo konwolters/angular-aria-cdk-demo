@@ -5,9 +5,7 @@ import { SelectComponent, SelectOption } from './select';
 
 @Component({
   imports: [FormField, SelectComponent],
-  template: `
-    <app-select label="Bereich" [options]="options" [formField]="teamForm.department" />
-  `,
+  templateUrl: './select.spec.html',
 })
 class SelectHostComponent {
   readonly model = signal({ department: '' });

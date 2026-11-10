@@ -100,7 +100,13 @@
                   [value]="option.value"
                   [label]="option.label"
                   [disabled]="option.disabled ?? false"
-                  class="flex min-h-10 cursor-pointer items-center gap-2 rounded-control px-3 py-2 data-[active=true]:bg-surface-muted"
+                  class="flex min-h-10 items-center gap-2 rounded-control px-3 py-2 data-[active=true]:bg-surface-muted"
+                  [class.cursor-pointer]="!option.disabled"
+                  [class.cursor-not-allowed]="option.disabled"
+                  [class.bg-surface-muted]="option.disabled"
+                  [class.text-content-muted]="option.disabled"
+                  (mousedown)="preventDisabledOptionInteraction($event, option.disabled ?? false)"
+                  (click)="preventDisabledOptionInteraction($event, option.disabled ?? false)"
                 >
                   <span>{{ option.label }}</span>
                   @if (value() === option.value) {

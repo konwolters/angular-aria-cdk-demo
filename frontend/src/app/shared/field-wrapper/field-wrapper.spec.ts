@@ -7,48 +7,7 @@ import { TextareaComponent } from '../textarea/textarea';
 
 @Component({
   imports: [TextFieldComponent, TextareaComponent, SelectComponent, MultiSelectComponent],
-  template: `
-    <app-text-field
-      label="Name"
-      hint="Hinweis"
-      [invalid]="true"
-      [touched]="true"
-      [errors]="errors"
-    />
-    <app-textarea label="Text" hint="Hinweis" [invalid]="true" [touched]="true" [errors]="errors" />
-    <app-select
-      label="Auswahl"
-      [options]="[]"
-      hint="Hinweis"
-      [invalid]="true"
-      [touched]="true"
-      [errors]="errors"
-    />
-    <app-select
-      label="Suche"
-      [options]="[]"
-      hint="Hinweis"
-      [searchable]="true"
-      [invalid]="true"
-      [touched]="true"
-      [errors]="errors"
-    />
-    <app-multi-select
-      label="Mehrfach"
-      hint="Hinweis"
-      [invalid]="true"
-      [touched]="true"
-      [errors]="errors"
-    />
-    <app-multi-select
-      label="Mehrfachsuche"
-      hint="Hinweis"
-      [searchable]="true"
-      [invalid]="true"
-      [touched]="true"
-      [errors]="errors"
-    />
-  `,
+  templateUrl: './field-wrapper.spec.html',
 })
 class FieldHost {
   readonly errors = [{ kind: 'required', message: 'Pflichtfeld' }];

@@ -5,12 +5,7 @@ import { TabItem, TabsComponent } from './tabs';
 
 @Component({
   imports: [TabPanelTemplateDirective, TabsComponent],
-  template: `
-    <app-tabs [tabs]="items" [(selectedTab)]="selected">
-      <ng-template appTabPanel="first">First panel content</ng-template>
-      <ng-template appTabPanel="second">Second panel content</ng-template>
-    </app-tabs>
-  `,
+  templateUrl: './tabs.spec.html',
 })
 class TabsHostComponent {
   readonly items: readonly TabItem[] = [

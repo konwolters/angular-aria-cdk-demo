@@ -11,25 +11,7 @@ interface DemoRow {
 
 @Component({
   imports: [DataTableCellDirective, DataTableHeaderDirective, DataTableComponent],
-  template: `
-    <app-data-table
-      [rows]="rows()"
-      [columns]="columns"
-      [total]="2"
-      [totalPages]="5"
-      [page]="0"
-      [pageSize]="1"
-      [pageWindowSize]="3"
-      [trackBy]="trackRow"
-      (sortChange)="sort.set($event)"
-      (pageChange)="page.set($event)"
-    >
-      <ng-template appDataTableCell="name" let-row>
-        <strong>{{ row.name }}</strong>
-      </ng-template>
-      <ng-template appDataTableHeader="custom"><span>Eigener Spaltenkopf</span></ng-template>
-    </app-data-table>
-  `,
+  templateUrl: './data-table.spec.html',
 })
 class DataTableHostComponent {
   readonly rows = signal<DemoRow[]>([{ id: 1, name: 'First row' }]);

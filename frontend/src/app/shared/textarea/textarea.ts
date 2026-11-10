@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
-import { ControlIdService } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/control-id.service';
 import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 @Component({

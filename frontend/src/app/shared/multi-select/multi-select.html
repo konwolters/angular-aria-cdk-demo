@@ -107,13 +107,23 @@
                   [value]="option.value"
                   [label]="option.label"
                   [disabled]="option.disabled ?? false"
-                  class="flex min-h-10 cursor-pointer items-center gap-2 rounded-control px-3 py-2 text-control data-[active=true]:bg-surface-muted"
-                  [class.bg-brand-subtle]="value().includes(option.value)"
-                  [class.text-brand-strong]="value().includes(option.value)"
+                  class="flex min-h-10 items-center gap-2 rounded-control px-3 py-2 text-control data-[active=true]:bg-surface-muted"
+                  [class.cursor-pointer]="!option.disabled"
+                  [class.cursor-not-allowed]="option.disabled"
+                  [class.bg-surface-muted]="option.disabled"
+                  [class.text-content-muted]="option.disabled"
+                  [class.bg-brand-subtle]="!option.disabled && value().includes(option.value)"
+                  [class.text-brand-strong]="!option.disabled && value().includes(option.value)"
+                  (mousedown)="preventDisabledOptionInteraction($event, option.disabled ?? false)"
+                  (click)="preventDisabledOptionInteraction($event, option.disabled ?? false)"
                 >
                   <span class="flex-1">{{ option.label }}</span>
                   @if (value().includes(option.value)) {
-                    <app-icon class="text-brand-strong" name="check" [size]="16" />
+                    <app-icon
+                      [class.text-brand-strong]="!option.disabled"
+                      name="check"
+                      [size]="16"
+                    />
                   }
                 </div>
               } @empty {

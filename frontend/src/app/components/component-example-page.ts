@@ -19,7 +19,8 @@ import { InlineMessageComponent } from '../shared/inline-message/inline-message'
 import { DiffViewComponent } from '../shared/diff-view/diff-view';
 import { SideDrawerComponent } from '../shared/side-drawer/side-drawer';
 import { ModalComponent } from '../shared/modal/modal';
-import { ToastOutletComponent, ToastService } from '../shared/toast/toast';
+import { ToastOutletComponent } from '../shared/toast/toast';
+import { ToastService } from '../shared/toast/toast.service';
 
 interface ComponentExample {
   id: string;
@@ -355,14 +356,8 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'disabled',
         'Mit deaktiviertem Tab',
-        '<app-tabs [tabs]="disabledTabs" [(selectedTab)]="activeTab">\n  <ng-template appTabPanel="general">Allgemein</ng-template>\n</app-tabs>',
-        "import { signal } from '@angular/core';\n\ndisabledTabs = [{ value: 'general', label: 'Allgemein' }, { value: 'locked', label: 'Gesperrt', disabled: true }];\nactiveTab = signal('general');",
-      ),
-      sample(
-        'keyboard',
-        'Explizite Tastaturaktivierung',
-        '<app-tabs [tabs]="tabs" [(selectedTab)]="activeTab" selectionMode="explicit" orientation="vertical">\n  <ng-template appTabPanel="general">Allgemeine Einstellungen</ng-template>\n  <ng-template appTabPanel="details">Details</ng-template>\n</app-tabs>',
-        "import { signal } from '@angular/core';\n\ntabs = [{ value: 'general', label: 'Allgemein' }, { value: 'details', label: 'Details' }];\nactiveTab = signal('general');\n// Pfeiltasten fokussieren; Enter oder Leertaste aktiviert.",
+        '<app-tabs [tabs]="disabledTabs" [(selectedTab)]="disabledExampleTab">\n  <ng-template appTabPanel="general">Allgemein</ng-template>\n</app-tabs>',
+        "import { signal } from '@angular/core';\n\ndisabledTabs = [{ value: 'general', label: 'Allgemein' }, { value: 'locked', label: 'Gesperrt', disabled: true }];\ndisabledExampleTab = signal('general');",
       ),
     ],
   },
@@ -736,13 +731,13 @@ protected resetCombinedFilters(): void {
         'success',
         'Erfolgsmeldung',
         '<button appButton (click)="toasts.show(\'Änderungen gespeichert\')">Speichern</button>\n<app-toast-outlet />',
-        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast';\n\ntoasts = inject(ToastService);\n// Die Meldung bleibt sichtbar, bis sie geschlossen wird.\n// show(text) liefert eine ID für toasts.dismiss(id).",
+        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast.service';\n\ntoasts = inject(ToastService);\n// Die Meldung bleibt sichtbar, bis sie geschlossen wird.\n// show(text) liefert eine ID für toasts.dismiss(id).",
       ),
       sample(
         'multiple',
         'Mehrere Meldungen',
         '<button appButton (click)="notify()">Meldungen anzeigen</button>\n<app-toast-outlet />',
-        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast';\n\ntoasts = inject(ToastService);\n\nnotify(): void {\n  this.toasts.show('Import gestartet');\n  this.toasts.show('3 Einträge verarbeitet');\n}",
+        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast.service';\n\ntoasts = inject(ToastService);\n\nnotify(): void {\n  this.toasts.show('Import gestartet');\n  this.toasts.show('3 Einträge verarbeitet');\n}",
       ),
     ],
   },
@@ -898,6 +893,7 @@ export class ComponentExamplePage {
   protected readonly formModalOpen = signal(false);
   protected readonly closeModalOpen = signal(false);
   protected readonly activeTab = signal('general');
+  protected readonly disabledExampleTab = signal('general');
   protected readonly currentStep = signal('details');
   protected readonly toast = inject(ToastService);
   protected readonly options = [

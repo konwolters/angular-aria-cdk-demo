@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
 import { IconComponent } from '../icon/icon';
-import { ControlIdService } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/control-id.service';
 import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 const BELOW_FIRST_POSITIONS: ConnectedPosition[] = [
@@ -135,6 +135,12 @@ export class SelectComponent implements FormValueControl<string> {
 
   protected preventReadonlyFocus(event: MouseEvent): void {
     if (this.readonly()) event.preventDefault();
+  }
+
+  protected preventDisabledOptionInteraction(event: Event, disabled: boolean): void {
+    if (!disabled) return;
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   private updateOverlayPosition(): void {

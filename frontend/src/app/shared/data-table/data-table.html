@@ -87,9 +87,9 @@
 
   @if (pagination()) {
     <footer
-      class="flex flex-wrap items-end justify-between gap-3 border-t border-border px-3 py-3 text-xs text-content-muted"
+      class="flex flex-wrap items-center justify-between gap-3 border-t border-border px-3 py-3 text-xs text-content-muted"
     >
-      <span role="status" aria-live="polite">
+      <span role="status" aria-live="polite" class="whitespace-nowrap">
         {{ firstRow() }}–{{ lastRow() }} von {{ total() }} Ergebnissen
       </span>
 
@@ -158,10 +158,12 @@
         </button>
       </nav>
 
-      <div class="flex">
+      <div class="flex flex-wrap items-center gap-2">
+        <span aria-hidden="true">Zeilen pro Seite</span>
         <div class="w-28">
           <app-select
             label="Zeilen pro Seite"
+            [hideLabel]="true"
             [options]="pageSizeSelectOptions()"
             [value]="pageSize().toString()"
             [changed]="false"

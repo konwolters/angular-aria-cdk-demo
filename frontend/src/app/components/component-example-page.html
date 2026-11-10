@@ -301,20 +301,10 @@
                         >
                       }
                       @case ('disabled') {
-                        <app-tabs [tabs]="disabledTabs" [(selectedTab)]="activeTab"
+                        <app-tabs [tabs]="disabledTabs" [(selectedTab)]="disabledExampleTab"
                           ><ng-template appTabPanel="general"
                             >Allgemeine Einstellungen</ng-template
                           ></app-tabs
-                        >
-                      }
-                      @case ('keyboard') {
-                        <app-tabs
-                          [tabs]="tabs"
-                          [(selectedTab)]="activeTab"
-                          selectionMode="explicit"
-                          orientation="vertical"
-                          ><ng-template appTabPanel="general">Allgemeine Einstellungen</ng-template
-                          ><ng-template appTabPanel="details">Details</ng-template></app-tabs
                         >
                       }
                     }
@@ -731,7 +721,7 @@
     <ng-template appTabPanel="source">
       <section class="space-y-4 pt-6" aria-label="Komponentenquellcode">
         <p class="text-sm text-content-muted">
-          Originaldateien der Komponente; Inline-Templates stehen in der TypeScript-Datei.
+          Originaldateien der Komponente einschließlich des separaten HTML-Templates.
         </p>
         <div class="flex flex-wrap gap-2" aria-label="Quelldatei auswählen">
           @for (file of sourceFiles(); track file) {

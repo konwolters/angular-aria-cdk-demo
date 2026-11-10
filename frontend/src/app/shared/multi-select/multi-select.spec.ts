@@ -5,7 +5,7 @@ import { form, FormField, required } from '@angular/forms/signals';
 
 @Component({
   imports: [FormField, MultiSelectComponent],
-  template: `<app-multi-select label="Status" [options]="options" [formField]="fields.status" />`,
+  templateUrl: './multi-select.spec.html',
 })
 class FormHost {
   readonly data = signal({ status: [] as string[] });

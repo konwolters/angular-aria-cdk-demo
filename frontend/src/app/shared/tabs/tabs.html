@@ -4,6 +4,7 @@
   [class.rounded-card]="framed()"
   [class.border]="framed()"
   [class.border-border]="framed()"
+  [class.flex]="orientation() === 'vertical'"
 >
   <div
     ngTabList
@@ -12,6 +13,9 @@
     [(selectedTab)]="selectedTab"
     class="flex border-border"
     [class.flex-col]="orientation() === 'vertical'"
+    [class.w-48]="orientation() === 'vertical'"
+    [class.max-w-[45%]]="orientation() === 'vertical'"
+    [class.shrink-0]="orientation() === 'vertical'"
     [class.border-b]="orientation() === 'horizontal'"
     [class.border-r]="orientation() === 'vertical'"
   >
@@ -21,14 +25,20 @@
         type="button"
         [value]="tab.value"
         [disabled]="tab.disabled ?? false"
-        class="inline-flex min-h-control flex-1 items-center justify-center border-transparent px-4 py-2 text-control font-medium text-content-muted hover:bg-surface-subtle hover:text-content focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-[-2px] disabled:cursor-not-allowed disabled:opacity-50"
+        class="inline-flex min-h-control flex-1 items-center border-transparent px-4 py-2 text-control font-medium hover:bg-surface-subtle hover:text-content focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-[-2px] disabled:opacity-50"
+        [class.cursor-pointer]="!tab.disabled"
+        [class.cursor-not-allowed]="tab.disabled"
+        [class.justify-center]="orientation() === 'horizontal'"
+        [class.justify-start]="orientation() === 'vertical'"
+        [class.text-left]="orientation() === 'vertical'"
         [class.border-b-2]="orientation() === 'horizontal'"
         [class.border-r-2]="orientation() === 'vertical'"
         [class.border-b-brand]="orientation() === 'horizontal' && selectedTab() === tab.value"
         [class.border-r-brand]="orientation() === 'vertical' && selectedTab() === tab.value"
         [class.text-brand-strong]="selectedTab() === tab.value"
+        [class.text-content-muted]="selectedTab() !== tab.value"
       >
-        {{ tab.label }}
+        <span class="min-w-0 break-words">{{ tab.label }}</span>
       </button>
     }
   </div>
@@ -39,7 +49,7 @@
       [value]="tab.value"
       [preserveContent]="true"
       [class.hidden]="selectedTab() !== tab.value"
-      class="p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-[-2px]"
+      class="min-w-0 flex-1 p-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-[-2px]"
     >
       <ng-template ngTabContent>
         @if (panelTemplate(tab.value); as panel) {

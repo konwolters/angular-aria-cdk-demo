@@ -1,13 +1,5 @@
-import { Component, Injectable, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
-
-@Injectable({ providedIn: 'root' })
-export class ControlIdService {
-  private nextId = 0;
-  next(): string {
-    return `app-control-${this.nextId++}`;
-  }
-}
 
 @Component({
   selector: 'app-field-messages',

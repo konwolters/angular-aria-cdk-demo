@@ -15,7 +15,7 @@ import {
 } from '@angular/core';
 import { FormValueControl, ValidationError, WithOptionalFieldTree } from '@angular/forms/signals';
 import { SelectOption } from '../select/select';
-import { ControlIdService } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/control-id.service';
 import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
 
 @Component({
@@ -148,6 +148,12 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
 
   protected preventReadonlyFocus(event: MouseEvent): void {
     if (this.readonly()) event.preventDefault();
+  }
+
+  protected preventDisabledOptionInteraction(event: Event, disabled: boolean): void {
+    if (!disabled) return;
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   protected close(): void {

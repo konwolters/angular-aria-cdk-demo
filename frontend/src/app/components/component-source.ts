@@ -8,6 +8,7 @@ export const componentSources: Record<string, readonly string[]> = {
     'field-wrapper/field-wrapper.html',
     'field-messages/field-messages.ts',
     'field-messages/field-messages.html',
+    'field-messages/control-id.service.ts',
   ],
   textarea: [
     'textarea/textarea.ts',
@@ -16,6 +17,7 @@ export const componentSources: Record<string, readonly string[]> = {
     'field-wrapper/field-wrapper.html',
     'field-messages/field-messages.ts',
     'field-messages/field-messages.html',
+    'field-messages/control-id.service.ts',
   ],
   select: [
     'select/select.ts',
@@ -24,6 +26,7 @@ export const componentSources: Record<string, readonly string[]> = {
     'field-wrapper/field-wrapper.html',
     'field-messages/field-messages.ts',
     'field-messages/field-messages.html',
+    'field-messages/control-id.service.ts',
   ],
   'multi-select': [
     'multi-select/multi-select.ts',
@@ -32,10 +35,15 @@ export const componentSources: Record<string, readonly string[]> = {
     'field-wrapper/field-wrapper.html',
     'field-messages/field-messages.ts',
     'field-messages/field-messages.html',
+    'field-messages/control-id.service.ts',
   ],
   tabs: ['tabs/tabs.ts', 'tabs/tabs.html', 'tabs/tab-panel-template.directive.ts'],
   stepper: ['stepper/stepper.ts', 'stepper/stepper.html'],
-  'file-picker': ['file-picker/file-picker.ts'],
+  'file-picker': [
+    'file-picker/file-picker.ts',
+    'file-picker/file-picker.html',
+    'field-messages/control-id.service.ts',
+  ],
   'data-table-toolbar': [
     'data-table-toolbar/data-table-toolbar.ts',
     'data-table-toolbar/data-table-toolbar.html',
@@ -54,13 +62,19 @@ export const componentSources: Record<string, readonly string[]> = {
     'data-table/data-table-cell.directive.ts',
     'data-table/data-table-header.directive.ts',
   ],
-  'inline-message': ['inline-message/inline-message.ts'],
-  'diff-view': ['diff-view/diff-view.ts'],
+  'inline-message': ['inline-message/inline-message.ts', 'inline-message/inline-message.html'],
+  'diff-view': ['diff-view/diff-view.ts', 'diff-view/diff-view.html'],
   'side-drawer': [
     'side-drawer/side-drawer.ts',
     'side-drawer/side-drawer.html',
     'dialog/dialog-base.ts',
+    'field-messages/control-id.service.ts',
   ],
-  modal: ['modal/modal.ts', 'modal/modal.html', 'dialog/dialog-base.ts'],
-  toast: ['toast/toast.ts'],
+  modal: [
+    'modal/modal.ts',
+    'modal/modal.html',
+    'dialog/dialog-base.ts',
+    'field-messages/control-id.service.ts',
+  ],
+  toast: ['toast/toast.service.ts', 'toast/toast.ts', 'toast/toast.html'],
 };

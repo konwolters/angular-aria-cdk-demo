@@ -9,7 +9,7 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
-import { ControlIdService } from '../field-messages/field-messages';
+import { ControlIdService } from '../field-messages/control-id.service';
 import { ButtonComponent, ButtonSize } from '../button/button';
 import { IconComponent } from '../icon/icon';
 
@@ -17,89 +17,7 @@ import { IconComponent } from '../icon/icon';
   selector: 'app-file-picker',
   host: { class: 'block' },
   imports: [ButtonComponent, IconComponent],
-  template: `
-    <section
-      class="block"
-      (dragenter)="dragEnter($event)"
-      (dragleave)="dragLeave($event)"
-      (dragover)="dragOver($event)"
-      (drop)="drop($event)"
-    >
-      <label [for]="errorId + '-input'" class="mb-2 block text-sm font-medium text-content">{{
-        label()
-      }}</label>
-      <div
-        class="flex flex-col items-center rounded-card border-2 border-dashed px-6 py-8 text-center transition-colors"
-        [class.border-border-strong]="!dragging()"
-        [class.bg-surface-subtle]="!dragging()"
-        [class.border-brand]="dragging()"
-        [class.bg-brand-subtle]="dragging()"
-        [class.opacity-50]="disabled()"
-      >
-        <input
-          #fileInput
-          [id]="errorId + '-input'"
-          type="file"
-          class="sr-only"
-          tabindex="-1"
-          [accept]="accept()"
-          [disabled]="disabled()"
-          [attr.aria-describedby]="errorId"
-          [attr.aria-invalid]="!!error()"
-          (change)="choose($event)"
-        />
-        <span
-          aria-hidden="true"
-          class="mb-4 grid h-12 w-12 place-items-center rounded-card border border-border bg-surface text-brand-strong"
-        >
-          <app-icon name="arrow-up" [size]="24" />
-        </span>
-        <p class="text-sm font-semibold text-content">
-          {{ dragging() ? 'Datei hier ablegen' : 'Datei hierher ziehen' }}
-        </p>
-        <p class="mb-4 mt-1 text-sm text-content-muted">oder vom Computer auswählen</p>
-        <button
-          appButton
-          [size]="buttonSize()"
-          type="button"
-          variant="secondary"
-          [disabled]="disabled()"
-          (click)="fileInput.click()"
-        >
-          Datei auswählen
-        </button>
-        <p class="mt-4 text-xs text-content-muted">
-          {{ acceptedTypes() }} · Maximal {{ formatSize(maxBytes()) }}
-        </p>
-      </div>
-      @if (value(); as file) {
-        <div
-          class="mt-3 flex items-center gap-3 rounded-control border border-border bg-surface p-3"
-        >
-          <span
-            class="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-brand-subtle text-brand-strong"
-            aria-hidden="true"
-            ><app-icon name="receipt" [size]="18"
-          /></span>
-          <div class="min-w-0 flex-1">
-            <p class="truncate text-sm font-medium text-content">{{ file.name }}</p>
-            <p class="mt-0.5 text-xs text-content-muted">{{ formatSize(file.size) }}</p>
-          </div>
-          <button
-            appButton
-            type="button"
-            variant="ghost"
-            size="small"
-            icon="close"
-            [disabled]="disabled()"
-            (click)="remove()"
-            [attr.aria-label]="file.name + ' entfernen'"
-          ></button>
-        </div>
-      }
-      <p [id]="errorId" role="alert" class="mt-2 text-sm text-danger">{{ error() }}</p>
-    </section>
-  `,
+  templateUrl: './file-picker.html',
 })
 export class FilePickerComponent {
   protected readonly errorId = inject(ControlIdService).next();

@@ -4,10 +4,7 @@ import { Component } from '@angular/core';
 
 @Component({
   imports: [DataTableToolbarComponent],
-  template: `<app-data-table-toolbar [showReset]="false" [applyDisabled]="true">
-    <span data-table-summary>3 Treffer</span>
-    <button data-table-actions type="button">Export</button>
-  </app-data-table-toolbar>`,
+  templateUrl: './data-table-toolbar.spec.html',
 })
 class ToolbarHost {}
 

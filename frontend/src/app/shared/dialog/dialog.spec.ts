@@ -6,17 +6,7 @@ import { SideDrawerComponent } from '../side-drawer/side-drawer';
 
 @Component({
   imports: [ModalComponent, SideDrawerComponent],
-  template: `
-    <app-side-drawer
-      [(open)]="drawer"
-      title="Editor"
-      [closeOnRequest]="false"
-      (closeRequested)="requests.push($event)"
-    >
-      <input aria-label="Name" /><button dialog-footer type="button">Übernehmen</button>
-    </app-side-drawer>
-    <app-modal [(open)]="modal" title="Bestätigung"><button type="button">OK</button></app-modal>
-  `,
+  templateUrl: './dialog.spec.html',
 })
 class Host {
   readonly drawer = signal(true);

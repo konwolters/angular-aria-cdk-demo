@@ -4,9 +4,7 @@ import { ButtonComponent, ButtonSize, ButtonVariant } from './button';
 
 @Component({
   imports: [ButtonComponent],
-  template: `
-    <button appButton [variant]="variant()" [size]="size()" icon="plus">Add item</button>
-  `,
+  templateUrl: './button.spec.html',
 })
 class ButtonHostComponent {
   readonly variant = signal<ButtonVariant>('secondary');

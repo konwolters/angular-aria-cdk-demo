@@ -5,26 +5,7 @@ export type MessageSeverity = 'info' | 'success' | 'warning' | 'error';
 @Component({
   selector: 'app-inline-message',
   host: { class: 'block' },
-  template: `
-    <section
-      [attr.role]="severity() === 'error' ? 'alert' : 'status'"
-      class="rounded-control border p-4 text-sm leading-relaxed"
-      [class.border-border]="severity() === 'info'"
-      [class.bg-brand-subtle]="severity() === 'info'"
-      [class.border-success]="severity() === 'success'"
-      [class.bg-success-subtle]="severity() === 'success'"
-      [class.border-warning]="severity() === 'warning'"
-      [class.bg-warning-subtle]="severity() === 'warning'"
-      [class.border-danger]="severity() === 'error'"
-      [class.bg-danger-subtle]="severity() === 'error'"
-    >
-      @if (title()) {
-        <h3 class="mb-1 font-semibold">{{ title() }}</h3>
-      }
-      <ng-content />
-      <div class="mt-2"><ng-content select="[message-actions]" /></div>
-    </section>
-  `,
+  templateUrl: './inline-message.html',
 })
 export class InlineMessageComponent {
   readonly severity = input<MessageSeverity>('info');

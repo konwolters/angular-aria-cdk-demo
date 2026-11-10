@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { ToastOutletComponent, ToastService } from './toast';
+import { ToastOutletComponent } from './toast';
+import { ToastService } from './toast.service';
 
 describe('ToastService', () => {
   it('keeps separate messages and dismisses only the requested ID', () => {
