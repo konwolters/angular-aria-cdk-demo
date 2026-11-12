@@ -18,6 +18,7 @@ export class DiffViewComponent {
   readonly beforeLabel = input('Aktueller Stand');
   readonly afterLabel = input('Beantragter Stand');
   protected status(entry: DiffEntry): string {
+    // Eine explizite Änderungsmarkierung hat Vorrang vor dem Vergleich der beiden Werte.
     if (!(entry.changed ?? entry.before !== entry.after)) return 'Unverändert';
     return entry.before === null ? 'Neu' : entry.after === null ? 'Entfernt' : 'Geändert';
   }

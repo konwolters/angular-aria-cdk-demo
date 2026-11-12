@@ -7,13 +7,15 @@ export const guiAccessGuard: CanActivateFn = async () => {
   const accessUrl = new URL('api/gui-access', document.baseURI);
   try {
     const response = await fetch(accessUrl, { credentials: 'same-origin', cache: 'no-store' });
+
     if (response.ok) return true;
+
     if (response.status === 401) {
       accessUrl.searchParams.set('login', '1');
       window.location.assign(accessUrl.href);
     }
   } catch {
-    // A failed access check must not open the GUI.
+    // Bei fehlgeschlagener Zugangsprüfung darf sich die GUI nicht öffnen.
   }
   return false;
 };

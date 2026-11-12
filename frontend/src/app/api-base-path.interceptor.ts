@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 
-/** Keep API calls inside the same deployment prefix as Angular's base URL. */
+/** API-Aufrufe verwenden dasselbe Deployment-Präfix wie die Angular-Basis-URL. */
 export const apiBasePathInterceptor: HttpInterceptorFn = (request, next) => {
   if (!request.url.startsWith('/api/')) {
     return next(request);

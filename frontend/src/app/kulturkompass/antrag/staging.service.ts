@@ -8,6 +8,7 @@ export class StagingService {
   private readonly daten = inject(KulturkompassDatenService);
   readonly request = signal<GuiRow | null>(null);
   private readonly imports = inject(ImportService);
+
   findById(id: string | null): GuiRow | null {
     return (
       this.daten.antraege.find((row) => row.id === id) ??
@@ -15,12 +16,14 @@ export class StagingService {
       null
     );
   }
+
   findForRow(row: GuiRow, bereich: string): GuiRow | null {
     return (
       this.daten.antraege.find((item) => item.name === row['name'] && item.bereich === bereich) ??
       null
     );
   }
+
   readonly requestTab = signal('stammdaten');
   readonly customer = computed(
     () =>

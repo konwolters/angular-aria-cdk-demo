@@ -36,6 +36,7 @@ export class AntragSeite {
   protected readonly angebot = this.state.angebot;
   protected readonly angebotColumns = () => REQUEST_ANGEBOT_COLUMNS;
   private readonly detail = inject(VeranstaltungsortService);
+
   constructor() {
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const id = params.get('id');
@@ -47,16 +48,20 @@ export class AntragSeite {
       this.state.requestTab.set(request?.['bereich'] === 'Angebote' ? 'angebot' : 'stammdaten');
     });
   }
+
   protected showRequestDiff(kind: 'angebot' | 'bereich', row: GuiRow): void {
     this.dialog.openDiff(
       kind === 'bereich' ? 'Bereich-Detail' : 'Angebotsdetail',
       antragDiff(kind, row),
     );
   }
+
   protected editRequest(): void {
     const scope = this.request()?.['bereich'] === 'Angebote' ? 'angebot' : 'veranstaltungsort';
     const ort = this.customer();
+
     if (!ort) return;
+
     void this.router.navigate(['/gui/veranstaltungsorte', ort['kundennummer']], {
       queryParams: { tab: scope === 'angebot' ? 'angebot' : 'stammdaten' },
       state: { editScope: scope },

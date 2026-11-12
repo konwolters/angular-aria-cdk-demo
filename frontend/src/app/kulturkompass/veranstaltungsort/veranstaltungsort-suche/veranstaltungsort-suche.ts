@@ -38,14 +38,17 @@ export class VeranstaltungsortSuche {
   protected readonly queryForm = form(this.state.query);
   protected readonly customerNumberForm = form(this.session.customerNumber);
   protected readonly rows = this.state.rows;
+
   protected apply(): void {
     this.state.appliedQuery.set(this.state.query());
   }
+
   protected reset(): void {
     this.state.query.set('');
     this.state.appliedQuery.set('');
     this.session.status.set('aktiv');
   }
+
   protected readonly extraModel = signal({
     registerkennung: '',
     bereichnummer: '',
@@ -58,6 +61,7 @@ export class VeranstaltungsortSuche {
   protected readonly columns = CUSTOMER_COLUMNS;
   private readonly detail = inject(VeranstaltungsortService);
   private readonly staging = inject(StagingService);
+
   protected createVeranstaltungsort(): void {
     this.detail.selected.set(null);
     this.detail.name.set('');
@@ -66,15 +70,19 @@ export class VeranstaltungsortSuche {
     this.detail.activeTab.set('stammdaten');
     this.navigateToDetail('neu', 'stammdaten');
   }
+
   protected openVeranstaltungsort(row: GuiRow, tab: 'stammdaten' | 'bereichs'): void {
     this.detail.selected.set(row);
+
     if (tab === 'bereichs') {
       this.detail.bereichFilter.set('alle');
       this.detail.bereichStatus.set('aktiv');
     }
+
     this.detail.activeTab.set(tab);
     this.navigateToDetail(row['kundennummer'], tab);
   }
+
   private navigateToDetail(id: string, tab: string): void {
     this.state.query.set('');
     this.state.appliedQuery.set('');
@@ -82,14 +90,17 @@ export class VeranstaltungsortSuche {
     this.detail.historical.set(null);
     void this.router.navigate(['/gui/veranstaltungsorte', id], { queryParams: { tab } });
   }
+
   protected openRequest(row: GuiRow): void {
     const request = this.staging.findForRow(row, 'Veranstaltungsort & Bereiche');
+
     if (request) {
       this.state.query.set('');
       this.state.appliedQuery.set('');
       void this.router.navigate(['/gui/staging', request['id']]);
     }
   }
+
   constructor() {
     this.state.page.set('veranstaltungsorte');
   }

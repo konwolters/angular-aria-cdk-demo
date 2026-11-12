@@ -111,6 +111,7 @@ export class SelectComponent implements FormValueControl<string> {
 
   constructor() {
     afterRenderEffect(() => {
+      // Ohne expliziten Vergleichswert wird der gebundene Anfangswert nach dem Rendern festgehalten.
       if (this.initialValue() === undefined && this.capturedInitialValue() === null) {
         this.capturedInitialValue.set(this.value());
       }
@@ -152,6 +153,7 @@ export class SelectComponent implements FormValueControl<string> {
     const spaceBelow = viewportHeight - originRect.bottom - viewportMargin;
     const spaceAbove = originRect.top - viewportMargin;
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    // Die geschätzte Popup-Höhe entscheidet, welche Overlay-Position zuerst versucht wird.
     const optionHeight = rem * 2.5;
     const popupChromeHeight = rem * 0.5 + 2;
     const popupMaxHeight = rem * 16 + popupChromeHeight;

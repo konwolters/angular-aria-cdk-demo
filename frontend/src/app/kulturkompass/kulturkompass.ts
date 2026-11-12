@@ -65,10 +65,13 @@ export class Kulturkompass {
   protected readonly detail = inject(VeranstaltungsortService);
   protected readonly referenzdaten = inject(ReferenzdatenService);
   protected readonly statuses = GUI_STATUSES;
+
   protected acceptDrawer(): void {
     if (this.dialog.drawerKind() === 'bereich') this.bereich.accept();
+
     this.dialog.drawerOpen.set(false);
   }
+
   private readonly router = inject(Router);
   private readonly currentUrl = toSignal(
     this.router.events.pipe(

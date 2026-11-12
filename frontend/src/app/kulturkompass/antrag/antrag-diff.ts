@@ -19,6 +19,7 @@ export function antragDiff(kind: 'angebot' | 'bereich', row: GuiRow): DiffEntry[
       { key: 'status', label: 'Status', before: row['status'], after: row['status'] },
     ];
   }
+
   return [
     { key: 'bereich', label: 'Bereich', before: row['bereichnummer'], after: row['bereichnummer'] },
     { key: 'land', label: 'Land', before: row['land'], after: row['land'] },

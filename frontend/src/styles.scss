@@ -4,45 +4,57 @@
 :root {
   color-scheme: light;
 
+  /* Grundflächen: canvas liegt hinter den eigentlichen Oberflächen. */
   --ui-color-canvas: #f8fafc;
   --ui-color-surface: #fff;
+  /* Semantisch getrennte Rollen können unabhängig angepasst werden, auch bei gleichem Farbwert. */
   --ui-color-surface-subtle: #f8fafc;
   --ui-color-surface-muted: #f1f5f9;
   --ui-color-content: #0f172a;
   --ui-color-content-secondary: #475569;
   --ui-color-content-muted: #64748b;
   --ui-color-content-subtle: #64748b;
+  /* Rahmenvarianten für Standard-, hervorgehobene und Hover-Zustände. */
   --ui-color-border: #e2e8f0;
   --ui-color-border-strong: #7c8a9c;
   --ui-color-border-hover: #64748b;
+  /* Markenfarben für Aktionen, deren Zustände und Text auf farbigem Hintergrund. */
   --ui-color-brand: #2563eb;
   --ui-color-brand-hover: #1d4ed8;
   --ui-color-brand-subtle: #eff6ff;
   --ui-color-brand-strong: #1d4ed8;
   --ui-color-on-brand: #fff;
+  /* Fokusmarkierung und halbtransparenter Hintergrund hinter Dialogen. */
   --ui-color-focus: #3b82f6;
   --ui-color-overlay: rgb(15 23 42 / 40%);
+  /* Statusfarben und die jeweils zugehörigen dezenten Hintergründe. */
   --ui-color-success: #047857;
   --ui-color-success-subtle: #ecfdf5;
   --ui-color-warning: #b45309;
   --ui-color-warning-subtle: #fffbeb;
   --ui-color-danger: #dc2626;
   --ui-color-danger-subtle: #fef2f2;
+  /* Rundungen nach Oberflächenrolle statt nach konkreter Komponente. */
   --ui-radius-control: 0.25rem;
   --ui-radius-card: 0.375rem;
   --ui-radius-dialog: 0.5rem;
   --ui-radius-pill: 9999px;
   --ui-radius-avatar: 9999px;
+  /* Basiseinheit für numerische Tailwind-Abstände, nicht nur für einen einzelnen Abstand. */
   --ui-size-spacing: 0.234375rem;
+  /* Wiederverwendbare Maße für Bedienelemente und Auswahlmenüs. */
   --ui-size-control: 2.375rem;
   --ui-size-dropdown: 12.5rem;
+  /* Schriftgrößen für die Textskala; die Basisgröße gilt auch für den body. */
   --ui-font-size-xs: 0.75rem;
   --ui-font-size-sm: 0.8125rem;
   --ui-font-size-base: 0.875rem;
+  /* Bedienelemente haben eine eigene Rolle, auch wenn ihr Wert aktuell dem kleinen Text entspricht. */
   --ui-font-size-control: 0.8125rem;
   --ui-font-size-lg: 1rem;
   --ui-font-size-xl: 1.125rem;
   --ui-font-size-2xl: 1.25rem;
+  /* Schriftstapel für normalen Text und Inhalte mit fester Zeichenbreite. */
   --ui-font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --ui-font-mono: Consolas, 'Liberation Mono', Menlo, monospace;
 }
@@ -54,7 +66,7 @@ body {
   font-size: var(--ui-font-size-base);
 }
 
-/* Documentation navigation is part of the page, not a separate card. */
+/* Die Dokumentationsnavigation gehört zur Seite und erhält keinen eigenen Kartenrahmen. */
 .documentation-tabs > div {
   border: 0;
   border-radius: 0;

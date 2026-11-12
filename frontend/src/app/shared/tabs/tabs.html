@@ -44,6 +44,7 @@
   </div>
 
   @for (tab of tabs(); track tab.value) {
+    <!-- Inhalte bleiben beim Tabwechsel erhalten, damit lokale Eingaben nicht verloren gehen. -->
     <section
       ngTabPanel
       [value]="tab.value"

@@ -28,6 +28,7 @@ export class ReferenzdatenSeite {
   protected readonly rows = () => this.state.rows;
   protected readonly columns = () => this.state.columns;
   protected readonly editableColumns = this.state.editableColumns;
+
   protected openEditor(row: GuiRow | null): void {
     this.state.prepareEditor(row);
     const subject =

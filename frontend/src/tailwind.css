@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @source './app';
 
+/* UI-Tokens aus styles.scss als Tailwind-Klassen verfügbar machen. */
 @theme inline {
   --font-sans: var(--ui-font-sans);
   --font-mono: var(--ui-font-mono);
@@ -40,6 +41,7 @@
   --text-sm: var(--ui-font-size-sm);
   --text-base: var(--ui-font-size-base);
   --text-control: var(--ui-font-size-control);
+  /* Textklassen setzen auch die Zeilenhöhe; Bedienelemente behalten eine eigene Typografierolle. */
   --text-xs--line-height: 1.4;
   --text-sm--line-height: 1.4;
   --text-base--line-height: 1.5;

@@ -34,23 +34,28 @@ export class AntragSuche {
   protected readonly queryForm = form(this.state.query);
   protected readonly customerNumberForm = form(this.session.customerNumber);
   protected readonly rows = this.state.rows;
+
   protected apply(): void {
     this.state.appliedQuery.set(this.state.query());
   }
+
   protected reset(): void {
     this.state.query.set('');
     this.state.appliedQuery.set('');
     this.session.status.set('aktiv');
   }
+
   protected readonly extraModel = signal({ bereichnummer: '', umfang: [] as string[] });
   protected readonly extraForm = form(this.extraModel);
   protected readonly columns = REQUEST_COLUMNS;
   protected readonly referenceTypesForm = form(this.state.referenceTypes);
+
   protected openAntrag(row: GuiRow): void {
     this.state.query.set('');
     this.state.appliedQuery.set('');
     void this.router.navigate(['/gui/staging', row['id']]);
   }
+
   constructor() {
     this.state.page.set('staging');
   }

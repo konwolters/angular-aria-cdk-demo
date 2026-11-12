@@ -47,6 +47,7 @@ export class ImportSeite {
   protected openResult(row: GuiRow): void {
     void this.router.navigate(['/gui/staging', row['id']]);
   }
+
   protected changeStep(direction: number): void {
     const steps = this.steps();
     const index = steps.findIndex((step) => step.value === this.importStage());

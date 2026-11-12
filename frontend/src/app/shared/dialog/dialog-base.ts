@@ -15,7 +15,7 @@ import { ControlIdService } from '../field-messages/control-id.service';
 
 export type CloseReason = 'escape' | 'backdrop' | 'button';
 
-/** Shared CDK lifecycle for modal and drawer; request handling can be delegated to the caller. */
+/** Gemeinsamer CDK-Lebenszyklus für Modal und Drawer; Schließanfragen können delegiert werden. */
 @Directive()
 export abstract class DialogBase implements OnDestroy {
   protected readonly titleId = inject(ControlIdService).next();
@@ -41,6 +41,7 @@ export abstract class DialogBase implements OnDestroy {
         this.ref = undefined;
       } else if (content && !this.ref) {
         const ref = this.dialog.open(content, {
+          // Schließanfragen laufen über requestClose, damit der Aufrufer sie ablehnen kann.
           disableClose: true,
           ariaLabelledBy: this.titleId,
           backdropClass: 'bg-overlay',
@@ -63,6 +64,7 @@ export abstract class DialogBase implements OnDestroy {
           }
         });
         ref.closed.subscribe(() => {
+          // Ein alter Dialog darf den Zustand eines inzwischen neu geöffneten Dialogs nicht ändern.
           if (this.ref === ref) {
             this.ref = undefined;
             this.open.set(false);
@@ -79,6 +81,7 @@ export abstract class DialogBase implements OnDestroy {
   }
 
   requestClose(reason: CloseReason = 'button'): void {
+    // Bei verschachtelten Dialogen darf nur der oberste auf die Anfrage reagieren.
     if (this.dialog.openDialogs.at(-1) !== this.ref) return;
     this.closeRequested.emit(reason);
     if (this.closeOnRequest()) this.open.set(false);

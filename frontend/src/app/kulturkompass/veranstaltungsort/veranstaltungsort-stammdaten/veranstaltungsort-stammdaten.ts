@@ -41,21 +41,27 @@ export class VeranstaltungsortStammdaten {
   protected historyValue(field: string): string {
     const value = this.selected()?.[field] || '';
     const version = this.historical()?.['version'];
+
     if (
       (field === 'alertId' && (version === '1' || version === '2')) ||
       (field === 'akronym' && version === '1')
     )
       return value ? `${value}-ALT` : '';
+
     return value;
   }
+
   protected historyChanged(field: string): boolean {
     return this.historical()?.['changedField'] === field;
   }
+
   protected historyPreviousValue(field: string): string | undefined {
     if (!this.historical()) return undefined;
+
     const value = this.historyValue(field);
     return this.historyChanged(field) && value ? `${value}-ALT` : value;
   }
+
   protected historyPreviousLabel(): string {
     return `Version ${Number(this.historical()?.['version'] ?? 1) - 1}`;
   }

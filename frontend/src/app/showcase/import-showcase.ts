@@ -28,7 +28,7 @@ interface ImportRow {
   imported: boolean;
 }
 
-// CSV fields may contain quoted separators, line breaks and escaped quotes.
+// CSV-Felder können Trennzeichen, Zeilenumbrüche und maskierte Anführungszeichen enthalten.
 export function parseCsv(text: string): string[][] {
   const rows: string[][] = [];
   let row: string[] = [];

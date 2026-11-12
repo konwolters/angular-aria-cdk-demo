@@ -21,6 +21,7 @@ export class ServerTableService {
       { defaultValue: EMPTY_TABLE_PAGE as TablePage<T> },
     );
 
+    // Während eines erneuten Ladens oder bei Fehlern bleiben die letzten Ergebnisse sichtbar.
     const value = linkedSignal<ResourceStatus, TablePage<T>>({
       source: resource.status,
       computation: (status, previous) => {
@@ -45,6 +46,7 @@ export class ServerTableService {
       .set('direction', query.direction);
 
     for (const [filterName, selectedValues] of Object.entries(query.filters)) {
+      // Mehrfachauswahlen werden als wiederholte Query-Parameter desselben Namens übertragen.
       for (const selectedValue of selectedValues) {
         params = params.append(filterName, selectedValue);
       }

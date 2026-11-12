@@ -70,9 +70,11 @@ export class BereichDetail {
       maxLength(entry.beschreibung, 255);
     });
   });
+
   protected zusatzIndex(id: number): number {
     return this.zusatzdaten().findIndex((entry) => entry.id === id);
   }
+
   protected readonly zusatzdatenExpanded = signal(false);
   protected readonly visibleZusatzdaten = computed(() =>
     this.zusatzdatenExpanded() ? this.zusatzdaten() : this.zusatzdaten().slice(0, 2),
@@ -87,6 +89,7 @@ export class BereichDetail {
       : []),
   ]);
   protected readonly trackZusatzdatum = (row: BereichZusatzdatum) => row.id;
+
   protected addZusatzdatum(): void {
     this.zusatzdatenExpanded.set(true);
     this.zusatzdaten.update((rows) => [

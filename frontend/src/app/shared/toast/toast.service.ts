@@ -11,7 +11,7 @@ export class ToastService {
   private readonly items = signal<readonly ToastMessage[]>([]);
   readonly messages = this.items.asReadonly();
 
-  /** Explicit dismissal keeps confirmations available to keyboard and screen reader users. */
+  /** Explizites Schließen hält Bestätigungen für Tastatur und Screenreader verfügbar. */
   show(text: string): number {
     const id = this.nextId++;
     this.items.update((items) => [...items, { id, text }]);

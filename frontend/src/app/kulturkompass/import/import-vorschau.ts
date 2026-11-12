@@ -34,6 +34,7 @@ export function importVorschau(
       )
       .map((row, index) => ({ ...row, zeile: String(index + 1) }));
   }
+
   return angebot.map((row, index) => ({
     ...row,
     zeile: String(index + 1),

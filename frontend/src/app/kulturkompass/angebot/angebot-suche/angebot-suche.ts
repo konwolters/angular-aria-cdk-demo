@@ -36,14 +36,17 @@ export class AngebotSuche {
   protected readonly queryForm = form(this.state.query);
   protected readonly customerNumberForm = form(this.session.customerNumber);
   protected readonly rows = this.state.rows;
+
   protected apply(): void {
     this.state.appliedQuery.set(this.state.query());
   }
+
   protected reset(): void {
     this.state.query.set('');
     this.state.appliedQuery.set('');
     this.session.status.set('aktiv');
   }
+
   protected readonly extraModel = signal({
     registerkennung: '',
     bereichnummer: '',
@@ -60,17 +63,21 @@ export class AngebotSuche {
   protected readonly businessTypesForm = form(this.state.businessTypes);
   private readonly dialog = inject(GuiDialogService);
   private readonly staging = inject(StagingService);
+
   protected openDetails(row: GuiRow): void {
     this.dialog.openDrawer('angebot', 'Angebotsdetail', row, false);
   }
+
   protected openRequest(row: GuiRow): void {
     const request = this.staging.findForRow(row, 'Angebote');
+
     if (request) {
       this.state.query.set('');
       this.state.appliedQuery.set('');
       void this.router.navigate(['/gui/staging', request['id']]);
     }
   }
+
   constructor() {
     this.state.page.set('angebot');
   }

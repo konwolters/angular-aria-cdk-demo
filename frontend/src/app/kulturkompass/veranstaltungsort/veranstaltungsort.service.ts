@@ -15,9 +15,11 @@ export class VeranstaltungsortService {
   readonly bereichFilter = signal('alle');
   readonly bereichStatus = signal('aktiv');
   readonly name = signal('');
+
   findByNumber(nummer: string | null): GuiRow | null {
     return this.daten.veranstaltungsorte.find((row) => row.kundennummer === nummer) ?? null;
   }
+
   beginEditing(scope: 'veranstaltungsort' | 'angebot'): void {
     this.name.set(this.selected()?.['name'] || '');
     this.session.customerNumber.set(this.selected()?.['kundennummer'] || '');
@@ -25,6 +27,7 @@ export class VeranstaltungsortService {
     this.editing.set(true);
     this.activeTab.set(scope === 'angebot' ? 'angebot' : 'stammdaten');
   }
+
   readonly bereichs = computed<GuiRow[]>(() => {
     const numbers = this.selected()?.['bereichnummer']?.split(', ') ?? [];
     return numbers.map(

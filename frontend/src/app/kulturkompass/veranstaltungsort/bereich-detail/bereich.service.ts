@@ -21,7 +21,9 @@ export class BereichService {
 
   accept(): void {
     const nummer = this.nummer;
+
     if (!nummer) return;
+
     this.datenbestand.update((data) => ({
       ...data,
       [nummer]: this.zusatzdaten().map((entry) => ({ ...entry })),

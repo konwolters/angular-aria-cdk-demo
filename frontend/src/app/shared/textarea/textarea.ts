@@ -52,6 +52,7 @@ export class TextareaComponent implements FormValueControl<string> {
 
   constructor() {
     afterRenderEffect(() => {
+      // Ohne expliziten Vergleichswert wird der gebundene Anfangswert nach dem Rendern festgehalten.
       if (this.initialValue() === undefined && this.capturedInitialValue() === null) {
         this.capturedInitialValue.set(this.value());
       }

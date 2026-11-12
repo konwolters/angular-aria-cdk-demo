@@ -6,7 +6,7 @@ export interface StepItem {
   label: string;
 }
 
-/** A progress indicator, not a workflow engine: callers own validation and navigation. */
+/** Fortschrittsanzeige ohne Ablaufsteuerung: Validierung und Navigation liegen beim Aufrufer. */
 @Component({
   selector: 'app-stepper',
   host: { class: 'block' },

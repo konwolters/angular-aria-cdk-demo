@@ -9,6 +9,10 @@ describe('Kulturkompass-Routing', () => {
     const harness = await RouterTestingHarness.create();
 
     await harness.navigateByUrl('/gui/veranstaltungsorte');
+    const exportButton = Array.from(harness.routeNativeElement!.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'CSV exportieren',
+    );
+    expect(exportButton?.disabled).toBe(true);
     const searchInput = harness.routeNativeElement!.querySelector('input') as HTMLInputElement;
     searchInput.value = 'Sonnenhof';
     searchInput.dispatchEvent(new Event('input'));

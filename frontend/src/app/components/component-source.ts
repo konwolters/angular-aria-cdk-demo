@@ -1,4 +1,4 @@
-/** Paths are relative to src/app/shared and are copied as build assets without transformation. */
+/** Pfade sind relativ zu src/app/shared und werden unverändert als Build-Assets kopiert. */
 export const componentSources: Record<string, readonly string[]> = {
   button: ['button/button.ts', 'button/button.html'],
   'text-field': [

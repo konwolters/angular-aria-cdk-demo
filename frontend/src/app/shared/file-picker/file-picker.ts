@@ -42,6 +42,7 @@ export class FilePickerComponent implements FormValueControl<File | null> {
   });
   protected readonly error = signal('');
   protected readonly dragging = signal(false);
+  // Verschachtelte Elemente lösen eigene Enter-/Leave-Ereignisse aus; der Zähler verhindert Flackern.
   private dragDepth = 0;
 
   protected dragEnter(event: DragEvent): void {
@@ -67,6 +68,7 @@ export class FilePickerComponent implements FormValueControl<File | null> {
   }
   protected choose(event: Event): void {
     this.selectFiles(Array.from((event.target as HTMLInputElement).files ?? []));
+    // So löst auch die erneute Auswahl derselben Datei wieder ein Change-Ereignis aus.
     (event.target as HTMLInputElement).value = '';
   }
   private selectFiles(files: File[]): void {

@@ -76,6 +76,7 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
     const term = this.searchTerm().trim().toLocaleLowerCase();
     const selected = this.value();
 
+    // Bereits gewählte Werte bleiben auch bei abweichendem Suchbegriff sichtbar und abwählbar.
     return this.normalizedOptions().filter(
       (option) =>
         selected.includes(option.value) ||
@@ -109,6 +110,7 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
 
     const original = this.originalValues();
     const selected = this.value();
+    // Die Reihenfolge der Auswahl ist für den Vergleich mit dem Anfangswert unerheblich.
     return (
       original.length > 0 &&
       (original.length !== selected.length || original.some((value) => !selected.includes(value)))
@@ -117,6 +119,7 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
 
   constructor() {
     afterRenderEffect(() => {
+      // Die Kopie hält den Anfangszustand auch bei späteren Änderungen am Array fest.
       if (this.initialValue() === undefined && this.capturedInitialValue() === null) {
         this.capturedInitialValue.set([...this.value()]);
       }

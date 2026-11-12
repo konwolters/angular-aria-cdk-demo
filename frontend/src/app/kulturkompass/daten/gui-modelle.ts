@@ -1,4 +1,4 @@
-/** Table-compatible data used by the local GUI. */
+/** Tabellenkompatible Daten für die lokale GUI. */
 export type GuiRow = Record<string, string>;
 export type GuiPage =
   'veranstaltungsorte' | 'angebot' | 'import' | 'staging' | 'referenzdaten' | 'detail' | 'antrag';

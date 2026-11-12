@@ -40,8 +40,10 @@ export class BereichListe {
   protected toggleZusatzdaten(bereichnummer: string): void {
     this.expandedBereichs.update((current) => {
       const next = new Set(current);
+
       if (next.has(bereichnummer)) next.delete(bereichnummer);
       else next.add(bereichnummer);
+
       return next;
     });
   }

@@ -55,6 +55,7 @@ export class VeranstaltungsortDetailSeite {
   protected readonly angebotColumns = () => DETAIL_ANGEBOT_COLUMNS;
   protected readonly historyRows = () => this.daten.historie;
   protected readonly historyColumns = () => HISTORY_COLUMNS;
+
   constructor() {
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(takeUntilDestroyed())
@@ -63,6 +64,7 @@ export class VeranstaltungsortDetailSeite {
         this.suche.page.set('detail');
         this.state.historical.set(null);
         this.routeError.set('');
+
         if (id === 'neu') {
           this.state.selected.set(null);
           this.state.name.set('');
@@ -72,19 +74,26 @@ export class VeranstaltungsortDetailSeite {
         } else {
           const ort = this.state.findByNumber(id);
           this.state.selected.set(ort);
+
           if (!ort) this.routeError.set('Veranstaltungsort nicht gefunden.');
+
           const scope = this.router.currentNavigation()?.extras.state?.['editScope'];
+
           if (ort && (scope === 'angebot' || scope === 'veranstaltungsort'))
             this.state.beginEditing(scope);
           else this.state.editing.set(false);
         }
+
         const tab = query.get('tab');
+
         if (tab === 'stammdaten' || tab === 'bereichs' || tab === 'angebot' || tab === 'historie')
           this.state.activeTab.set(tab);
       });
   }
+
   protected showDetails(kind: 'angebot' | 'bereich', row: GuiRow): void {
     if (kind === 'bereich') this.bereich.prepare(row);
+
     this.dialog.openDrawer(
       kind,
       kind === 'angebot' ? 'Angebotsdetail' : 'Bereich-Detail',
@@ -92,8 +101,10 @@ export class VeranstaltungsortDetailSeite {
       false,
     );
   }
+
   protected openEditor(kind: 'angebot' | 'bereich', row: GuiRow | null): void {
     if (kind === 'bereich') this.bereich.prepare(row);
+
     const value =
       kind === 'angebot' && !row && this.state.bereichFilter() !== 'alle'
         ? { bereichnummer: this.state.bereichFilter() }

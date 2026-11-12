@@ -14,6 +14,7 @@ export class ReferenzdatenService {
   readonly editorForm = form(this.editorModel, (path) =>
     readonlyField(path.code, { when: () => this.existing() }),
   );
+
   prepareEditor(row: GuiRow | null): void {
     this.existing.set(!!row);
     this.editorModel.set({
@@ -23,6 +24,7 @@ export class ReferenzdatenService {
       status: 'aktiv',
     });
   }
+
   readonly tabs = [
     { value: 'land', label: 'Länder' },
     { value: 'geschaeft', label: 'Veranstaltungsarten' },
@@ -66,6 +68,7 @@ export class ReferenzdatenService {
       ['action', 'Aktion'],
     ]),
   ]);
+
   private makeColumns(definitions: string[][]): DataTableColumn<GuiRow>[] {
     return definitions.map(([key, header]) => ({ key, header, value: (row) => row[key] ?? '—' }));
   }

@@ -57,6 +57,7 @@ export class DataTableComponent<T> {
     const pageCount = Math.max(0, this.totalPages());
     const windowSize = Math.min(pageCount, Math.max(1, Math.trunc(this.pageWindowSize())));
     const centeredStart = this.page() - Math.floor(windowSize / 2);
+    // An den Rändern wird das Fenster verschoben, statt weniger Seitenzahlen anzuzeigen.
     const start = Math.max(0, Math.min(centeredStart, pageCount - windowSize));
 
     return Array.from({ length: windowSize }, (_, offset) => start + offset);
