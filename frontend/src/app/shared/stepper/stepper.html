@@ -2,7 +2,7 @@
   @for (step of steps(); track step.value) {
     <li
       [attr.aria-current]="step.value === current() ? 'step' : null"
-      class="flex min-w-0 items-center gap-3 rounded-control border px-4 py-4 transition-colors"
+      class="flex min-w-0 items-center gap-3 rounded-control border px-4 py-2 transition-colors"
       [class.border-brand]="step.value === current()"
       [class.bg-brand-subtle]="step.value === current()"
       [class.border-border]="step.value !== current()"

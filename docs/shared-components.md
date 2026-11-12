@@ -447,6 +447,8 @@ Spaltenschlüssel einer Spalte zu. Im Template ist die Zeile über `let-row` ver
 | `columns` | `readonly DataTableColumn<T>[]` | erforderlich | Spaltendefinitionen |
 | `framed` | `boolean` | `true` | Zeigt Rahmen und Kartenhintergrund |
 | `striped` | `boolean` | `true` | Hebt jede zweite Datenzeile farblich hervor; mit `false` abschaltbar |
+| `compact` | `boolean` | `false` | Kleinere Zell- und Leerzustandsabstände; Zellen vertikal mittig |
+| `layout` | `'auto' \| 'fixed'` | `'auto'` | Bei `fixed` richten sich Spaltenbreiten nicht nach dem Zellinhalt |
 | `pagination` | `boolean` | `true` | Zeigt Paging und Ergebniszähler; für lokale Detail-/Vergleichslisten abschaltbar |
 | `total` | `number` | `0` | Gesamtzahl aller gefilterten Zeilen |
 | `totalPages` | `number` | `0` | Anzahl der Seiten |
@@ -543,7 +545,7 @@ Import: `frontend/src/app/shared/side-drawer/side-drawer.ts`
 | Input / Model | Typ | Standard | Bedeutung |
 | --- | --- | --- | --- |
 | `title` | `string` | erforderlich | Drawer-Titel und zugängliche Beschriftung |
-| `width` | `string` | `48rem` | Gewünschte CSS-Breite, z. B. `56rem`; maximal die Fensterbreite, auch im geöffneten Zustand änderbar |
+| `width` | `string` | `56rem` | Gewünschte CSS-Breite, z. B. `48rem`; maximal die Fensterbreite, auch im geöffneten Zustand änderbar |
 | `open` | `ModelSignal<boolean>` | `false` | Sichtbarkeit; mit `[(open)]` zweiseitig bindbar |
 
 ## `app-tabs`

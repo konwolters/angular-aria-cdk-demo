@@ -8,12 +8,12 @@ const BASE_CLASSES =
   'inline-flex shrink-0 items-center justify-center gap-2 rounded-control font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
-  primary: 'border border-transparent bg-brand text-on-brand hover:bg-brand-hover',
+  primary: 'border border-transparent bg-brand text-on-brand shadow-sm hover:bg-brand-hover',
   secondary:
-    'border border-border-strong bg-surface text-content-secondary hover:border-border-hover hover:bg-surface-subtle',
+    'border border-border-strong bg-surface text-content-secondary shadow-sm hover:border-border-hover hover:bg-surface-subtle',
   ghost: 'border border-transparent bg-transparent text-content-secondary hover:bg-surface-muted',
   link: 'border border-transparent bg-transparent text-brand-strong hover:text-brand-hover hover:underline',
-  danger: 'border border-transparent bg-danger text-on-brand hover:bg-danger/90',
+  danger: 'border border-transparent bg-danger text-on-brand shadow-sm hover:bg-danger/90',
 };
 
 const SIZE_CLASSES: Record<ButtonSize, string> = {

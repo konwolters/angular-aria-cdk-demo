@@ -87,8 +87,8 @@
         <div data-table-searches>
           <app-text-field label="Suche" placeholder="Name oder E-Mail" [(value)]="query" />
         </div>
-        <div data-table-filters>
-          <app-select label="Status" [options]="statuses" [(value)]="statusFilter" />
+        <div data-table-filters class="w-48 max-w-full">
+          <app-select label="Status" [options]="statuses" [(value)]="statusFilter" [changed]="false" />
         </div>
       </app-data-table-toolbar>
       <app-data-table

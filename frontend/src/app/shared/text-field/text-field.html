@@ -1,6 +1,7 @@
 <app-field-wrapper
   [label]="label()"
   [hideLabel]="hideLabel()"
+  [required]="required()"
   [changed]="isChanged()"
   [changedLabel]="changedLabel()"
   [previousValueLabel]="previousValueLabel()"
@@ -12,7 +13,8 @@
   [controlId]="messagesId + '-control'"
 >
   <div
-    class="mt-1 flex w-full overflow-hidden rounded-control border border-border-strong focus-within:border-focus"
+    class="flex w-full overflow-hidden rounded-control border border-border-strong shadow-sm focus-within:border-focus"
+    [class.mt-1]="!hideLabel()"
     [class.h-8]="size() === 'small'"
     [class.h-control]="size() === 'medium'"
     [class.bg-surface]="!readonly()"

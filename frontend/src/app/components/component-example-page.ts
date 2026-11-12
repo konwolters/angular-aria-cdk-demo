@@ -989,6 +989,7 @@ export class ComponentExamplePage {
     { value: 'general', label: 'Allgemein' },
     { value: 'locked', label: 'Gesperrt', disabled: true },
   ];
+  protected readonly trackPerson = (person: SelectablePerson) => person.id;
 
   protected hasChanges(): boolean {
     return false;
@@ -1017,8 +1018,6 @@ export class ComponentExamplePage {
     this.direction.update((direction) => (direction === 'asc' ? 'desc' : 'asc'));
     this.sort.set(key);
   }
-
-  protected readonly trackPerson = (person: SelectablePerson) => person.id;
 
   protected togglePerson(person: SelectablePerson, event: Event): void {
     if (person.disabled) return;

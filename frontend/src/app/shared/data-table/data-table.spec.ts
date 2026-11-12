@@ -25,6 +25,32 @@ class DataTableHostComponent {
 }
 
 describe('DataTableComponent', () => {
+  it('supports compact cells and a fixed table layout without changing the defaults', () => {
+    const fixture = TestBed.createComponent(DataTableComponent);
+    fixture.componentRef.setInput('rows', [{ name: 'Test' }]);
+    fixture.componentRef.setInput('columns', [
+      { key: 'name', header: 'Name', value: (row: { name: string }) => row.name, width: '12rem' },
+    ]);
+    fixture.detectChanges();
+    const table = fixture.nativeElement.querySelector('table') as HTMLTableElement;
+    const cell = fixture.nativeElement.querySelector('tbody td') as HTMLTableCellElement;
+    expect(table.classList.contains('table-auto')).toBe(true);
+    expect(cell.classList.contains('py-2')).toBe(true);
+
+    fixture.componentRef.setInput('compact', true);
+    fixture.componentRef.setInput('layout', 'fixed');
+    fixture.detectChanges();
+    expect(table.classList.contains('table-fixed')).toBe(true);
+    expect(table.classList.contains('table-auto')).toBe(false);
+    expect(cell.classList.contains('py-1')).toBe(true);
+    expect(cell.classList.contains('align-middle')).toBe(true);
+    expect((fixture.nativeElement.querySelector('th') as HTMLElement).style.width).toBe('12rem');
+
+    fixture.componentRef.setInput('rows', []);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('tbody td').classList.contains('py-3')).toBe(true);
+  });
+
   it('can hide all paging controls for local lists and comparisons', () => {
     const fixture = TestBed.createComponent(DataTableComponent);
     fixture.componentRef.setInput('rows', []);

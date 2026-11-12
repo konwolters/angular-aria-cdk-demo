@@ -2,6 +2,7 @@
   <app-field-wrapper
     [label]="label()"
     [hideLabel]="hideLabel()"
+    [required]="required()"
     [changed]="isChanged()"
     [changedLabel]="changedLabel()"
     [previousValueLabel]="previousValueLabel()"
@@ -15,7 +16,7 @@
     <div #origin class="flex items-center gap-2">
       @if (searchable()) {
         <div
-          class="flex min-w-0 w-full items-center gap-2 rounded-control border border-border-strong px-3 focus-within:border-focus"
+          class="flex min-w-0 w-full items-center gap-2 rounded-control border border-border-strong px-3 shadow-sm focus-within:border-focus"
           [class.h-8]="size() === 'small'"
           [class.h-control]="size() === 'medium'"
           [class.bg-surface]="!readonly() && !disabled()"
@@ -59,7 +60,7 @@
           [attr.aria-required]="required()"
           [attr.aria-invalid]="invalid()"
           (blur)="touch.emit()"
-          class="inline-flex w-full items-center justify-between rounded-control border border-border-strong px-3 text-left text-control text-content-secondary"
+          class="inline-flex w-full items-center justify-between rounded-control border border-border-strong px-3 text-left text-control text-content-secondary shadow-sm"
           [class.h-8]="size() === 'small'"
           [class.h-control]="size() === 'medium'"
           [class.bg-surface]="!readonly() && !disabled()"

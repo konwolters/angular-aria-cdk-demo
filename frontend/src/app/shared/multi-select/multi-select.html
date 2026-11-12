@@ -2,6 +2,7 @@
   <app-field-wrapper
     [label]="label()"
     [hideLabel]="hideLabel()"
+    [required]="required()"
     [changed]="isChanged()"
     [changedLabel]="changedLabel()"
     [previousValueLabel]="previousValueLabel()"
@@ -15,7 +16,7 @@
     <div #origin [class.w-full]="fullWidth()" [class.w-dropdown]="!fullWidth()">
       @if (searchable()) {
         <div
-          class="inline-flex w-full items-center gap-1 rounded-control border border-border-strong px-3 py-2 text-control focus-within:border-focus"
+          class="inline-flex w-full items-center gap-1 rounded-control border border-border-strong px-3 py-2 text-control shadow-sm focus-within:border-focus"
           [class.h-8]="size() === 'small'"
           [class.h-control]="size() === 'medium'"
           [class.bg-surface]="!readonly() && !disabled()"
@@ -59,7 +60,7 @@
           [tabindex]="readonly() ? -1 : undefined"
           (mousedown)="preventReadonlyFocus($event)"
           [attr.aria-label]="selectionSummary().accessibleLabel"
-          class="inline-flex w-full items-center gap-1 rounded-control border border-border-strong px-3 py-2 text-control focus:border-focus"
+          class="inline-flex w-full items-center gap-1 rounded-control border border-border-strong px-3 py-2 text-control shadow-sm focus:border-focus"
           [class.h-8]="size() === 'small'"
           [class.h-control]="size() === 'medium'"
           [class.cursor-pointer]="!readonly() && !disabled()"

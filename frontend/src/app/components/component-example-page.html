@@ -671,12 +671,6 @@
     <ng-template appTabPanel="api">
       @if (api(); as documentation) {
         <div class="space-y-6 pt-6">
-          <section aria-label="Komponenten-Imports" class="border-b border-border">
-            <h2 class="border-b border-border px-5 py-4 font-semibold">Imports</h2>
-            <pre
-              class="overflow-x-auto bg-canvas p-5 font-mono text-sm"
-            ><code>{{ documentation.importCode }}</code></pre>
-          </section>
           @if (documentation.notes) {
             <p class="text-sm text-content-muted">{{ documentation.notes }}</p>
           }

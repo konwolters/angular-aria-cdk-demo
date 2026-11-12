@@ -7,7 +7,11 @@
   [attr.aria-busy]="loading()"
 >
   <div class="overflow-x-auto">
-    <table class="w-full min-w-[760px] table-auto text-left text-sm">
+    <table
+      class="w-full min-w-[760px] text-left text-sm"
+      [class.table-auto]="layout() === 'auto'"
+      [class.table-fixed]="layout() === 'fixed'"
+    >
       <caption class="sr-only">
         {{
           caption()
@@ -18,7 +22,10 @@
           @for (column of columns(); track column.key) {
             <th
               scope="col"
-              class="px-3 py-2"
+              [class.px-2]="compact()"
+              [class.py-1]="compact()"
+              [class.px-3]="!compact()"
+              [class.py-2]="!compact()"
               [style.width]="column.width || null"
               [style.min-width]="column.minWidth || null"
               [attr.aria-sort]="
@@ -56,7 +63,12 @@
           <tr class="hover:bg-canvas" [class]="striped() && $index % 2 === 1 ? 'bg-canvas/50' : ''">
             @for (column of columns(); track column.key) {
               <td
-                class="px-3 py-2 text-content-secondary"
+                class="text-content-secondary"
+                [class.px-2]="compact()"
+                [class.py-1]="compact()"
+                [class.align-middle]="compact()"
+                [class.px-3]="!compact()"
+                [class.py-2]="!compact()"
                 [style.min-width]="column.minWidth || null"
               >
                 @if (cellTemplate(column.key); as template) {
@@ -72,7 +84,12 @@
           </tr>
         } @empty {
           <tr>
-            <td [attr.colspan]="columns().length" class="px-5 py-12 text-center text-content-muted">
+            <td
+              [attr.colspan]="columns().length"
+              class="px-5 text-center text-content-muted"
+              [class.py-3]="compact()"
+              [class.py-12]="!compact()"
+            >
               {{ loading() ? 'Lädt…' : emptyMessage() }}
             </td>
           </tr>
@@ -125,6 +142,7 @@
             type="button"
             variant="secondary"
             size="small"
+            class="min-w-8 tabular-nums"
             [attr.aria-label]="'Seite ' + (pageNumber + 1)"
             [attr.aria-current]="page() === pageNumber ? 'page' : null"
             [active]="page() === pageNumber"

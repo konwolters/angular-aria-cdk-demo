@@ -18,7 +18,7 @@ import { ModalComponent } from '../shared/modal/modal';
 import { ToastOutletComponent } from '../shared/toast/toast';
 
 describe('Component API documentation', () => {
-  it('documents every component page and its import', () => {
+  it('documents every component page and its source files', () => {
     const slugs = [
       'button',
       'text-field',
@@ -40,7 +40,6 @@ describe('Component API documentation', () => {
     expect(Object.keys(componentApis).sort()).toEqual(slugs.sort());
     expect(Object.keys(componentSources).sort()).toEqual(slugs.sort());
     for (const slug of slugs) {
-      expect(componentApis[slug].importCode).toContain('import {');
       expect(componentSources[slug].length).toBeGreaterThan(0);
       expect(componentSources[slug].every((path) => !path.includes('..'))).toBe(true);
       expect(

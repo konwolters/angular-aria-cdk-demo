@@ -14,6 +14,7 @@ export class FieldWrapperComponent {
   readonly controlId = input<string>();
   readonly labelSize = input<'small' | 'medium'>('medium');
   readonly hideLabel = input(false);
+  readonly required = input(false);
   readonly changed = input(false);
   readonly changedLabel = input('GEÄNDERT');
   readonly previousValueLabel = input('Wert vorher');

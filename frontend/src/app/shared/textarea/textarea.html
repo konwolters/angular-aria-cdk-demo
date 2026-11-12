@@ -1,6 +1,7 @@
 <app-field-wrapper
   [label]="label()"
   [hideLabel]="hideLabel()"
+  [required]="required()"
   [changed]="isChanged()"
   [changedLabel]="changedLabel()"
   [previousValueLabel]="previousValueLabel()"
@@ -23,7 +24,7 @@
     [required]="required()"
     [tabindex]="readonly() ? -1 : null"
     [attr.aria-invalid]="invalid() ? 'true' : null"
-    class="mt-1 w-full resize-y rounded-control border border-border-strong p-3 text-control font-normal text-content-secondary outline-none placeholder:text-content-subtle focus:border-focus"
+    class="mt-1 w-full resize-y rounded-control border border-border-strong p-3 text-control font-normal text-content-secondary shadow-sm outline-none placeholder:text-content-subtle focus:border-focus"
     [class.min-h-20]="size() === 'small'"
     [class.min-h-28]="size() === 'medium'"
     [class.bg-surface]="!readonly()"

@@ -16,6 +16,9 @@
 }
 <ng-template #labelContent>
   <span class="min-w-0 [overflow-wrap:anywhere]">{{ label() }}</span>
+  @if (required()) {
+    <span aria-hidden="true" class="font-bold">*</span>
+  }
   @if (changed()) {
     <span class="rounded bg-brand px-1.5 py-0.5 text-xs font-semibold tracking-wide text-on-brand">
       {{ changedLabel() }}

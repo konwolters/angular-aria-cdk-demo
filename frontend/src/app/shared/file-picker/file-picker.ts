@@ -24,6 +24,11 @@ export class FilePickerComponent {
   readonly label = input('Datei');
   readonly buttonSize = input<ButtonSize>('small');
   readonly accept = input('.csv,text/csv');
+  readonly maxBytes = input(10 * 1024 * 1024);
+  readonly disabled = input(false);
+  readonly value = model<File | null>(null);
+  readonly rejected = output<string>();
+  private readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
   protected readonly acceptedTypes = computed(() => {
     const types = this.accept()
       .split(',')
@@ -34,14 +39,9 @@ export class FilePickerComponent {
       .map((type) => type.slice(1).toUpperCase());
     return [...new Set(extensions.length ? extensions : types)].join(', ') || 'Alle Dateitypen';
   });
-  readonly maxBytes = input(10 * 1024 * 1024);
-  readonly disabled = input(false);
-  readonly value = model<File | null>(null);
-  readonly rejected = output<string>();
   protected readonly error = signal('');
   protected readonly dragging = signal(false);
   private dragDepth = 0;
-  private readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   protected dragEnter(event: DragEvent): void {
     event.preventDefault();

@@ -9,7 +9,7 @@ import { DialogBase } from '../dialog/dialog-base';
   templateUrl: './side-drawer.html',
 })
 export class SideDrawerComponent extends DialogBase {
-  readonly width = input('48rem');
+  readonly width = input('56rem');
   protected readonly drawer = true;
 
   protected override dialogWidth(): string {

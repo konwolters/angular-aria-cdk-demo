@@ -49,20 +49,6 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
   readonly label = input.required<string>();
   readonly options = input<readonly (string | SelectOption)[]>([]);
   readonly value = model<string[]>([]);
-  protected readonly normalizedOptions = computed(() =>
-    this.options().map((option) =>
-      typeof option === 'string' ? { value: option, label: option } : option,
-    ),
-  );
-  protected labelFor(value: string, short = false): string {
-    const option = this.normalizedOptions().find((option) => option.value === value);
-    return (short ? option?.shortLabel : undefined) ?? option?.label ?? value;
-  }
-  protected readonly originalLabels = computed(() =>
-    this.originalValues()
-      .map((value) => this.labelFor(value))
-      .join(', '),
-  );
   readonly searchable = input(false);
   readonly maxDisplayedValues = input(2);
   readonly initialValue = input<readonly string[]>();
@@ -71,12 +57,21 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
   readonly changedLabel = input('GEÄNDERT');
   readonly previousValueLabel = input('Wert vorher');
   readonly labelSize = input<'small' | 'medium'>('medium');
-
+  protected readonly listbox = viewChild(Listbox);
+  protected readonly combobox = viewChild(Combobox);
+  protected readonly normalizedOptions = computed(() =>
+    this.options().map((option) =>
+      typeof option === 'string' ? { value: option, label: option } : option,
+    ),
+  );
+  protected readonly originalLabels = computed(() =>
+    this.originalValues()
+      .map((value) => this.labelFor(value))
+      .join(', '),
+  );
   protected readonly expanded = signal(false);
   protected readonly searchTerm = signal('');
   protected readonly capturedInitialValue = signal<readonly string[] | null>(null);
-  protected readonly listbox = viewChild(Listbox);
-  protected readonly combobox = viewChild(Combobox);
   protected readonly visibleOptions = computed(() => {
     const term = this.searchTerm().trim().toLocaleLowerCase();
     const selected = this.value();
@@ -130,6 +125,11 @@ export class MultiSelectComponent implements FormValueControl<string[]> {
         this.listbox()?.scrollActiveItemIntoView();
       }
     });
+  }
+
+  protected labelFor(value: string, short = false): string {
+    const option = this.normalizedOptions().find((option) => option.value === value);
+    return (short ? option?.shortLabel : undefined) ?? option?.label ?? value;
   }
 
   protected updateSearchTerm(event: Event): void {

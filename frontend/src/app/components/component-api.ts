@@ -6,7 +6,6 @@ export interface ApiEntry {
 }
 
 export interface ComponentApi {
-  importCode: string;
   inputs?: readonly ApiEntry[];
   outputs?: readonly ApiEntry[];
   slots?: readonly ApiEntry[];
@@ -25,8 +24,6 @@ const entry = (
 const output = (name: string, type: string, description: string) =>
   entry(name, type, '—', description);
 const slot = (name: string, description: string) => entry(name, 'Content', '—', description);
-const importFrom = (symbols: string, path: string) =>
-  `import { ${symbols} } from '../shared/${path}';`;
 
 const feedback: ApiEntry[] = [
   entry('hint', 'string', "''", 'Optionaler Hinweis unter dem Feld.'),
@@ -113,7 +110,6 @@ const selectOptionType = {
 
 export const componentApis: Record<string, ComponentApi> = {
   button: {
-    importCode: importFrom('ButtonComponent', 'button/button'),
     inputs: [
       entry(
         'variant',
@@ -131,7 +127,6 @@ export const componentApis: Record<string, ComponentApi> = {
     slots: [slot('Standardinhalt', 'Beschriftung des Buttons.')],
   },
   'text-field': {
-    importCode: importFrom('TextFieldComponent', 'text-field/text-field'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
       controlSize,
@@ -158,7 +153,6 @@ export const componentApis: Record<string, ComponentApi> = {
     notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
   },
   textarea: {
-    importCode: importFrom('TextareaComponent', 'textarea/textarea'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
       controlSize,
@@ -173,7 +167,6 @@ export const componentApis: Record<string, ComponentApi> = {
     notes: `Unterstützt Angular Signal Forms über FormValueControl. ${fieldWrapperNote}`,
   },
   select: {
-    importCode: importFrom('SelectComponent, SelectOption', 'select/select'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
       controlSize,
@@ -196,7 +189,6 @@ export const componentApis: Record<string, ComponentApi> = {
     types: [selectOptionType],
   },
   'multi-select': {
-    importCode: importFrom('MultiSelectComponent', 'multi-select/multi-select'),
     inputs: [
       entry('label', 'string', 'erforderlich', 'Feldbeschriftung.'),
       controlSize,
@@ -231,7 +223,6 @@ export const componentApis: Record<string, ComponentApi> = {
     types: [selectOptionType],
   },
   tabs: {
-    importCode: `${importFrom('TabsComponent, TabItem', 'tabs/tabs')}\n${importFrom('TabPanelTemplateDirective', 'tabs/tab-panel-template.directive')}`,
     inputs: [
       entry(
         'tabs',
@@ -278,7 +269,6 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   stepper: {
-    importCode: importFrom('StepperComponent, StepItem', 'stepper/stepper'),
     inputs: [
       entry('steps', 'readonly StepItem[]', 'erforderlich', 'Schritte mit value und label.'),
       entry('current', 'string', 'erforderlich', 'Wert des aktuellen Schritts.'),
@@ -303,7 +293,6 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   'file-picker': {
-    importCode: importFrom('FilePickerComponent', 'file-picker/file-picker'),
     inputs: [
       entry('label', 'string', "'Datei'", 'Feldbeschriftung.'),
       entry('accept', 'string', "'.csv,text/csv'", 'Erlaubte Dateitypen.'),
@@ -326,7 +315,6 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   'data-table-toolbar': {
-    importCode: importFrom('DataTableToolbarComponent', 'data-table-toolbar/data-table-toolbar'),
     inputs: [
       entry('resetLabel', 'string', "'Zurücksetzen'", 'Beschriftung der Reset-Aktion.'),
       entry('showReset', 'boolean', 'true', 'Zeigt die Reset-Aktion.'),
@@ -347,7 +335,6 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   'data-table': {
-    importCode: `${importFrom('DataTableComponent, DataTableColumn', 'data-table/data-table')}\n${importFrom('DataTableCellDirective', 'data-table/data-table-cell.directive')}\n${importFrom('DataTableHeaderDirective', 'data-table/data-table-header.directive')}`,
     inputs: [
       entry('rows', 'readonly T[]', 'erforderlich', 'Zeilen der aktuellen Seite.'),
       entry(
@@ -358,6 +345,18 @@ export const componentApis: Record<string, ComponentApi> = {
       ),
       entry('framed', 'boolean', 'true', 'Zeigt den äußeren Rahmen.'),
       entry('striped', 'boolean', 'true', 'Färbt jede zweite Datenzeile abwechselnd.'),
+      entry(
+        'compact',
+        'boolean',
+        'false',
+        'Reduziert Zellabstände und zentriert Zellen vertikal; auch der Leerzustand wird kompakter.',
+      ),
+      entry(
+        'layout',
+        "'auto' | 'fixed'",
+        "'auto'",
+        'Tabellenlayout: fixed berücksichtigt Spaltenbreiten unabhängig vom Zellinhalt.',
+      ),
       entry('pagination', 'boolean', 'true', 'Zeigt die Seitensteuerung.'),
       entry('total', 'number', '0', 'Gesamtzahl der Ergebnisse.'),
       entry('totalPages', 'number', '0', 'Anzahl der Seiten.'),
@@ -430,7 +429,6 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   'inline-message': {
-    importCode: importFrom('InlineMessageComponent', 'inline-message/inline-message'),
     inputs: [
       entry('severity', "'info' | 'success' | 'warning' | 'error'", "'info'", 'Art der Meldung.'),
       entry('title', 'string', "''", 'Optionaler Titel.'),
@@ -441,7 +439,6 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   'diff-view': {
-    importCode: importFrom('DiffViewComponent, DiffEntry', 'diff-view/diff-view'),
     inputs: [
       entry(
         'entries',
@@ -482,13 +479,12 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
   },
   'side-drawer': {
-    importCode: importFrom('SideDrawerComponent', 'side-drawer/side-drawer'),
     inputs: [
       ...dialogInputs,
       entry(
         'width',
         'string',
-        "'48rem'",
+        "'56rem'",
         'Gewünschte CSS-Breite des Drawers, z. B. 56rem. Auf die Fensterbreite begrenzt; auch im geöffneten Zustand änderbar.',
       ),
     ],
@@ -497,17 +493,12 @@ export const componentApis: Record<string, ComponentApi> = {
     methods: dialogMethods,
   },
   modal: {
-    importCode: importFrom('ModalComponent', 'modal/modal'),
     inputs: dialogInputs,
     outputs: dialogOutputs,
     slots: dialogSlots,
     methods: dialogMethods,
   },
   toast: {
-    importCode: [
-      importFrom('ToastService', 'toast/toast.service'),
-      importFrom('ToastOutletComponent', 'toast/toast'),
-    ].join('\n'),
     methods: [
       entry(
         'show(text)',
@@ -550,14 +541,6 @@ export const componentApis: Record<string, ComponentApi> = {
 };
 
 componentApis['data-table-combined'] = {
-  importCode: [
-    importFrom('DataTableToolbarComponent', 'data-table-toolbar/data-table-toolbar'),
-    importFrom('DataTableComponent, DataTableColumn', 'data-table/data-table'),
-    importFrom('DataTableCellDirective', 'data-table/data-table-cell.directive'),
-    importFrom('DataTableHeaderDirective', 'data-table/data-table-header.directive'),
-    importFrom('TextFieldComponent', 'text-field/text-field'),
-    importFrom('SelectComponent', 'select/select'),
-  ].join('\n'),
   inputs: [
     ...(componentApis['data-table-toolbar'].inputs ?? []),
     ...(componentApis['data-table'].inputs ?? []),

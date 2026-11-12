@@ -24,6 +24,8 @@ export class DataTableComponent<T> {
   readonly rows = input.required<readonly T[]>();
   readonly columns = input.required<readonly DataTableColumn<T>[]>();
   readonly framed = input(true);
+  readonly compact = input(false);
+  readonly layout = input<'auto' | 'fixed'>('auto');
   readonly striped = input(true);
   readonly pagination = input(true);
   readonly total = input(0);
@@ -46,9 +48,6 @@ export class DataTableComponent<T> {
 
   protected readonly cellTemplates = contentChildren(DataTableCellDirective);
   protected readonly headerTemplates = contentChildren(DataTableHeaderDirective);
-  protected headerTemplate(key: string): TemplateRef<unknown> | undefined {
-    return this.headerTemplates().find((header) => header.appDataTableHeader() === key)?.template;
-  }
   protected readonly pageSizeSelectOptions = computed<SelectOption[]>(() =>
     this.pageSizeOptions().map((size) => ({ value: String(size), label: String(size) })),
   );
@@ -63,6 +62,10 @@ export class DataTableComponent<T> {
 
   protected readonly firstRow = () => (this.total() === 0 ? 0 : this.page() * this.pageSize() + 1);
   protected readonly lastRow = () => Math.min((this.page() + 1) * this.pageSize(), this.total());
+
+  protected headerTemplate(key: string): TemplateRef<unknown> | undefined {
+    return this.headerTemplates().find((header) => header.appDataTableHeader() === key)?.template;
+  }
 
   protected sortIcon(key: string): IconName {
     if (this.sort() !== key) return 'sort';
