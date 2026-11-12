@@ -126,7 +126,7 @@ weiterhin für Formularverhalten, Tastaturbedienung und Barrierefreiheit.
 
 | Input | Typ | Standard |
 | --- | --- | --- |
-| `variant` | `primary \| secondary \| ghost \| link \| danger` | `primary` |
+| `variant` | `primary \| secondary \| ghost \| link \| text-link \| danger` | `primary` |
 | `size` | `small \| medium \| large` | `small` |
 | `icon` | `IconName` | kein Icon |
 | `iconPosition` | `start \| end` | `start` |

@@ -1,0 +1,17 @@
+<app-import-seite
+  [(importStage)]="state.stage"
+  [(dataType)]="state.dataType"
+  [(file)]="state.file"
+  [steps]="state.steps"
+  [completedSteps]="state.completedSteps()"
+  [importTypes]="state.importTypes"
+  [previewRows]="state.previewRows()"
+  [previewColumns]="state.previewColumns()"
+  [groupRows]="state.groupRows"
+  [groupColumns]="state.groupColumns"
+  [importResultRows]="state.resultRows"
+  [importResultColumns]="state.resultColumns"
+  [pagination]="ctx().pagination"
+  (openResult)="ctx().openImportResult($event)"
+  (openStaging)="ctx().navigateStaging()"
+/>

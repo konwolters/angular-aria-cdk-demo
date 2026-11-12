@@ -1,0 +1,32 @@
+<app-suche-seite
+  [page]="
+    state.page() === 'angebot'
+      ? 'angebot'
+      : state.page() === 'staging'
+        ? 'staging'
+        : 'veranstaltungsorte'
+  "
+  [rows]="state.rows()"
+  [columns]="
+    state.page() === 'veranstaltungsorte'
+      ? customerColumns
+      : state.page() === 'angebot'
+        ? angebotColumns
+        : requestColumns
+  "
+  [pagination]="ctx().pagination"
+  [statuses]="ctx().statuses"
+  [(query)]="state.query"
+  [(customerNumber)]="session.customerNumber"
+  [(status)]="session.status"
+  [(countries)]="state.countries"
+  [(businessTypes)]="state.businessTypes"
+  [(referenceTypes)]="state.referenceTypes"
+  (createCustomer)="ctx().createCustomer()"
+  (apply)="state.appliedQuery.set(state.query())"
+  (reset)="state.query.set(''); state.appliedQuery.set(''); session.status.set('aktiv')"
+  (export)="state.exportResults()"
+  (open)="ctx().openRow($event)"
+  (openRequest)="ctx().openRequest($event)"
+  (openBereichs)="ctx().openCustomer($event, 'bereichs')"
+/>

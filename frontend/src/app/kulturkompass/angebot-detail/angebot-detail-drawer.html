@@ -1,0 +1,19 @@
+<app-side-drawer [(open)]="open" [title]="title()">
+  <div class="text-base">
+    <app-angebot-detail
+      [value]="value()"
+      [readonly]="!editing()"
+      [bereichOptions]="bereichOptions()"
+    />
+  </div>
+  <div dialog-footer class="pt-5">
+    <div class="flex justify-end gap-2">
+      <button appButton size="small" variant="secondary" type="button" (click)="open.set(false)">
+        {{ editing() ? 'Abbrechen' : 'Schließen' }}
+      </button>
+      @if (editing()) {
+        <button appButton size="small" type="button" (click)="accept.emit()">Übernehmen</button>
+      }
+    </div>
+  </div>
+</app-side-drawer>

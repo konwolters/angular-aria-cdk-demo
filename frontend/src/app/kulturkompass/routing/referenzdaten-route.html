@@ -1,0 +1,10 @@
+<app-referenzdaten-seite
+  [tabs]="state.tabs"
+  [(selectedTab)]="state.selectedTab"
+  [(editing)]="state.editing"
+  [rows]="state.rows"
+  [columns]="state.columns"
+  [editableColumns]="state.editableColumns()"
+  (edit)="ctx().openEditor('reference', $event)"
+  (submit)="ctx().confirm('Zur Freigabe einreichen')"
+/>

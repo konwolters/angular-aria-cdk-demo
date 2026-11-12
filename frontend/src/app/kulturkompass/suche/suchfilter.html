@@ -1,0 +1,139 @@
+<app-data-table-toolbar
+  buttonSize="small"
+  [compactTop]="true"
+  [showApply]="false"
+  [showReset]="false"
+  (apply)="apply.emit()"
+  (reset)="reset.emit()"
+>
+  <div data-table-searches class="w-full">
+    @if (page() === 'angebot') {
+      <section aria-labelledby="angebot-customer-filters" class="@container">
+        <h2
+          id="angebot-customer-filters"
+          class="mb-2 text-xs font-semibold uppercase tracking-wide text-content-muted"
+        >
+          Veranstaltungsort und Bereich
+        </h2>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3">
+          <app-text-field size="small" label="Veranstaltungsort" [(value)]="query" />
+          <app-text-field size="small" label="Standortnummer" [(value)]="customerNumber" />
+          <app-text-field size="small" label="Registerkennung" />
+          <app-text-field size="small" label="Bereichsnummer" />
+        </div>
+      </section>
+      <section aria-labelledby="angebot-characteristic-filters" class="@container mt-4">
+        <h2
+          id="angebot-characteristic-filters"
+          class="mb-2 text-xs font-semibold uppercase tracking-wide text-content-muted"
+        >
+          Angebotsmerkmale
+        </h2>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3">
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Land"
+            [options]="['DE', 'LU', 'US']"
+            [(value)]="countries"
+            [changed]="false"
+          />
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Veranstaltungsart"
+            [options]="['Workshop', 'Ausstellung']"
+            [(value)]="businessTypes"
+            [changed]="false"
+          />
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Angebotsformat"
+            [options]="['Präsenz', 'Online']"
+            [changed]="false"
+          />
+          <app-text-field size="small" label="Angebotscode" [monospace]="true" />
+          <app-text-field size="small" label="Kontaktcode Ansprechperson" />
+          <app-text-field size="small" label="Kontakt-ID Ansprechperson" />
+          <app-text-field size="small" label="Kontaktcode Veranstaltungsteam" />
+          <app-text-field size="small" label="Zusatzinformationen" />
+        </div>
+      </section>
+    } @else {
+      <div
+        class="@container grid items-end gap-3"
+        [class]="
+          page() === 'staging'
+            ? 'grid-cols-[repeat(auto-fill,minmax(min(100%,11rem),1fr))]'
+            : 'grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))]'
+        "
+      >
+        <app-text-field
+          size="small"
+          [label]="page() === 'staging' ? 'Antrag' : 'Name'"
+          [(value)]="query"
+        />
+        <app-text-field size="small" label="Standortnummer" [(value)]="customerNumber" />
+        <app-text-field size="small" label="Bereichsnummer" />
+        @if (page() === 'veranstaltungsorte') {
+          <app-text-field size="small" label="Standort-ID" />
+          <app-text-field size="small" label="Standortkürzel" />
+          <app-text-field size="small" label="Registerkennung" />
+          <app-select
+            size="small"
+            label="Status"
+            [options]="statuses()"
+            [(value)]="status"
+            [changed]="false"
+          />
+        }
+        @if (page() === 'staging') {
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Status"
+            [options]="['In Bearbeitung', 'Eingereicht']"
+            [(value)]="referenceTypes"
+            [changed]="false"
+          />
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Änderungsumfang"
+            [options]="['Veranstaltungsort & Bereiche', 'Angebote', 'Referenzdaten']"
+            [changed]="false"
+          />
+        }
+      </div>
+    }
+  </div>
+  <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
+    <span>{{ count() }} {{ page() === 'staging' ? 'Einträge' : 'Treffer' }}</span>
+    <div class="flex flex-wrap justify-end gap-3">
+      <button appButton size="small" type="submit">Suchen</button>
+      <button
+        appButton
+        size="small"
+        type="button"
+        variant="secondary"
+        icon="refresh"
+        (click)="reset.emit()"
+      >
+        Zurücksetzen
+      </button>
+      @if (page() !== 'staging') {
+        <button
+          appButton
+          size="small"
+          variant="secondary"
+          type="button"
+          [disabled]="count() === 0"
+          (click)="export.emit()"
+        >
+          CSV exportieren
+        </button>
+      }
+    </div>
+  </div>
+</app-data-table-toolbar>

@@ -1,0 +1,93 @@
+<app-gui-layout
+  [navigation]="navigation"
+  [activePage]="activeNavigation()"
+  [roles]="roles"
+  [(role)]="role"
+  (logout)="confirm('Abmelden')"
+>
+  <div class="space-y-4">
+    @if (routeError()) {
+      <p class="px-5 text-content-muted">{{ routeError() }}</p>
+    }
+    <div [hidden]="!!routeError()"><router-outlet [routerOutletData]="pageContext" /></div>
+  </div>
+</app-gui-layout>
+
+@if (drawerKind() === 'angebot') {
+  <app-angebot-detail-drawer
+    [(open)]="drawerOpen"
+    [title]="drawerTitle()"
+    [value]="drawerRow()"
+    [editing]="drawerEditing()"
+    [bereichOptions]="page() === 'detail' ? bereichOptions().slice(1) : null"
+    (accept)="acceptDrawer()"
+  />
+} @else {
+  <app-side-drawer [(open)]="drawerOpen" [title]="drawerTitle()">
+    <div class="text-base">
+      @if (drawerKind() === 'request-diff') {
+        <div class="mt-5"><app-diff-view [entries]="requestDiff()" /></div>
+      } @else if (drawerKind() === 'reference') {
+        <div class="mt-5 grid gap-4 sm:grid-cols-2">
+          @if (referenceTab() !== 'zusatz') {
+            <app-text-field
+              size="small"
+              label="Kurzbezeichnung"
+              [value]="drawerRow()?.['code'] || ''"
+              [readonly]="!!drawerRow()"
+            />
+          }
+          <app-text-field
+            size="small"
+            label="Bezeichnung"
+            [value]="drawerRow()?.['bezeichnung'] || ''"
+          />
+          @if (referenceTab() === 'land') {
+            <app-text-field
+              size="small"
+              label="Regionscode"
+              [value]="drawerRow()?.['verwahrart'] || ''"
+            />
+          }
+          <app-select size="small" label="Status" [options]="statuses" value="aktiv" />
+        </div>
+      } @else {
+        <app-bereich-detail
+          [value]="drawerRow()"
+          [editing]="drawerEditing()"
+          [editScope]="editScope()"
+          [statuses]="statuses"
+          [zusatzarten]="zusatzarten"
+          [(zusatzdaten)]="drawerZusatzdaten"
+        />
+      }
+    </div>
+    <div dialog-footer class="pt-5">
+      <div class="flex justify-end gap-2">
+        <button
+          appButton
+          size="small"
+          variant="secondary"
+          type="button"
+          (click)="drawerOpen.set(false)"
+        >
+          {{ drawerEditing() ? 'Abbrechen' : 'Schließen' }}
+        </button>
+        @if (drawerEditing()) {
+          <button appButton size="small" type="button" (click)="acceptDrawer()">Übernehmen</button>
+        }
+      </div>
+    </div>
+  </app-side-drawer>
+}
+<app-modal [(open)]="modalOpen" [title]="modalTitle()">
+  <p class="mt-3 text-sm text-content-muted">{{ modalTitle() }}?</p>
+  @if (modalTitle() === 'Antrag ablehnen') {
+    <div class="mt-4"><app-textarea size="small" label="Ablehnungsgrund" [(value)]="note" /></div>
+  }
+  <div dialog-footer class="mt-5 flex justify-end gap-2">
+    <button appButton size="small" variant="secondary" type="button" (click)="modalOpen.set(false)">
+      Schließen
+    </button>
+  </div>
+</app-modal>

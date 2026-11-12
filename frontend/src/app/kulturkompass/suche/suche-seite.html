@@ -1,0 +1,41 @@
+<div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
+  <h1 class="text-lg font-semibold text-brand-strong">
+    {{
+      page() === 'veranstaltungsorte'
+        ? 'Veranstaltungsorte'
+        : page() === 'angebot'
+          ? 'Angebotssuche'
+          : 'Staging & Freigaben'
+    }}
+  </h1>
+  @if (page() === 'veranstaltungsorte') {
+    <button appButton size="small" type="button" (click)="createCustomer.emit()">
+      Veranstaltungsort anlegen
+    </button>
+  }
+</div>
+<section class="bg-surface !mt-0">
+  <app-suchfilter
+    [page]="page()"
+    [count]="rows().length"
+    [statuses]="statuses()"
+    [(query)]="query"
+    [(customerNumber)]="customerNumber"
+    [(status)]="status"
+    [(countries)]="countries"
+    [(businessTypes)]="businessTypes"
+    [(referenceTypes)]="referenceTypes"
+    (apply)="apply.emit()"
+    (reset)="reset.emit()"
+    (export)="export.emit()"
+  />
+  <app-suchergebnis-tabelle
+    [page]="page()"
+    [rows]="rows()"
+    [columns]="columns()"
+    [pagination]="pagination()"
+    (open)="open.emit($event)"
+    (openRequest)="openRequest.emit($event)"
+    (openBereichs)="openBereichs.emit($event)"
+  />
+</section>

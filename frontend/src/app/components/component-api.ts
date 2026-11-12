@@ -113,9 +113,9 @@ export const componentApis: Record<string, ComponentApi> = {
     inputs: [
       entry(
         'variant',
-        "'primary' | 'secondary' | 'ghost' | 'link' | 'danger'",
+        "'primary' | 'secondary' | 'ghost' | 'link' | 'text-link' | 'danger'",
         "'primary'",
-        'Visuelle Variante.',
+        'Visuelle Variante. text-link hat keine feste Mindesthöhe oder Innenabstände und erlaubt Zeilenumbrüche.',
       ),
       entry('size', "'small' | 'medium' | 'large'", "'small'", 'Größe.'),
       entry('icon', 'IconName | undefined', 'undefined', 'Optionales Icon.'),

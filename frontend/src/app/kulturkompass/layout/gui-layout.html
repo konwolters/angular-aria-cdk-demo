@@ -1,0 +1,73 @@
+<div class="min-h-screen bg-surface text-content text-base">
+  <header
+    class="flex min-h-14 flex-wrap items-center justify-between gap-4 border-b border-border bg-surface px-6"
+  >
+    <a
+      routerLink="/gui/veranstaltungsorte"
+      class="flex h-11 items-center font-semibold tracking-wide"
+    >
+      Kulturkompass
+    </a>
+    <div class="flex flex-wrap items-center gap-4">
+      <span class="text-xs text-content-muted">HT10234</span>
+      <button appButton variant="secondary" size="small" type="button" (click)="logout.emit()">
+        Abmelden
+      </button>
+    </div>
+  </header>
+  <nav
+    aria-label="Kulturkompass-Navigation mobil"
+    class="flex gap-1 overflow-x-auto border-b border-border bg-surface p-2 md:hidden"
+  >
+    @for (item of navigation(); track item.id) {
+      <a
+        [routerLink]="['/gui', item.id]"
+        [attr.aria-current]="activePage() === item.id ? 'page' : null"
+        class="rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-surface-muted"
+        [class.bg-slate-200]="activePage() === item.id"
+        >{{ item.label }}</a
+      >
+    }
+  </nav>
+  <div class="flex min-h-[calc(100vh-72px)]">
+    <aside class="hidden w-56 shrink-0 border-r border-border bg-surface p-3 md:block">
+      <nav aria-label="Kulturkompass-Navigation" class="space-y-1">
+        <p class="px-3 py-2 text-xs uppercase tracking-wide text-content-muted">Hauptnavigation</p>
+        @for (item of navigation(); track item.id) {
+          <a
+            [routerLink]="['/gui', item.id]"
+            [attr.aria-current]="activePage() === item.id ? 'page' : null"
+            class="block rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-surface-muted"
+            [class.bg-slate-200]="activePage() === item.id"
+            >{{ item.label }}</a
+          >
+        }
+      </nav>
+    </aside>
+    <main class="min-w-0 flex-1 pb-6 pt-4"><ng-content /></main>
+  </div>
+  <div class="fixed bottom-3 left-3 z-30">
+    @if (settingsOpen()) {
+      <div class="mb-2 w-72 rounded-card border border-border bg-surface p-4 shadow-lg">
+        <app-select
+          size="small"
+          label="Rolle"
+          [options]="roles()"
+          [(value)]="role"
+          [changed]="false"
+        />
+      </div>
+    }
+    <button
+      appButton
+      variant="secondary"
+      size="small"
+      type="button"
+      aria-label="Einstellungen"
+      [attr.aria-expanded]="settingsOpen()"
+      (click)="settingsOpen.set(!settingsOpen())"
+    >
+      ⚙
+    </button>
+  </div>
+</div>
