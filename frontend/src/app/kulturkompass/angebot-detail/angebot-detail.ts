@@ -50,11 +50,11 @@ export class AngebotDetailComponent {
     { value: 'US', label: 'USA' },
   ];
   protected readonly columns: DataTableColumn<Participant>[] = [
-    { key: 'name', header: '', value: (row) => row.name },
-    { key: 'konto', header: 'Kontakt-ID', value: (row) => row.konto },
-    { key: 'bic', header: 'Kontaktcode', value: (row) => row.bic },
-    { key: 'pc', header: 'PC', value: (row) => row.pc },
-    { key: 'bezeichnung', header: 'Name', value: (row) => row.bezeichnung },
+    { key: 'name', header: '', width: '28%', value: (row) => row.name },
+    { key: 'konto', header: 'Kontakt-ID', width: '18%', value: (row) => row.konto },
+    { key: 'bic', header: 'Kontaktcode', width: '18%', value: (row) => row.bic },
+    { key: 'pc', header: 'PC', width: '18%', value: (row) => row.pc },
+    { key: 'bezeichnung', header: 'Name', width: '18%', value: (row) => row.bezeichnung },
   ];
   protected readonly participants = computed<Participant[]>(() => [
     {

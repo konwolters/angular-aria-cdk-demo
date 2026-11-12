@@ -50,7 +50,13 @@
       caption="Erzeugte Änderungsanträge"
     >
       <ng-template appDataTableCell="action" let-row>
-        <button appButton size="small" variant="link" type="button" (click)="openResult.emit(row)">
+        <button
+          appButton
+          size="small"
+          variant="link"
+          type="button"
+          (click)="ctx().openImportResult(row)"
+        >
           Öffnen
         </button>
       </ng-template>
@@ -81,7 +87,7 @@
       >
         Neuen Import starten
       </button>
-      <button appButton size="small" type="button" (click)="openStaging.emit()">
+      <button appButton size="small" type="button" (click)="ctx().navigateStaging()">
         Zu Staging &amp; Freigaben
       </button>
     }

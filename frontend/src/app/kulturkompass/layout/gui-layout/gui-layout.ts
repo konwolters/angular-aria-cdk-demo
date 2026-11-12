@@ -1,7 +1,7 @@
 import { Component, input, model, output, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ButtonComponent } from '../../shared/button/button';
-import { SelectComponent, SelectOption } from '../../shared/select/select';
+import { ButtonComponent } from '../../../shared/button/button';
+import { SelectComponent, SelectOption } from '../../../shared/select/select';
 
 export interface GuiNavigationItem {
   id: string;

@@ -9,7 +9,7 @@
     }}
   </h1>
   @if (page() === 'veranstaltungsorte') {
-    <button appButton size="small" type="button" (click)="createCustomer.emit()">
+    <button appButton size="small" type="button" (click)="ctx().createCustomer()">
       Veranstaltungsort anlegen
     </button>
   }
@@ -25,17 +25,17 @@
     [(countries)]="countries"
     [(businessTypes)]="businessTypes"
     [(referenceTypes)]="referenceTypes"
-    (apply)="apply.emit()"
-    (reset)="reset.emit()"
-    (export)="export.emit()"
+    (apply)="state.appliedQuery.set(state.query())"
+    (reset)="state.query.set(''); state.appliedQuery.set(''); session.status.set('aktiv')"
+    (export)="state.exportResults()"
   />
   <app-suchergebnis-tabelle
     [page]="page()"
     [rows]="rows()"
     [columns]="columns()"
     [pagination]="pagination()"
-    (open)="open.emit($event)"
-    (openRequest)="openRequest.emit($event)"
-    (openBereichs)="openBereichs.emit($event)"
+    (open)="ctx().openRow($event)"
+    (openRequest)="ctx().openRequest($event)"
+    (openBereichs)="ctx().openCustomer($event, 'bereichs')"
   />
 </section>

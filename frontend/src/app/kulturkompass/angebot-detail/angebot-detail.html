@@ -69,7 +69,8 @@
 </div>
 <h3 class="mb-2 mt-5 text-sm font-semibold">Veranstaltungsbeteiligte</h3>
 <app-data-table
-  class="[&_th]:p-1 [&_td]:p-1 [&_table]:w-full [&_table]:min-w-[39rem] [&_th:first-child]:w-[28%] [&_th:not(:first-child)]:w-[18%]"
+  [tightCells]="true"
+  minWidth="39rem"
   [rows]="participants()"
   [pagination]="false"
   [columns]="columns"

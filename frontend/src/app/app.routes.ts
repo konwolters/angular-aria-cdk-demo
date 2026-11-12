@@ -13,40 +13,50 @@ export const routes: Routes = [
       {
         path: 'veranstaltungsorte/:id',
         loadComponent: () =>
-          import('./kulturkompass/routing/veranstaltungsort-route').then(
-            (m) => m.VeranstaltungsortRouteComponent,
+          import('./kulturkompass/veranstaltungsorte/veranstaltungsort-detail-seite/veranstaltungsort-detail-seite').then(
+            (m) => m.VeranstaltungsortDetailSeiteComponent,
           ),
       },
       {
         path: 'staging/:id',
         loadComponent: () =>
-          import('./kulturkompass/routing/antrag-route').then((m) => m.AntragRouteComponent),
+          import('./kulturkompass/staging/antrag-seite/antrag-seite').then(
+            (m) => m.AntragSeiteComponent,
+          ),
       },
       {
         path: 'veranstaltungsorte',
         loadComponent: () =>
-          import('./kulturkompass/routing/suche-route').then((m) => m.SucheRouteComponent),
+          import('./kulturkompass/suche/suche-seite/suche-seite').then(
+            (m) => m.SucheSeiteComponent,
+          ),
       },
       {
         path: 'angebot',
         loadComponent: () =>
-          import('./kulturkompass/routing/suche-route').then((m) => m.SucheRouteComponent),
+          import('./kulturkompass/suche/suche-seite/suche-seite').then(
+            (m) => m.SucheSeiteComponent,
+          ),
       },
       {
         path: 'import',
         loadComponent: () =>
-          import('./kulturkompass/routing/import-route').then((m) => m.ImportRouteComponent),
+          import('./kulturkompass/import/import-seite/import-seite').then(
+            (m) => m.ImportSeiteComponent,
+          ),
       },
       {
         path: 'staging',
         loadComponent: () =>
-          import('./kulturkompass/routing/suche-route').then((m) => m.SucheRouteComponent),
+          import('./kulturkompass/suche/suche-seite/suche-seite').then(
+            (m) => m.SucheSeiteComponent,
+          ),
       },
       {
         path: 'referenzdaten',
         loadComponent: () =>
-          import('./kulturkompass/routing/referenzdaten-route').then(
-            (m) => m.ReferenzdatenRouteComponent,
+          import('./kulturkompass/referenzdaten/referenzdaten-seite/referenzdaten-seite').then(
+            (m) => m.ReferenzdatenSeiteComponent,
           ),
       },
     ],

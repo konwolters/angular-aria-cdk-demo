@@ -1,11 +1,11 @@
 import { Component, input, model, output } from '@angular/core';
-import { ButtonComponent } from '../../shared/button/button';
-import { DataTableCellDirective } from '../../shared/data-table/data-table-cell.directive';
-import { DataTableColumn, DataTableComponent } from '../../shared/data-table/data-table';
-import { SelectOption } from '../../shared/select/select';
-import { TabPanelTemplateDirective } from '../../shared/tabs/tab-panel-template.directive';
-import { TabItem, TabsComponent } from '../../shared/tabs/tabs';
-import { VeranstaltungsortStammdatenComponent } from '../veranstaltungsort-stammdaten/veranstaltungsort-stammdaten';
+import { ButtonComponent } from '../../../shared/button/button';
+import { DataTableCellDirective } from '../../../shared/data-table/data-table-cell.directive';
+import { DataTableColumn, DataTableComponent } from '../../../shared/data-table/data-table';
+import { SelectOption } from '../../../shared/select/select';
+import { TabPanelTemplateDirective } from '../../../shared/tabs/tab-panel-template.directive';
+import { TabItem, TabsComponent } from '../../../shared/tabs/tabs';
+import { VeranstaltungsortStammdatenComponent } from '../../veranstaltungsort-stammdaten/veranstaltungsort-stammdaten';
 
 type Row = Record<string, string>;
 

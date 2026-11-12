@@ -1,14 +1,14 @@
 import { Component, input, model, output } from '@angular/core';
-import { ButtonComponent } from '../../shared/button/button';
-import { DataTableCellDirective } from '../../shared/data-table/data-table-cell.directive';
-import { DataTableColumn, DataTableComponent } from '../../shared/data-table/data-table';
-import { SelectOption } from '../../shared/select/select';
-import { TabPanelTemplateDirective } from '../../shared/tabs/tab-panel-template.directive';
-import { TabItem, TabsComponent } from '../../shared/tabs/tabs';
-import { BereichZusatzdatum } from '../bereich-detail/bereich-detail';
-import { BereichListeComponent } from '../bereich-liste/bereich-liste';
-import { VeranstaltungsortStammdatenComponent } from '../veranstaltungsort-stammdaten/veranstaltungsort-stammdaten';
-import { AngebotListeComponent } from '../angebot-liste/angebot-liste';
+import { ButtonComponent } from '../../../shared/button/button';
+import { DataTableCellDirective } from '../../../shared/data-table/data-table-cell.directive';
+import { DataTableColumn, DataTableComponent } from '../../../shared/data-table/data-table';
+import { SelectOption } from '../../../shared/select/select';
+import { TabPanelTemplateDirective } from '../../../shared/tabs/tab-panel-template.directive';
+import { TabItem, TabsComponent } from '../../../shared/tabs/tabs';
+import { BereichZusatzdatum } from '../../bereich-detail/bereich-detail';
+import { BereichListeComponent } from '../../bereich-liste/bereich-liste';
+import { VeranstaltungsortStammdatenComponent } from '../../veranstaltungsort-stammdaten/veranstaltungsort-stammdaten';
+import { AngebotListeComponent } from '../../angebot-liste/angebot-liste';
 
 type Row = Record<string, string>;
 type Kind = 'angebot' | 'bereich';

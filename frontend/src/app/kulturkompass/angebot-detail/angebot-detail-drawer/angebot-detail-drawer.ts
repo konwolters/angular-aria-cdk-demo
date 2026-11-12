@@ -1,8 +1,8 @@
 import { Component, input, model, output } from '@angular/core';
-import { ButtonComponent } from '../../shared/button/button';
-import { SelectOption } from '../../shared/select/select';
-import { SideDrawerComponent } from '../../shared/side-drawer/side-drawer';
-import { AngebotDetailComponent } from './angebot-detail';
+import { ButtonComponent } from '../../../shared/button/button';
+import { SelectOption } from '../../../shared/select/select';
+import { SideDrawerComponent } from '../../../shared/side-drawer/side-drawer';
+import { AngebotDetailComponent } from '../angebot-detail';
 
 @Component({
   selector: 'app-angebot-detail-drawer',

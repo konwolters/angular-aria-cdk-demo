@@ -60,11 +60,11 @@
           appButton
           size="small"
           type="button"
-          (click)="beginEditing.emit('veranstaltungsort')"
+          (click)="ctx().beginEditing('veranstaltungsort')"
         >
           Veranstaltungsort & Bereiche ändern
         </button>
-        <button appButton size="small" type="button" (click)="beginEditing.emit('angebot')">
+        <button appButton size="small" type="button" (click)="ctx().beginEditing('angebot')">
           Angebote ändern
         </button>
       </div>
@@ -94,15 +94,20 @@
     [angebotColumns]="angebotColumns()"
     [historyRows]="historyRows()"
     [historyColumns]="historyColumns()"
-    (details)="details.emit($event)"
-    (edit)="edit.emit($event)"
+    (details)="ctx().showDetails($event.kind, $event.row)"
+    (edit)="ctx().openEditor($event.kind, $event.row)"
   />
   @if (editing()) {
     <div class="flex justify-end gap-3 border-t border-border pt-5">
       <button appButton size="small" variant="secondary" type="button" (click)="editing.set(false)">
         Abbrechen
       </button>
-      <button appButton size="small" type="button" (click)="submit.emit()">
+      <button
+        appButton
+        size="small"
+        type="button"
+        (click)="ctx().confirm('Zur Freigabe einreichen')"
+      >
         Zur Freigabe einreichen
       </button>
     </div>

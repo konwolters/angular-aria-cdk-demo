@@ -341,7 +341,7 @@ export const componentApis: Record<string, ComponentApi> = {
         'columns',
         'readonly DataTableColumn<T>[]',
         'erforderlich',
-        'Spalten mit key, header und value; optional sortable, width (gewünschte CSS-Breite) und minWidth (CSS-Mindestbreite). Zum Beispiel width: "16rem", minWidth: "14rem". Dies sind Eigenschaften einer Spalte, keine separaten Tabellen-Inputs.',
+        'Spalten mit key, header und value; optional sortable, width und minWidth für die jeweilige Spalte.',
       ),
       entry('framed', 'boolean', 'true', 'Zeigt den äußeren Rahmen.'),
       entry('striped', 'boolean', 'true', 'Färbt jede zweite Datenzeile abwechselnd.'),
@@ -351,6 +351,8 @@ export const componentApis: Record<string, ComponentApi> = {
         'false',
         'Reduziert Zellabstände und zentriert Zellen vertikal; auch der Leerzustand wird kompakter.',
       ),
+      entry('tightCells', 'boolean', 'false', 'Reduziert den Innenabstand der Zellen.'),
+      entry('minWidth', 'string', "'760px'", 'Mindestbreite der Tabelle im Scrollbereich.'),
       entry(
         'layout',
         "'auto' | 'fixed'",

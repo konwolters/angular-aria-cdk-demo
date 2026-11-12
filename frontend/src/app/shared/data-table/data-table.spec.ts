@@ -46,6 +46,14 @@ describe('DataTableComponent', () => {
     expect(cell.classList.contains('align-middle')).toBe(true);
     expect((fixture.nativeElement.querySelector('th') as HTMLElement).style.width).toBe('12rem');
 
+    fixture.componentRef.setInput('tightCells', true);
+    fixture.componentRef.setInput('minWidth', '39rem');
+    fixture.detectChanges();
+    expect(table.style.minWidth).toBe('39rem');
+    expect(cell.classList.contains('p-1')).toBe(true);
+    expect(cell.classList.contains('px-2')).toBe(false);
+    expect(fixture.nativeElement.querySelector('th').classList.contains('p-1')).toBe(true);
+
     fixture.componentRef.setInput('rows', []);
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('tbody td').classList.contains('py-3')).toBe(true);

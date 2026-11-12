@@ -25,6 +25,8 @@ export class DataTableComponent<T> {
   readonly columns = input.required<readonly DataTableColumn<T>[]>();
   readonly framed = input(true);
   readonly compact = input(false);
+  readonly tightCells = input(false);
+  readonly minWidth = input('760px');
   readonly layout = input<'auto' | 'fixed'>('auto');
   readonly striped = input(true);
   readonly pagination = input(true);

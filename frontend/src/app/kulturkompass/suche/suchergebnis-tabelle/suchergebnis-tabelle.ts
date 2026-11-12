@@ -1,9 +1,9 @@
 import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ButtonComponent } from '../../shared/button/button';
-import { DataTableCellDirective } from '../../shared/data-table/data-table-cell.directive';
-import { DataTableColumn, DataTableComponent } from '../../shared/data-table/data-table';
-import { GuiPagination } from '../gui-pagination';
+import { ButtonComponent } from '../../../shared/button/button';
+import { DataTableCellDirective } from '../../../shared/data-table/data-table-cell.directive';
+import { DataTableColumn, DataTableComponent } from '../../../shared/data-table/data-table';
+import { GuiPagination } from '../../gui-pagination';
 
 type Row = Record<string, string>;
 

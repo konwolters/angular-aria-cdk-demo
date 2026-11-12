@@ -1,9 +1,9 @@
 import { Component, input, model, output } from '@angular/core';
-import { ButtonComponent } from '../../shared/button/button';
-import { DataTableToolbarComponent } from '../../shared/data-table-toolbar/data-table-toolbar';
-import { MultiSelectComponent } from '../../shared/multi-select/multi-select';
-import { SelectComponent, SelectOption } from '../../shared/select/select';
-import { TextFieldComponent } from '../../shared/text-field/text-field';
+import { ButtonComponent } from '../../../shared/button/button';
+import { DataTableToolbarComponent } from '../../../shared/data-table-toolbar/data-table-toolbar';
+import { MultiSelectComponent } from '../../../shared/multi-select/multi-select';
+import { SelectComponent, SelectOption } from '../../../shared/select/select';
+import { TextFieldComponent } from '../../../shared/text-field/text-field';
 
 @Component({
   selector: 'app-suchfilter',
