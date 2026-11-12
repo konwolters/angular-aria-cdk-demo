@@ -1,65 +1,73 @@
-<div>
-  <aside class="fixed inset-y-0 left-0 hidden w-64 border-r border-border bg-surface p-6 lg:block">
-    <a routerLink="/showcase" class="flex items-center gap-3">
-      <span class="grid h-10 w-10 place-items-center rounded-card bg-brand font-bold text-on-brand">
-        A
-      </span>
-      <span>
-        <span class="block font-semibold">Angular Aria CDK</span>
-        <span class="block text-xs text-content-muted">Component demo</span>
-      </span>
-    </a>
+@if (isGui()) {
+  <router-outlet />
+} @else {
+  <div>
+    <aside
+      class="fixed inset-y-0 left-0 hidden w-64 border-r border-border bg-surface p-6 lg:block"
+    >
+      <a routerLink="/showcase" class="flex items-center gap-3">
+        <span
+          class="grid h-10 w-10 place-items-center rounded-card bg-brand font-bold text-on-brand"
+        >
+          A
+        </span>
+        <span>
+          <span class="block font-semibold">Angular Aria CDK</span>
+          <span class="block text-xs text-content-muted">Component demo</span>
+        </span>
+      </a>
 
-    <nav aria-label="Hauptnavigation" class="mt-10 space-y-6 overflow-y-auto pb-24">
-      <section aria-labelledby="showcase-nav-label">
-        <p
-          id="showcase-nav-label"
-          class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-content-subtle"
-        >
-          Showcase
-        </p>
-        <div class="space-y-1">
-          <a
-            routerLink="/showcase"
-            routerLinkActive="bg-brand-subtle text-brand-strong"
-            ariaCurrentWhenActive="page"
-            class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
+      <nav aria-label="Hauptnavigation" class="mt-10 space-y-6 overflow-y-auto pb-24">
+        <section aria-labelledby="showcase-nav-label">
+          <p
+            id="showcase-nav-label"
+            class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-content-subtle"
           >
-            <app-icon name="grid" [size]="16" />
-            Datenimport
-          </a>
-        </div>
-      </section>
-      <section aria-labelledby="components-nav-label">
-        <p
-          id="components-nav-label"
-          class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-content-subtle"
-        >
-          Komponenten
-        </p>
-        <div class="space-y-1">
-          @for (item of componentLinks; track item.slug) {
+            Showcase
+          </p>
+          <div class="space-y-1">
             <a
-              [routerLink]="'/components/' + item.slug"
+              routerLink="/showcase"
               routerLinkActive="bg-brand-subtle text-brand-strong"
               ariaCurrentWhenActive="page"
-              class="block rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-canvas"
-              >{{ item.name }}</a
+              class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
             >
-          }
-        </div>
-      </section>
-    </nav>
+              <app-icon name="grid" [size]="16" />
+              Datenimport
+            </a>
+          </div>
+        </section>
+        <section aria-labelledby="components-nav-label">
+          <p
+            id="components-nav-label"
+            class="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-content-subtle"
+          >
+            Komponenten
+          </p>
+          <div class="space-y-1">
+            @for (item of componentLinks; track item.slug) {
+              <a
+                [routerLink]="'/components/' + item.slug"
+                routerLinkActive="bg-brand-subtle text-brand-strong"
+                ariaCurrentWhenActive="page"
+                class="block rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-canvas"
+                >{{ item.name }}</a
+              >
+            }
+          </div>
+        </section>
+      </nav>
 
-    <div class="absolute bottom-6 left-6 right-6 rounded-card bg-canvas p-4">
-      <div class="text-sm font-medium">UI primitives</div>
-      <p class="mt-1 text-xs leading-5 text-content-muted">
-        Angular + Tailwind. Keine Komponentenbibliothek.
-      </p>
-    </div>
-  </aside>
+      <div class="absolute bottom-6 left-6 right-6 rounded-card bg-canvas p-4">
+        <div class="text-sm font-medium">UI primitives</div>
+        <p class="mt-1 text-xs leading-5 text-content-muted">
+          Angular + Tailwind. Keine Komponentenbibliothek.
+        </p>
+      </div>
+    </aside>
 
-  <main class="min-h-screen bg-surface px-4 py-8 sm:px-6 lg:ml-64 lg:px-10">
-    <router-outlet />
-  </main>
-</div>
+    <main class="min-h-screen bg-surface px-4 py-8 sm:px-6 lg:ml-64 lg:px-10">
+      <router-outlet />
+    </main>
+  </div>
+}

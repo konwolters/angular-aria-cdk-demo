@@ -1,0 +1,57 @@
+<app-tabs [tabs]="tabs()" [(selectedTab)]="selectedTab">
+  <ng-template appTabPanel="stammdaten">
+    <app-veranstaltungsort-stammdaten
+      [selected]="customer()"
+      [historical]="comparison()"
+      previousLabel="Aktueller Stand"
+      [statuses]="statuses()"
+    />
+  </ng-template>
+  <ng-template appTabPanel="bereichs">
+    <div class="pt-5">
+      <app-data-table
+        [rows]="bereichs()"
+        [columns]="bereichColumns()"
+        [pagination]="false"
+        caption="Geänderte Bereiche"
+      >
+        <ng-template appDataTableCell="action" let-row>
+          <button
+            appButton
+            size="small"
+            variant="link"
+            type="button"
+            (click)="details.emit({ kind: 'bereich', row })"
+          >
+            Details
+          </button>
+        </ng-template>
+      </app-data-table>
+    </div>
+  </ng-template>
+  <ng-template appTabPanel="angebot">
+    <div class="pt-5">
+      <app-data-table
+        [rows]="angebot()"
+        [columns]="angebotColumns()"
+        [pagination]="false"
+        caption="Geänderte Angebote"
+      >
+        <ng-template appDataTableCell="isin" let-row
+          ><span class="font-mono">{{ row.isin }}</span></ng-template
+        >
+        <ng-template appDataTableCell="action" let-row>
+          <button
+            appButton
+            size="small"
+            variant="link"
+            type="button"
+            (click)="details.emit({ kind: 'angebot', row })"
+          >
+            Details
+          </button>
+        </ng-template>
+      </app-data-table>
+    </div>
+  </ng-template>
+</app-tabs>

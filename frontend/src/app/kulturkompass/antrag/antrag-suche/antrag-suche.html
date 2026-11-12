@@ -1,0 +1,73 @@
+<div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
+  <h1 class="text-lg font-semibold text-brand-strong">Staging & Freigaben</h1>
+</div>
+<section class="bg-surface !mt-0">
+  <app-data-table-toolbar
+    buttonSize="small"
+    [compactTop]="true"
+    [showApply]="false"
+    [showReset]="false"
+    (apply)="apply()"
+    (reset)="reset()"
+  >
+    <div data-table-searches class="w-full">
+      <div
+        class="@container grid grid-cols-[repeat(auto-fill,minmax(min(100%,11rem),1fr))] items-end gap-3"
+      >
+        <app-text-field size="small" label="Antrag" [formField]="queryForm" />
+        <app-text-field size="small" label="Standortnummer" [formField]="customerNumberForm" />
+        <app-text-field size="small" label="Bereichsnummer" [formField]="extraForm.bereichnummer" />
+        <app-multi-select
+          size="small"
+          [fullWidth]="true"
+          label="Status"
+          [options]="['In Bearbeitung', 'Eingereicht']"
+          [formField]="referenceTypesForm"
+          [changed]="false"
+        />
+        <app-multi-select
+          size="small"
+          [fullWidth]="true"
+          label="Änderungsumfang"
+          [formField]="extraForm.umfang"
+          [options]="['Veranstaltungsort & Bereiche', 'Angebote', 'Referenzdaten']"
+          [changed]="false"
+        />
+      </div>
+    </div>
+    <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
+      <span>{{ rows().length }} Einträge</span>
+      <div class="flex flex-wrap justify-end gap-3">
+        <button appButton size="small" type="submit">Suchen</button>
+        <button
+          appButton
+          size="small"
+          type="button"
+          variant="secondary"
+          icon="refresh"
+          (click)="reset()"
+        >
+          Zurücksetzen
+        </button>
+      </div>
+    </div>
+  </app-data-table-toolbar>
+  <app-data-table
+    [framed]="false"
+    [rows]="pagination.rows('staging', rows())"
+    [total]="rows().length"
+    [totalPages]="pagination.totalPages('staging', rows())"
+    [page]="pagination.page('staging', rows())"
+    [pageSize]="pagination.size('staging')"
+    (pageChange)="pagination.setPage('staging', $event)"
+    (pageSizeChange)="pagination.setSize('staging', $event)"
+    [columns]="columns"
+    caption="Änderungsanträge"
+  >
+    <ng-template appDataTableCell="action" let-row
+      ><button appButton variant="link" size="small" type="button" (click)="openAntrag(row)">
+        Prüfen
+      </button></ng-template
+    >
+  </app-data-table>
+</section>

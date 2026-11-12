@@ -1,7 +1,28 @@
 import { TestBed } from '@angular/core/testing';
+import { Component, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
 import { FilePickerComponent } from './file-picker';
 
+@Component({
+  imports: [FilePickerComponent, FormField],
+  templateUrl: './file-picker-form.spec.html',
+})
+class FilePickerFormHost {
+  readonly file = signal<File | null>(null);
+  readonly fileForm = form(this.file);
+}
+
 describe('FilePickerComponent', () => {
+  it('binds a selected file through Signal Forms', () => {
+    const fixture = TestBed.createComponent(FilePickerFormHost);
+    fixture.detectChanges();
+    const input = fixture.nativeElement.querySelector('input') as HTMLInputElement;
+    const file = new File(['a;b'], 'example.csv', { type: 'text/csv' });
+    Object.defineProperty(input, 'files', { configurable: true, value: [file] });
+    input.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+    expect(fixture.componentInstance.file()).toBe(file);
+  });
   it('accepts CSV files, resets the native input and can remove the selection', () => {
     const fixture = TestBed.createComponent(FilePickerComponent);
     fixture.detectChanges();

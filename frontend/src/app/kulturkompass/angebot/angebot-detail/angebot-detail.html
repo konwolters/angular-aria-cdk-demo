@@ -1,0 +1,139 @@
+<app-side-drawer [(open)]="open" [title]="title()">
+  <div class="text-base">
+    <div class="mt-5 grid gap-4 sm:grid-cols-2">
+      @if (readonly()) {
+        <app-text-field
+          size="small"
+          label="Bereich"
+          [value]="value()?.['bereichnummer'] || ''"
+          [readonly]="true"
+          [changed]="false"
+        />
+      } @else {
+        <app-select
+          size="small"
+          label="Bereich"
+          [options]="bereichOptions() ?? bereichs"
+          [formField]="angebotForm.bereichnummer"
+          [initialValue]="value()?.['bereichnummer'] || ''"
+        />
+      }
+      <app-select
+        size="small"
+        label="Veranstaltungsart"
+        [options]="businessTypes"
+        [formField]="angebotForm.geschaeft"
+        [initialValue]="value()?.['geschaeft'] || ''"
+        [changed]="readonly() ? false : undefined"
+      />
+      <app-select
+        size="small"
+        label="Angebotsformat"
+        [options]="securities"
+        [formField]="angebotForm.wertpapier"
+        [initialValue]="value()?.['wertpapier'] || ''"
+        [changed]="readonly() ? false : undefined"
+      />
+      <app-text-field
+        size="small"
+        label="Angebotscode"
+        [monospace]="true"
+        [formField]="angebotForm.isin"
+        [initialValue]="value()?.['isin'] || ''"
+        [changed]="readonly() ? false : undefined"
+      />
+      <app-select
+        size="small"
+        label="Land"
+        [options]="countries"
+        [formField]="angebotForm.land"
+        [initialValue]="value()?.['land'] || ''"
+        [changed]="readonly() ? false : undefined"
+      />
+      <app-text-field
+        size="small"
+        label="Kontaktcode Veranstaltungsort"
+        [formField]="angebotForm.psetBic"
+        [initialValue]="value()?.['psetBic'] || ''"
+        [changed]="readonly() ? false : undefined"
+      />
+    </div>
+    <h3 class="mb-2 mt-5 text-sm font-semibold">Veranstaltungsbeteiligte</h3>
+    <app-data-table
+      [tightCells]="true"
+      minWidth="39rem"
+      [rows]="participants()"
+      [pagination]="false"
+      [columns]="columns"
+      caption="Veranstaltungsbeteiligte"
+    >
+      <ng-template appDataTableCell="konto" let-row>
+        <app-text-field
+          size="small"
+          [label]="'Kontakt-ID ' + row.name"
+          class="w-full max-w-40"
+          [hideLabel]="true"
+          [formField]="angebotForm.participants[row.index].konto"
+          [initialValue]="row.konto"
+          [changed]="readonly() ? false : undefined"
+        />
+      </ng-template>
+      <ng-template appDataTableCell="bic" let-row>
+        <app-text-field
+          size="small"
+          [label]="'Kontaktcode ' + row.name"
+          class="w-full max-w-40"
+          [hideLabel]="true"
+          [formField]="angebotForm.participants[row.index].bic"
+          [initialValue]="row.bic"
+          [changed]="readonly() ? false : undefined"
+        />
+      </ng-template>
+      <ng-template appDataTableCell="pc" let-row>
+        <app-text-field
+          size="small"
+          [label]="'PC ' + row.name"
+          class="w-full max-w-40"
+          [hideLabel]="true"
+          [formField]="angebotForm.participants[row.index].pc"
+          [initialValue]="row.pc"
+          [changed]="readonly() ? false : undefined"
+        />
+      </ng-template>
+      <ng-template appDataTableCell="bezeichnung" let-row>
+        @if (row.hasName) {
+          <app-text-field
+            size="small"
+            [label]="'Name ' + row.name"
+            class="w-full max-w-40"
+            [hideLabel]="true"
+            [formField]="angebotForm.participants[row.index].bezeichnung"
+            [initialValue]="row.bezeichnung"
+            [changed]="readonly() ? false : undefined"
+          />
+        } @else {
+          —
+        }
+      </ng-template>
+    </app-data-table>
+    <div class="mt-4">
+      <app-textarea
+        size="small"
+        label="Zusatzinformationen"
+        [formField]="angebotForm.zusatzinfo"
+        [initialValue]="value()?.['zusatzinfo'] || ''"
+        [changed]="readonly() ? false : undefined"
+      />
+    </div>
+  </div>
+  <div dialog-footer class="pt-5">
+    <div class="flex justify-end gap-2">
+      <button appButton size="small" variant="secondary" type="button" (click)="open.set(false)">
+        {{ editing() ? 'Abbrechen' : 'Schließen' }}
+      </button>
+      @if (editing()) {
+        <button appButton size="small" type="button" (click)="accept.emit()">Übernehmen</button>
+      }
+    </div>
+  </div>
+</app-side-drawer>

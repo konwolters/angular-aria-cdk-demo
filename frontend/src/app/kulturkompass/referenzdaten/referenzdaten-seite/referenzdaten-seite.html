@@ -1,0 +1,43 @@
+<div class="flex flex-wrap items-center justify-between gap-3 px-5">
+  <h1 class="text-lg font-semibold text-brand-strong">Referenzdaten</h1>
+  @if (editing()) {
+    <button appButton size="small" type="button" (click)="openEditor(null)">Neu</button>
+  } @else {
+    <button appButton size="small" type="button" (click)="editing.set(true)">Bearbeiten</button>
+  }
+</div>
+<app-tabs [tabs]="tabs()" [(selectedTab)]="selectedTab" [framed]="false">
+  @for (tab of tabs(); track tab.value) {
+    <ng-template [appTabPanel]="tab.value">
+      <div class="pt-5">
+        <app-data-table
+          [rows]="rows()[tab.value]"
+          [pagination]="false"
+          [columns]="editing() ? editableColumns() : columns()[tab.value]"
+          caption="Referenzdaten"
+        >
+          <ng-template appDataTableCell="action" let-row>
+            <button appButton variant="link" size="small" type="button" (click)="openEditor(row)">
+              Bearbeiten
+            </button>
+          </ng-template>
+        </app-data-table>
+      </div>
+    </ng-template>
+  }
+</app-tabs>
+@if (editing()) {
+  <div class="flex justify-end gap-3 border-t border-border pt-5">
+    <button appButton size="small" variant="secondary" type="button" (click)="editing.set(false)">
+      Abbrechen
+    </button>
+    <button
+      appButton
+      size="small"
+      type="button"
+      (click)="dialog.confirm('Zur Freigabe einreichen')"
+    >
+      Zur Freigabe einreichen
+    </button>
+  </div>
+}

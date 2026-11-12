@@ -8,7 +8,8 @@
 >
   <div class="overflow-x-auto">
     <table
-      class="w-full min-w-[760px] text-left text-sm"
+      class="w-full text-left text-sm"
+      [style.min-width]="minWidth()"
       [class.table-auto]="layout() === 'auto'"
       [class.table-fixed]="layout() === 'fixed'"
     >
@@ -22,10 +23,11 @@
           @for (column of columns(); track column.key) {
             <th
               scope="col"
-              [class.px-2]="compact()"
-              [class.py-1]="compact()"
-              [class.px-3]="!compact()"
-              [class.py-2]="!compact()"
+              [class.p-1]="tightCells()"
+              [class.px-2]="!tightCells() && compact()"
+              [class.py-1]="!tightCells() && compact()"
+              [class.px-3]="!tightCells() && !compact()"
+              [class.py-2]="!tightCells() && !compact()"
               [style.width]="column.width || null"
               [style.min-width]="column.minWidth || null"
               [attr.aria-sort]="
@@ -64,11 +66,12 @@
             @for (column of columns(); track column.key) {
               <td
                 class="text-content-secondary"
-                [class.px-2]="compact()"
-                [class.py-1]="compact()"
+                [class.p-1]="tightCells()"
+                [class.px-2]="!tightCells() && compact()"
+                [class.py-1]="!tightCells() && compact()"
                 [class.align-middle]="compact()"
-                [class.px-3]="!compact()"
-                [class.py-2]="!compact()"
+                [class.px-3]="!tightCells() && !compact()"
+                [class.py-2]="!tightCells() && !compact()"
                 [style.min-width]="column.minWidth || null"
               >
                 @if (cellTemplate(column.key); as template) {

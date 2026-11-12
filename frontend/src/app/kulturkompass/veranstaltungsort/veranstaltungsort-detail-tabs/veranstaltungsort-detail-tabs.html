@@ -1,0 +1,68 @@
+<app-tabs [tabs]="tabs()" [(selectedTab)]="activeTab">
+  <ng-template appTabPanel="stammdaten">
+    <app-veranstaltungsort-stammdaten
+      [selected]="selected()"
+      [historical]="historical()"
+      [editing]="editing()"
+      [editScope]="editScope()"
+      [statuses]="statuses()"
+      [(name)]="name"
+      [(customerNumber)]="customerNumber"
+      [(status)]="status"
+    />
+  </ng-template>
+  <ng-template appTabPanel="bereichs">
+    <app-bereich-liste
+      [rows]="bereichs()"
+      [totalBereichs]="totalBereichs()"
+      [columns]="bereichColumns()"
+      [statuses]="statuses()"
+      [zusatzdaten]="zusatzdaten()"
+      [zusatzarten]="zusatzarten()"
+      [bereichOptions]="bereichOptions()"
+      [editing]="editing()"
+      [editScope]="editScope()"
+      [(bereichFilter)]="bereichFilter"
+      [(bereichStatus)]="bereichStatus"
+      (details)="details.emit({ kind: 'bereich', row: $event })"
+      (edit)="edit.emit({ kind: 'bereich', row: $event })"
+      (add)="edit.emit({ kind: 'bereich', row: null })"
+    />
+  </ng-template>
+  <ng-template appTabPanel="angebot">
+    <app-angebot-liste
+      [rows]="angebot()"
+      [totalAngebot]="totalAngebot()"
+      [columns]="angebotColumns()"
+      [bereichOptions]="bereichOptions()"
+      [editing]="editing()"
+      [editScope]="editScope()"
+      [(bereichFilter)]="bereichFilter"
+      (details)="details.emit({ kind: 'angebot', row: $event })"
+      (edit)="edit.emit({ kind: 'angebot', row: $event })"
+      (add)="edit.emit({ kind: 'angebot', row: null })"
+    />
+  </ng-template>
+  <ng-template appTabPanel="historie">
+    <div class="pt-5">
+      <app-data-table
+        [rows]="historyRows()"
+        [pagination]="false"
+        [columns]="historyColumns()"
+        caption="Historie"
+      >
+        <ng-template appDataTableCell="details" let-row>
+          <button
+            appButton
+            size="small"
+            variant="link"
+            type="button"
+            (click)="historical.set(row); editing.set(false); activeTab.set('stammdaten')"
+          >
+            Details
+          </button>
+        </ng-template>
+      </app-data-table>
+    </div>
+  </ng-template>
+</app-tabs>

@@ -1,0 +1,89 @@
+<div class="space-y-4 px-5">
+  <h1 class="text-lg font-semibold text-brand-strong">Import</h1>
+  <app-stepper [steps]="steps()" [current]="importStage()" [completed]="completedSteps()" />
+  @if (importStage() === 'datei') {
+    <div class="space-y-5">
+      <app-select
+        class="w-full max-w-xs"
+        size="small"
+        label="Datenart"
+        [options]="importTypes()"
+        [formField]="dataTypeForm"
+        [changed]="false"
+      />
+      <app-file-picker buttonSize="small" label="CSV-Datei" [formField]="fileForm" />
+    </div>
+  } @else if (importStage() === 'vorschau') {
+    <app-data-table
+      class="-mx-5 block border-y border-border"
+      [framed]="false"
+      [rows]="pagination().rows('import-vorschau', previewRows())"
+      [total]="previewRows().length"
+      [totalPages]="pagination().totalPages('import-vorschau', previewRows())"
+      [page]="pagination().page('import-vorschau', previewRows())"
+      [pageSize]="pagination().size('import-vorschau')"
+      (pageChange)="pagination().setPage('import-vorschau', $event)"
+      (pageSizeChange)="pagination().setSize('import-vorschau', $event)"
+      [columns]="previewColumns()"
+      caption="Importvorschau"
+    >
+      <ng-template appDataTableCell="isin" let-row
+        ><span class="font-mono">{{ row.isin }}</span></ng-template
+      >
+    </app-data-table>
+  } @else if (importStage() === 'gruppen') {
+    <app-data-table
+      class="-mx-5 block border-y border-border"
+      [framed]="false"
+      [rows]="groupRows()"
+      [pagination]="false"
+      [columns]="groupColumns()"
+      caption="Gruppierung"
+    />
+  } @else {
+    <app-data-table
+      class="-mx-5 block border-y border-border"
+      [framed]="false"
+      [rows]="importResultRows()"
+      [columns]="importResultColumns()"
+      [pagination]="false"
+      caption="Erzeugte Änderungsanträge"
+    >
+      <ng-template appDataTableCell="action" let-row>
+        <button appButton size="small" variant="link" type="button" (click)="openResult(row)">
+          Öffnen
+        </button>
+      </ng-template>
+    </app-data-table>
+  }
+  <div class="flex justify-end gap-3 pt-4">
+    @if (importStage() !== 'datei') {
+      <button appButton size="small" variant="secondary" type="button" (click)="changeStep(-1)">
+        Zurück
+      </button>
+    }
+    @if (importStage() !== 'ergebnis') {
+      <button appButton size="small" type="button" (click)="changeStep(1)">
+        {{
+          importStage() === 'datei'
+            ? 'Vorschau anzeigen'
+            : importStage() === 'vorschau'
+              ? 'Weiter zur Gruppierung'
+              : 'Ergebnis anzeigen'
+        }}
+      </button>
+    } @else {
+      <button
+        appButton
+        size="small"
+        type="button"
+        (click)="importStage.set('datei'); file.set(null)"
+      >
+        Neuen Import starten
+      </button>
+      <button appButton size="small" type="button" (click)="router.navigate(['/gui/staging'])">
+        Zu Staging &amp; Freigaben
+      </button>
+    }
+  </div>
+</div>

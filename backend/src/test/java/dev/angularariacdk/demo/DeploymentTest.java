@@ -8,11 +8,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = "server.servlet.context-path=/aria-demo")
+        properties = {"server.servlet.context-path=/aria-demo", "GUI_PASSWORD=test-password"})
 class DeploymentTest {
     @LocalServerPort
     private int port;
@@ -62,5 +64,23 @@ class DeploymentTest {
             assertThat(response.statusCode()).as(path).isEqualTo(404);
             assertThat(response.body()).doesNotContain("<app-root");
         }
+    }
+
+    @Test
+    void protectsGuiAccessWhileKeepingTheRestPublic() throws Exception {
+        var denied = get("/aria-demo/api/gui-access");
+        assertThat(denied.statusCode()).isEqualTo(401);
+        assertThat(denied.headers().firstValue("www-authenticate").orElseThrow()).contains("Basic");
+        assertThat(get("/aria-demo/showcase").statusCode()).isEqualTo(200);
+
+        var credentials = Base64.getEncoder().encodeToString("kulturkompass:test-password".getBytes(StandardCharsets.UTF_8));
+        var request = HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/aria-demo/api/gui-access"))
+                .header("Authorization", "Basic " + credentials).GET().build();
+        assertThat(client.send(request, HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(204);
+
+        var invalid = HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/aria-demo/api/gui-access"))
+                .header("Authorization", "Basic invalid").GET().build();
+        assertThat(client.send(invalid, HttpResponse.BodyHandlers.ofString()).statusCode()).isEqualTo(401);
+        assertThat(new GuiAccessController("").access(null, null, null).getStatusCode().value()).isEqualTo(503);
     }
 }

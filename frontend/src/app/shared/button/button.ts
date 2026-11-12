@@ -1,11 +1,11 @@
 import { Component, computed, input } from '@angular/core';
 import { IconComponent, IconName } from '../icon/icon';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'link' | 'danger';
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'link' | 'text-link' | 'danger';
 export type ButtonSize = 'small' | 'medium' | 'large';
 
 const BASE_CLASSES =
-  'inline-flex shrink-0 items-center justify-center gap-2 rounded-control font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
+  'inline-flex items-center gap-2 rounded-control font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-focus focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary: 'border border-transparent bg-brand text-on-brand shadow-sm hover:bg-brand-hover',
@@ -13,6 +13,8 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
     'border border-border-strong bg-surface text-content-secondary shadow-sm hover:border-border-hover hover:bg-surface-subtle',
   ghost: 'border border-transparent bg-transparent text-content-secondary hover:bg-surface-muted',
   link: 'border border-transparent bg-transparent text-brand-strong hover:text-brand-hover hover:underline',
+  'text-link':
+    'min-w-0 justify-start whitespace-normal text-left bg-transparent text-brand-strong hover:text-brand-hover hover:underline',
   danger: 'border border-transparent bg-danger text-on-brand shadow-sm hover:bg-danger/90',
 };
 
@@ -40,7 +42,11 @@ export class ButtonComponent {
   protected readonly classes = computed(() =>
     [
       BASE_CLASSES,
-      SIZE_CLASSES[this.size()],
+      this.variant() === 'text-link'
+        ? this.size() === 'large'
+          ? 'text-base'
+          : 'text-control'
+        : `shrink-0 justify-center ${SIZE_CLASSES[this.size()]}`,
       VARIANT_CLASSES[this.variant()],
       this.active() ? 'border-brand bg-brand-subtle text-brand-strong' : '',
     ]

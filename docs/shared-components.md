@@ -126,7 +126,7 @@ weiterhin für Formularverhalten, Tastaturbedienung und Barrierefreiheit.
 
 | Input | Typ | Standard |
 | --- | --- | --- |
-| `variant` | `primary \| secondary \| ghost \| link \| danger` | `primary` |
+| `variant` | `primary \| secondary \| ghost \| link \| text-link \| danger` | `primary` |
 | `size` | `small \| medium \| large` | `small` |
 | `icon` | `IconName` | kein Icon |
 | `iconPosition` | `start \| end` | `start` |
@@ -448,6 +448,8 @@ Spaltenschlüssel einer Spalte zu. Im Template ist die Zeile über `let-row` ver
 | `framed` | `boolean` | `true` | Zeigt Rahmen und Kartenhintergrund |
 | `striped` | `boolean` | `true` | Hebt jede zweite Datenzeile farblich hervor; mit `false` abschaltbar |
 | `compact` | `boolean` | `false` | Kleinere Zell- und Leerzustandsabstände; Zellen vertikal mittig |
+| `tightCells` | `boolean` | `false` | Reduziert den Innenabstand der Tabellenzellen auf allen Seiten |
+| `minWidth` | `string` | `'760px'` | Mindestbreite der Tabelle im horizontalen Scrollbereich |
 | `layout` | `'auto' \| 'fixed'` | `'auto'` | Bei `fixed` richten sich Spaltenbreiten nicht nach dem Zellinhalt |
 | `pagination` | `boolean` | `true` | Zeigt Paging und Ergebniszähler; für lokale Detail-/Vergleichslisten abschaltbar |
 | `total` | `number` | `0` | Gesamtzahl aller gefilterten Zeilen |

@@ -1,0 +1,105 @@
+<div class="mt-5 grid gap-4 sm:grid-cols-2">
+  <app-text-field size="small" label="Bereichsnummer" [formField]="bereichForm.bereichnummer" />
+  <app-text-field size="small" label="Bezeichnung" [formField]="bereichForm.bezeichnung" />
+  <app-select size="small" label="Status" [options]="statuses()" [formField]="bereichForm.status" />
+</div>
+<div class="mt-4">
+  <app-textarea size="small" label="Kommentar" [formField]="bereichForm.kommentar" />
+</div>
+<h3 class="mb-2 mt-5 text-sm font-semibold">Zusatzdaten</h3>
+<app-data-table
+  [compact]="true"
+  layout="fixed"
+  [rows]="visibleZusatzdaten()"
+  [columns]="columns()"
+  [trackBy]="trackZusatzdatum"
+  [pagination]="false"
+  caption="Zusatzdaten"
+  emptyMessage="Keine Zusatzdaten erfasst."
+>
+  <ng-template appDataTableHeader="art">
+    Art
+    @if (editing()) {
+      <span aria-hidden="true">*</span>
+    }
+  </ng-template>
+  <ng-template appDataTableHeader="wert">
+    Wert
+    @if (editing()) {
+      <span aria-hidden="true">*</span>
+    }
+  </ng-template>
+  <ng-template appDataTableCell="art" let-row>
+    @if (editing()) {
+      <app-select
+        label="Art"
+        [hideLabel]="true"
+        [options]="zusatzarten()"
+        [formField]="zusatzForm[zusatzIndex(row.id)].art"
+        [changed]="false"
+      />
+    } @else {
+      {{ row.art }}
+    }
+  </ng-template>
+  <ng-template appDataTableCell="wert" let-row>
+    @if (editing()) {
+      <app-text-field
+        label="Wert"
+        [hideLabel]="true"
+        [formField]="zusatzForm[zusatzIndex(row.id)].wert"
+        [changed]="false"
+      />
+    } @else {
+      {{ row.wert }}
+    }
+  </ng-template>
+  <ng-template appDataTableCell="beschreibung" let-row>
+    @if (editing()) {
+      <app-text-field
+        label="Beschreibung"
+        [hideLabel]="true"
+        [formField]="zusatzForm[zusatzIndex(row.id)].beschreibung"
+        [changed]="false"
+      />
+    } @else {
+      {{ row.beschreibung }}
+    }
+  </ng-template>
+  <ng-template appDataTableCell="action" let-row>
+    @if (editing()) {
+      <button
+        appButton
+        size="small"
+        variant="link"
+        type="button"
+        (click)="removeZusatzdatum(row.id)"
+      >
+        Entfernen
+      </button>
+    }
+  </ng-template>
+</app-data-table>
+@if (zusatzdaten().length > 2) {
+  <button
+    appButton
+    size="small"
+    variant="link"
+    type="button"
+    [attr.aria-expanded]="zusatzdatenExpanded()"
+    (click)="zusatzdatenExpanded.set(!zusatzdatenExpanded())"
+  >
+    {{
+      zusatzdatenExpanded()
+        ? 'Weniger anzeigen'
+        : '+ ' + (zusatzdaten().length - 2) + ' weitere anzeigen'
+    }}
+  </button>
+}
+@if (editing()) {
+  <div class="mt-2 flex justify-end">
+    <button appButton size="small" variant="secondary" type="button" (click)="addZusatzdatum()">
+      Eintrag hinzufügen
+    </button>
+  </div>
+}

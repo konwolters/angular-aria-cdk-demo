@@ -1,0 +1,125 @@
+@if (routeError()) {
+  <p class="px-5 text-content-muted">{{ routeError() }}</p>
+} @else {
+  <div class="space-y-4 px-5">
+    @if (historical(); as version) {
+      <section
+        class="flex flex-wrap items-center justify-between gap-3 rounded-control border border-border bg-surface-muted p-4"
+      >
+        <div>
+          <p class="font-semibold">
+            Historischer Stand – Version {{ version['version'] }} vom {{ version['zeitpunkt'] }}
+          </p>
+          <p class="mt-1 text-sm text-content-muted">
+            Freigegeben von {{ version['freigegeben'] }} · Erstellt von {{ version['erstellt'] }}
+          </p>
+        </div>
+        <button
+          appButton
+          size="small"
+          variant="secondary"
+          type="button"
+          (click)="historical.set(null); activeTab.set('historie')"
+        >
+          Zurück zur Historie
+        </button>
+      </section>
+    }
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <nav
+          aria-label="Breadcrumb"
+          class="flex flex-wrap items-center gap-1 text-sm text-content-muted"
+        >
+          <a
+            routerLink="/gui/veranstaltungsorte"
+            class="text-brand-strong hover:text-brand-hover hover:underline"
+            >Veranstaltungsorte</a
+          >
+          <span aria-hidden="true">/</span><span>{{ selected()?.['name'] || 'Neuanlage' }}</span>
+          @if (editing()) {
+            <span aria-hidden="true">/</span><span>Bearbeitung</span>
+          }
+          @if (historical()) {
+            <span aria-hidden="true">/</span><span>Historischer Stand</span>
+          }
+        </nav>
+        <h1 class="mt-2 text-2xl font-semibold text-brand-strong">
+          {{ selected()?.['name'] || 'Veranstaltungsort anlegen' }}
+        </h1>
+        <p class="mt-1 text-sm text-content-muted">
+          {{
+            editing()
+              ? editScope() === 'angebot'
+                ? 'Änderungsumfang: Angebote'
+                : 'Änderungsumfang: Veranstaltungsort & Bereiche'
+              : 'Veranstaltungsortdetails · Produktivstand'
+          }}
+        </p>
+      </div>
+      @if (!editing() && !historical()) {
+        <div class="flex flex-wrap gap-2">
+          <button
+            appButton
+            size="small"
+            type="button"
+            (click)="state.beginEditing('veranstaltungsort')"
+          >
+            Veranstaltungsort & Bereiche ändern
+          </button>
+          <button appButton size="small" type="button" (click)="state.beginEditing('angebot')">
+            Angebote ändern
+          </button>
+        </div>
+      }
+    </div>
+    <app-veranstaltungsort-detail-tabs
+      [tabs]="tabs()"
+      [selected]="selected()"
+      [(historical)]="historical"
+      [(editing)]="editing"
+      [editScope]="editScope()"
+      [(activeTab)]="activeTab"
+      [(name)]="name"
+      [(customerNumber)]="customerNumber"
+      [(status)]="status"
+      [(bereichFilter)]="bereichFilter"
+      [(bereichStatus)]="bereichStatus"
+      [statuses]="statuses()"
+      [bereichs]="bereichs()"
+      [totalBereichs]="totalBereichs()"
+      [bereichColumns]="bereichColumns()"
+      [zusatzdaten]="zusatzdaten()"
+      [zusatzarten]="zusatzarten()"
+      [bereichOptions]="bereichOptions()"
+      [angebot]="angebot()"
+      [totalAngebot]="totalAngebot()"
+      [angebotColumns]="angebotColumns()"
+      [historyRows]="historyRows()"
+      [historyColumns]="historyColumns()"
+      (details)="showDetails($event.kind, $event.row)"
+      (edit)="openEditor($event.kind, $event.row)"
+    />
+    @if (editing()) {
+      <div class="flex justify-end gap-3 border-t border-border pt-5">
+        <button
+          appButton
+          size="small"
+          variant="secondary"
+          type="button"
+          (click)="editing.set(false)"
+        >
+          Abbrechen
+        </button>
+        <button
+          appButton
+          size="small"
+          type="button"
+          (click)="dialog.confirm('Zur Freigabe einreichen')"
+        >
+          Zur Freigabe einreichen
+        </button>
+      </div>
+    }
+  </div>
+}

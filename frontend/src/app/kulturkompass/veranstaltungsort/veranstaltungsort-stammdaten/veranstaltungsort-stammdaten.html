@@ -1,0 +1,51 @@
+<div class="grid max-w-3xl gap-4 pt-5 sm:grid-cols-2 lg:grid-cols-3">
+  <app-text-field
+    size="small"
+    label="Name"
+    [formField]="stammdatenForm.name"
+    (valueChange)="name.set($event)"
+    [initialValue]="historyPreviousValue('name')"
+    [changed]="historical() ? historyChanged('name') : undefined"
+    [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
+  />
+  <app-text-field
+    size="small"
+    label="Standortnummer"
+    [formField]="stammdatenForm.kundennummer"
+    (valueChange)="customerNumber.set($event)"
+    [initialValue]="historyPreviousValue('kundennummer')"
+    [changed]="historical() ? historyChanged('kundennummer') : undefined"
+    [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
+  />
+  <app-text-field
+    size="small"
+    label="Standort-ID"
+    [formField]="stammdatenForm.alertId"
+    [initialValue]="historyPreviousValue('alertId')"
+    [changed]="historical() ? historyChanged('alertId') : undefined"
+    [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
+  />
+  <app-text-field
+    size="small"
+    label="Standortkürzel"
+    [formField]="stammdatenForm.akronym"
+    [initialValue]="historyPreviousValue('akronym')"
+    [changed]="historical() ? historyChanged('akronym') : undefined"
+    [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
+  />
+  <app-text-field
+    size="small"
+    label="Registerkennung"
+    [formField]="stammdatenForm.lei"
+    [initialValue]="historyPreviousValue('lei')"
+    [changed]="historical() ? historyChanged('lei') : undefined"
+    [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
+  />
+  <app-select
+    size="small"
+    label="Status"
+    [options]="statuses()"
+    [formField]="stammdatenForm.status"
+    (valueChange)="status.set($event)"
+  />
+</div>

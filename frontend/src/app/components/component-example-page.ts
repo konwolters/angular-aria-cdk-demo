@@ -146,7 +146,7 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'variants',
         'Varianten',
-        '<button appButton>Primär</button>\n<button appButton variant="secondary">Sekundär</button>\n<button appButton variant="ghost">Ghost</button>\n<button appButton variant="link">Link</button>\n<button appButton variant="danger">Gefahr</button>',
+        '<button appButton>Primär</button>\n<button appButton variant="secondary">Sekundär</button>\n<button appButton variant="ghost">Ghost</button>\n<button appButton variant="link">Link</button>\n<button appButton variant="text-link">Textlink</button>\n<button appButton variant="danger">Gefahr</button>',
         "import { ButtonComponent } from '../shared/button/button';\n\n@Component({ imports: [ButtonComponent] })\n// variant: primary | secondary | ghost | link | danger",
       ),
       sample(

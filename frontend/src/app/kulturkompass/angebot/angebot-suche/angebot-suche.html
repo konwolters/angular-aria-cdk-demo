@@ -1,0 +1,153 @@
+<div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
+  <h1 class="text-lg font-semibold text-brand-strong">Angebotssuche</h1>
+</div>
+<section class="bg-surface !mt-0">
+  <app-data-table-toolbar
+    buttonSize="small"
+    [compactTop]="true"
+    [showApply]="false"
+    [showReset]="false"
+    (apply)="apply()"
+    (reset)="reset()"
+  >
+    <div data-table-searches class="w-full">
+      <section aria-labelledby="angebot-customer-filters" class="@container">
+        <h2
+          id="angebot-customer-filters"
+          class="mb-2 text-xs font-semibold uppercase tracking-wide text-content-muted"
+        >
+          Veranstaltungsort und Bereich
+        </h2>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3">
+          <app-text-field size="small" label="Veranstaltungsort" [formField]="queryForm" />
+          <app-text-field size="small" label="Standortnummer" [formField]="customerNumberForm" />
+          <app-text-field
+            size="small"
+            label="Registerkennung"
+            [formField]="extraForm.registerkennung"
+          />
+          <app-text-field
+            size="small"
+            label="Bereichsnummer"
+            [formField]="extraForm.bereichnummer"
+          />
+        </div>
+      </section>
+      <section aria-labelledby="angebot-characteristic-filters" class="@container mt-4">
+        <h2
+          id="angebot-characteristic-filters"
+          class="mb-2 text-xs font-semibold uppercase tracking-wide text-content-muted"
+        >
+          Angebotsmerkmale
+        </h2>
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3">
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Land"
+            [options]="['DE', 'LU', 'US']"
+            [formField]="countriesForm"
+            [changed]="false"
+          />
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Veranstaltungsart"
+            [options]="['Workshop', 'Ausstellung']"
+            [formField]="businessTypesForm"
+            [changed]="false"
+          />
+          <app-multi-select
+            size="small"
+            [fullWidth]="true"
+            label="Angebotsformat"
+            [formField]="extraForm.format"
+            [options]="['Präsenz', 'Online']"
+            [changed]="false"
+          />
+          <app-text-field
+            size="small"
+            label="Angebotscode"
+            [formField]="extraForm.code"
+            [monospace]="true"
+          />
+          <app-text-field
+            size="small"
+            label="Kontaktcode Ansprechperson"
+            [formField]="extraForm.ansprechcode"
+          />
+          <app-text-field
+            size="small"
+            label="Kontakt-ID Ansprechperson"
+            [formField]="extraForm.ansprechid"
+          />
+          <app-text-field
+            size="small"
+            label="Kontaktcode Veranstaltungsteam"
+            [formField]="extraForm.teamcode"
+          />
+          <app-text-field
+            size="small"
+            label="Zusatzinformationen"
+            [formField]="extraForm.zusatzinfo"
+          />
+        </div>
+      </section>
+    </div>
+    <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
+      <span>{{ rows().length }} Treffer</span>
+      <div class="flex flex-wrap justify-end gap-3">
+        <button appButton size="small" type="submit">Suchen</button>
+        <button
+          appButton
+          size="small"
+          type="button"
+          variant="secondary"
+          icon="refresh"
+          (click)="reset()"
+        >
+          Zurücksetzen</button
+        ><button
+          appButton
+          size="small"
+          variant="secondary"
+          type="button"
+          [disabled]="rows().length === 0"
+          (click)="state.exportResults()"
+        >
+          CSV exportieren
+        </button>
+      </div>
+    </div>
+  </app-data-table-toolbar>
+  <app-data-table
+    [framed]="false"
+    [rows]="pagination.rows('angebot', rows())"
+    [total]="rows().length"
+    [totalPages]="pagination.totalPages('angebot', rows())"
+    [page]="pagination.page('angebot', rows())"
+    [pageSize]="pagination.size('angebot')"
+    (pageChange)="pagination.setPage('angebot', $event)"
+    (pageSizeChange)="pagination.setSize('angebot', $event)"
+    [columns]="columns"
+    caption="Suchergebnisse"
+  >
+    <ng-template appDataTableCell="isin" let-row
+      ><span class="font-mono">{{ row.isin }}</span></ng-template
+    >
+    <ng-template appDataTableCell="antrag" let-row>
+      @if (row.antrag === 'Ja') {
+        <button appButton variant="link" size="small" type="button" (click)="openRequest(row)">
+          Ja
+        </button>
+      } @else {
+        {{ row.antrag }}
+      }
+    </ng-template>
+    <ng-template appDataTableCell="action" let-row
+      ><button appButton variant="link" size="small" type="button" (click)="openDetails(row)">
+        Details
+      </button></ng-template
+    >
+  </app-data-table>
+</section>
