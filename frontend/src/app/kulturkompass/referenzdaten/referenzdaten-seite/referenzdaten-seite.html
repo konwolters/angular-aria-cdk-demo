@@ -1,9 +1,7 @@
 <div class="flex flex-wrap items-center justify-between gap-3 px-5">
   <h1 class="text-lg font-semibold text-brand-strong">Referenzdaten</h1>
   @if (editing()) {
-    <button appButton size="small" type="button" (click)="ctx().openEditor('reference', null)">
-      Neu
-    </button>
+    <button appButton size="small" type="button" (click)="openEditor(null)">Neu</button>
   } @else {
     <button appButton size="small" type="button" (click)="editing.set(true)">Bearbeiten</button>
   }
@@ -19,13 +17,7 @@
           caption="Referenzdaten"
         >
           <ng-template appDataTableCell="action" let-row>
-            <button
-              appButton
-              variant="link"
-              size="small"
-              type="button"
-              (click)="ctx().openEditor('reference', row)"
-            >
+            <button appButton variant="link" size="small" type="button" (click)="openEditor(row)">
               Bearbeiten
             </button>
           </ng-template>
@@ -39,7 +31,12 @@
     <button appButton size="small" variant="secondary" type="button" (click)="editing.set(false)">
       Abbrechen
     </button>
-    <button appButton size="small" type="button" (click)="ctx().confirm('Zur Freigabe einreichen')">
+    <button
+      appButton
+      size="small"
+      type="button"
+      (click)="dialog.confirm('Zur Freigabe einreichen')"
+    >
       Zur Freigabe einreichen
     </button>
   </div>

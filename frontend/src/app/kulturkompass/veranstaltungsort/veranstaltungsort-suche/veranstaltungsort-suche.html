@@ -1,0 +1,140 @@
+<div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
+  <h1 class="text-lg font-semibold text-brand-strong">Veranstaltungsorte</h1>
+  <button appButton size="small" type="button" (click)="createVeranstaltungsort()">
+    Veranstaltungsort anlegen
+  </button>
+</div>
+<section class="bg-surface !mt-0">
+  <app-data-table-toolbar
+    buttonSize="small"
+    [compactTop]="true"
+    [showApply]="false"
+    [showReset]="false"
+    (apply)="apply()"
+    (reset)="reset()"
+  >
+    <div data-table-searches class="w-full">
+      <div
+        class="@container grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3"
+      >
+        <app-text-field size="small" label="Name" [formField]="queryForm" />
+        <app-text-field size="small" label="Standortnummer" [formField]="customerNumberForm" />
+        <app-text-field size="small" label="Bereichsnummer" [formField]="extraForm.bereichnummer" />
+        <app-text-field size="small" label="Standort-ID" [formField]="extraForm.standortId" />
+        <app-text-field
+          size="small"
+          label="Standortkürzel"
+          [formField]="extraForm.standortkuerzel"
+        />
+        <app-text-field
+          size="small"
+          label="Registerkennung"
+          [formField]="extraForm.registerkennung"
+        />
+        <app-select
+          size="small"
+          label="Status"
+          [options]="statuses()"
+          [formField]="statusForm"
+          [changed]="false"
+        />
+      </div>
+    </div>
+    <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
+      <span>{{ rows().length }} Treffer</span>
+      <div class="flex flex-wrap justify-end gap-3">
+        <button appButton size="small" type="submit">Suchen</button>
+        <button
+          appButton
+          size="small"
+          type="button"
+          variant="secondary"
+          icon="refresh"
+          (click)="reset()"
+        >
+          Zurücksetzen</button
+        ><button
+          appButton
+          size="small"
+          variant="secondary"
+          type="button"
+          [disabled]="rows().length === 0"
+          (click)="state.exportResults()"
+        >
+          CSV exportieren
+        </button>
+      </div>
+    </div>
+  </app-data-table-toolbar>
+  <app-data-table
+    [framed]="false"
+    [rows]="pagination.rows('veranstaltungsorte', rows())"
+    [total]="rows().length"
+    [totalPages]="pagination.totalPages('veranstaltungsorte', rows())"
+    [page]="pagination.page('veranstaltungsorte', rows())"
+    [pageSize]="pagination.size('veranstaltungsorte')"
+    (pageChange)="pagination.setPage('veranstaltungsorte', $event)"
+    (pageSizeChange)="pagination.setSize('veranstaltungsorte', $event)"
+    [columns]="columns"
+    caption="Suchergebnisse"
+  >
+    <ng-template appDataTableCell="name" let-row>
+      <a
+        class="text-brand-strong hover:text-brand-hover hover:underline"
+        [routerLink]="['/gui/veranstaltungsorte', row.kundennummer]"
+        [queryParams]="{ tab: 'stammdaten' }"
+        >{{ row.name }}</a
+      >
+    </ng-template>
+    <ng-template appDataTableCell="lei" let-row
+      ><span class="break-all">{{ row.lei }}</span></ng-template
+    >
+    <ng-template appDataTableCell="antrag" let-row>
+      @if (row.antrag === 'Ja') {
+        <button appButton variant="link" size="small" type="button" (click)="openRequest(row)">
+          Ja
+        </button>
+      } @else {
+        {{ row.antrag }}
+      }
+    </ng-template>
+    <ng-template appDataTableCell="bereichnummer" let-row>
+      @let bereiche = row.bereichnummer.split(', ');
+      <div class="flex flex-col items-start">
+        @for (bereich of bereiche.slice(0, 5); track bereich) {
+          <button
+            appButton
+            variant="link"
+            size="small"
+            type="button"
+            (click)="openVeranstaltungsort(row, 'bereichs')"
+          >
+            {{ bereich }}
+          </button>
+        }
+        @if (bereiche.length > 5) {
+          <button
+            appButton
+            variant="link"
+            size="small"
+            type="button"
+            (click)="openVeranstaltungsort(row, 'bereichs')"
+          >
+            + {{ bereiche.length - 5 }} weitere
+          </button>
+        }
+      </div>
+    </ng-template>
+    <ng-template appDataTableCell="action" let-row
+      ><button
+        appButton
+        variant="link"
+        size="small"
+        type="button"
+        (click)="openVeranstaltungsort(row, 'stammdaten')"
+      >
+        Details
+      </button></ng-template
+    >
+  </app-data-table>
+</section>

@@ -1,6 +1,6 @@
 import { SelectOption } from '../../shared/select/select';
 import { GuiRow } from '../daten/gui-modelle';
-import { BereichZusatzdatum } from '../bereich-detail/bereich-detail';
+import { BereichZusatzdatum } from '../veranstaltungsort/bereich-detail/bereich-detail';
 
 export function importVorschau(
   datenart: string,

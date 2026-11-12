@@ -12,6 +12,7 @@ import {
 import { ControlIdService } from '../field-messages/control-id.service';
 import { ButtonComponent, ButtonSize } from '../button/button';
 import { IconComponent } from '../icon/icon';
+import { FormValueControl } from '@angular/forms/signals';
 
 @Component({
   selector: 'app-file-picker',
@@ -19,7 +20,7 @@ import { IconComponent } from '../icon/icon';
   imports: [ButtonComponent, IconComponent],
   templateUrl: './file-picker.html',
 })
-export class FilePickerComponent {
+export class FilePickerComponent implements FormValueControl<File | null> {
   protected readonly errorId = inject(ControlIdService).next();
   readonly label = input('Datei');
   readonly buttonSize = input<ButtonSize>('small');

@@ -1,0 +1,36 @@
+<div class="pt-5">
+  <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+    <div class="flex items-end gap-3">
+      <app-select
+        class="w-48 max-w-full"
+        size="small"
+        label="Bereichsnummer"
+        [options]="bereichOptions()"
+        [formField]="bereichFilterForm"
+        [changed]="false"
+        [searchable]="true"
+      />
+      <span class="pb-2 text-sm text-content-muted"
+        >{{ rows().length }} von {{ totalAngebot() }} Angebote</span
+      >
+    </div>
+    @if (editing() && editScope() === 'angebot') {
+      <button appButton size="small" type="button" (click)="add.emit()">Angebote hinzufügen</button>
+    }
+  </div>
+  <app-data-table [rows]="rows()" [pagination]="false" [columns]="columns()" caption="Angebote">
+    <ng-template appDataTableCell="isin" let-row
+      ><span class="font-mono">{{ row.isin }}</span></ng-template
+    >
+    <ng-template appDataTableCell="action" let-row>
+      <button appButton variant="link" size="small" type="button" (click)="details.emit(row)">
+        Details
+      </button>
+      @if (editing() && editScope() === 'angebot') {
+        <button appButton variant="link" size="small" type="button" (click)="edit.emit(row)">
+          Bearbeiten
+        </button>
+      }
+    </ng-template>
+  </app-data-table>
+</div>

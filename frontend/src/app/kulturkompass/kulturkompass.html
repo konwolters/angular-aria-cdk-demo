@@ -2,63 +2,64 @@
   [navigation]="navigation"
   [activePage]="activeNavigation()"
   [roles]="roles"
-  [(role)]="role"
-  (logout)="confirm('Abmelden')"
+  [(role)]="session.role"
+  (logout)="dialog.confirm('Abmelden')"
 >
   <div class="space-y-4">
-    @if (routeError()) {
-      <p class="px-5 text-content-muted">{{ routeError() }}</p>
-    }
-    <div [hidden]="!!routeError()"><router-outlet [routerOutletData]="pageContext" /></div>
+    <router-outlet />
   </div>
 </app-gui-layout>
 
-@if (drawerKind() === 'angebot') {
-  <app-angebot-detail-drawer
-    [(open)]="drawerOpen"
-    [title]="drawerTitle()"
-    [value]="drawerRow()"
-    [editing]="drawerEditing()"
-    [bereichOptions]="page() === 'detail' ? bereichOptions().slice(1) : null"
+@if (dialog.drawerKind() === 'angebot') {
+  <app-angebot-detail
+    [(open)]="dialog.drawerOpen"
+    [title]="dialog.drawerTitle()"
+    [value]="dialog.drawerRow()"
+    [editing]="dialog.drawerEditing()"
+    [bereichOptions]="suche.page() === 'detail' ? detail.bereichOptions().slice(1) : null"
     (accept)="acceptDrawer()"
   />
 } @else {
-  <app-side-drawer [(open)]="drawerOpen" [title]="drawerTitle()">
+  <app-side-drawer [(open)]="dialog.drawerOpen" [title]="dialog.drawerTitle()">
     <div class="text-base">
-      @if (drawerKind() === 'request-diff') {
-        <div class="mt-5"><app-diff-view [entries]="requestDiff()" /></div>
-      } @else if (drawerKind() === 'reference') {
+      @if (dialog.drawerKind() === 'request-diff') {
+        <div class="mt-5"><app-diff-view [entries]="dialog.requestDiff()" /></div>
+      } @else if (dialog.drawerKind() === 'reference') {
         <div class="mt-5 grid gap-4 sm:grid-cols-2">
-          @if (referenceTab() !== 'zusatz') {
+          @if (referenzdaten.selectedTab() !== 'zusatz') {
             <app-text-field
               size="small"
               label="Kurzbezeichnung"
-              [value]="drawerRow()?.['code'] || ''"
-              [readonly]="!!drawerRow()"
+              [formField]="referenzdaten.editorForm.code"
             />
           }
           <app-text-field
             size="small"
             label="Bezeichnung"
-            [value]="drawerRow()?.['bezeichnung'] || ''"
+            [formField]="referenzdaten.editorForm.bezeichnung"
           />
-          @if (referenceTab() === 'land') {
+          @if (referenzdaten.selectedTab() === 'land') {
             <app-text-field
               size="small"
               label="Regionscode"
-              [value]="drawerRow()?.['verwahrart'] || ''"
+              [formField]="referenzdaten.editorForm.verwahrart"
             />
           }
-          <app-select size="small" label="Status" [options]="statuses" value="aktiv" />
+          <app-select
+            size="small"
+            label="Status"
+            [options]="statuses"
+            [formField]="referenzdaten.editorForm.status"
+          />
         </div>
       } @else {
         <app-bereich-detail
-          [value]="drawerRow()"
-          [editing]="drawerEditing()"
-          [editScope]="editScope()"
+          [value]="dialog.drawerRow()"
+          [editing]="dialog.drawerEditing()"
+          [editScope]="detail.editScope()"
           [statuses]="statuses"
-          [zusatzarten]="zusatzarten"
-          [(zusatzdaten)]="drawerZusatzdaten"
+          [zusatzarten]="referenzdaten.zusatzarten"
+          [(zusatzdaten)]="bereich.zusatzdaten"
         />
       }
     </div>
@@ -69,24 +70,32 @@
           size="small"
           variant="secondary"
           type="button"
-          (click)="drawerOpen.set(false)"
+          (click)="dialog.drawerOpen.set(false)"
         >
-          {{ drawerEditing() ? 'Abbrechen' : 'Schließen' }}
+          {{ dialog.drawerEditing() ? 'Abbrechen' : 'Schließen' }}
         </button>
-        @if (drawerEditing()) {
+        @if (dialog.drawerEditing()) {
           <button appButton size="small" type="button" (click)="acceptDrawer()">Übernehmen</button>
         }
       </div>
     </div>
   </app-side-drawer>
 }
-<app-modal [(open)]="modalOpen" [title]="modalTitle()">
-  <p class="mt-3 text-sm text-content-muted">{{ modalTitle() }}?</p>
-  @if (modalTitle() === 'Antrag ablehnen') {
-    <div class="mt-4"><app-textarea size="small" label="Ablehnungsgrund" [(value)]="note" /></div>
+<app-modal [(open)]="dialog.modalOpen" [title]="dialog.modalTitle()">
+  <p class="mt-3 text-sm text-content-muted">{{ dialog.modalTitle() }}?</p>
+  @if (dialog.modalTitle() === 'Antrag ablehnen') {
+    <div class="mt-4">
+      <app-textarea size="small" label="Ablehnungsgrund" [formField]="dialog.noteForm" />
+    </div>
   }
   <div dialog-footer class="mt-5 flex justify-end gap-2">
-    <button appButton size="small" variant="secondary" type="button" (click)="modalOpen.set(false)">
+    <button
+      appButton
+      size="small"
+      variant="secondary"
+      type="button"
+      (click)="dialog.modalOpen.set(false)"
+    >
       Schließen
     </button>
   </div>

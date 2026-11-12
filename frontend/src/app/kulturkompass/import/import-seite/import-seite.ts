@@ -1,8 +1,9 @@
+import { Router } from '@angular/router';
+import { GuiRow } from '../../daten/gui-modelle';
+import { GuiPaginationService } from '../../gui-pagination.service';
 import { Component, inject } from '@angular/core';
-import type { Signal } from '@angular/core';
-import { ROUTER_OUTLET_DATA } from '@angular/router';
-import type { GuiPageContext } from '../../kulturkompass';
-import { ImportZustand } from '../import-zustand';
+import { form, FormField } from '@angular/forms/signals';
+import { ImportService } from '../import.service';
 import { ButtonComponent } from '../../../shared/button/button';
 import { DataTableCellDirective } from '../../../shared/data-table/data-table-cell.directive';
 import { DataTableComponent } from '../../../shared/data-table/data-table';
@@ -14,6 +15,7 @@ import { StepperComponent } from '../../../shared/stepper/stepper';
   selector: 'app-import-seite',
   imports: [
     ButtonComponent,
+    FormField,
     DataTableCellDirective,
     DataTableComponent,
     FilePickerComponent,
@@ -22,12 +24,15 @@ import { StepperComponent } from '../../../shared/stepper/stepper';
   ],
   templateUrl: './import-seite.html',
 })
-export class ImportSeiteComponent {
-  protected readonly ctx = inject(ROUTER_OUTLET_DATA) as Signal<GuiPageContext>;
-  protected readonly state = inject(ImportZustand);
+export class ImportSeite {
+  private readonly paginationState = inject(GuiPaginationService);
+  protected readonly router = inject(Router);
+  protected readonly state = inject(ImportService);
   protected readonly importStage = this.state.stage;
   protected readonly dataType = this.state.dataType;
   protected readonly file = this.state.file;
+  protected readonly dataTypeForm = form(this.dataType);
+  protected readonly fileForm = form(this.file);
   protected readonly steps = () => this.state.steps;
   protected readonly completedSteps = this.state.completedSteps;
   protected readonly importTypes = () => this.state.importTypes;
@@ -37,8 +42,11 @@ export class ImportSeiteComponent {
   protected readonly groupColumns = () => this.state.groupColumns;
   protected readonly importResultRows = () => this.state.resultRows;
   protected readonly importResultColumns = () => this.state.resultColumns;
-  protected readonly pagination = () => this.ctx().pagination;
+  protected readonly pagination = () => this.paginationState;
 
+  protected openResult(row: GuiRow): void {
+    void this.router.navigate(['/gui/staging', row['id']]);
+  }
   protected changeStep(direction: number): void {
     const steps = this.steps();
     const index = steps.findIndex((step) => step.value === this.importStage());

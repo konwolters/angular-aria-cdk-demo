@@ -8,10 +8,10 @@
         size="small"
         label="Datenart"
         [options]="importTypes()"
-        [(value)]="dataType"
+        [formField]="dataTypeForm"
         [changed]="false"
       />
-      <app-file-picker buttonSize="small" label="CSV-Datei" [(value)]="file" />
+      <app-file-picker buttonSize="small" label="CSV-Datei" [formField]="fileForm" />
     </div>
   } @else if (importStage() === 'vorschau') {
     <app-data-table
@@ -50,13 +50,7 @@
       caption="Erzeugte Änderungsanträge"
     >
       <ng-template appDataTableCell="action" let-row>
-        <button
-          appButton
-          size="small"
-          variant="link"
-          type="button"
-          (click)="ctx().openImportResult(row)"
-        >
+        <button appButton size="small" variant="link" type="button" (click)="openResult(row)">
           Öffnen
         </button>
       </ng-template>
@@ -87,7 +81,7 @@
       >
         Neuen Import starten
       </button>
-      <button appButton size="small" type="button" (click)="ctx().navigateStaging()">
+      <button appButton size="small" type="button" (click)="router.navigate(['/gui/staging'])">
         Zu Staging &amp; Freigaben
       </button>
     }
