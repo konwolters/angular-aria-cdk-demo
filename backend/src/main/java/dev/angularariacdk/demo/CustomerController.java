@@ -1,5 +1,8 @@
 package dev.angularariacdk.demo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,12 +48,11 @@ public class CustomerController {
             "joined", Comparator.comparing(Customer::joined));
 
     @GetMapping("/api/customers")
-    public PageResponse<Customer> customers(
+    public Page<Customer> customers(
             @RequestParam(defaultValue = "") String search,
             @RequestParam(required = false) List<String> status,
             @RequestParam(required = false) List<String> region,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size,
+            @PageableDefault(size = 8) Pageable pageable,
             @RequestParam(defaultValue = "name") String sort,
             @RequestParam(defaultValue = "asc") String direction) {
         Comparator<Customer> comparator = SORTS.getOrDefault(sort, SORTS.get("name"));
@@ -66,7 +68,7 @@ public class CustomerController {
                 .sorted(comparator)
                 .toList();
 
-        return PageResponse.from(filtered, page, size);
+        return MockPages.from(filtered, pageable);
     }
 
     private static boolean matchesSearch(Customer customer, String term) {

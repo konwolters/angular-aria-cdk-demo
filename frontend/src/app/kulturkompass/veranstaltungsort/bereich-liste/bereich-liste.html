@@ -3,7 +3,6 @@
     <div class="flex flex-wrap items-end gap-3">
       <app-select
         class="w-48 max-w-full"
-        size="small"
         label="Status"
         [options]="statuses()"
         [formField]="bereichStatusForm"
@@ -11,7 +10,6 @@
       />
       <app-select
         class="w-48 max-w-full"
-        size="small"
         label="Bereichsnummer"
         [options]="bereichOptions()"
         [formField]="bereichFilterForm"
@@ -23,7 +21,7 @@
       >
     </div>
     @if (editing() && editScope() === 'veranstaltungsort') {
-      <button appButton size="small" type="button" (click)="add.emit()">Bereich hinzufügen</button>
+      <button appButton type="button" (click)="add.emit()">Bereich hinzufügen</button>
     }
   </div>
   <app-data-table [rows]="rows()" [pagination]="false" [columns]="columns()" caption="Bereiche">
@@ -41,7 +39,6 @@
       @if (entries.length > 2) {
         <button
           appButton
-          size="small"
           variant="text-link"
           type="button"
           [attr.aria-expanded]="expanded"
@@ -60,11 +57,11 @@
       }
     </ng-template>
     <ng-template appDataTableCell="action" let-row>
-      <button appButton variant="link" size="small" type="button" (click)="details.emit(row)">
+      <button appButton variant="link" type="button" (click)="details.emit(row)">
         Details
       </button>
       @if (editing()) {
-        <button appButton variant="link" size="small" type="button" (click)="edit.emit(row)">
+        <button appButton variant="link" type="button" (click)="edit.emit(row)">
           {{ editScope() === 'angebot' ? 'Zusatzdaten bearbeiten' : 'Bearbeiten' }}
         </button>
       }

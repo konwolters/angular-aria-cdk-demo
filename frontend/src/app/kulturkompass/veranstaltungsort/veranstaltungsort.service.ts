@@ -5,8 +5,9 @@ import { GuiSessionService } from '../daten/gui-session.service';
 
 @Service({ autoProvided: false })
 export class VeranstaltungsortService {
-  private readonly daten = inject(KulturkompassDatenService);
-  private readonly session = inject(GuiSessionService);
+  private readonly kulturkompassDatenService = inject(KulturkompassDatenService);
+  private readonly guiSessionService = inject(GuiSessionService);
+
   readonly selected = signal<GuiRow | null>(null);
   readonly historical = signal<GuiRow | null>(null);
   readonly editing = signal(false);
@@ -17,12 +18,16 @@ export class VeranstaltungsortService {
   readonly name = signal('');
 
   findByNumber(nummer: string | null): GuiRow | null {
-    return this.daten.veranstaltungsorte.find((row) => row.kundennummer === nummer) ?? null;
+    return (
+      this.kulturkompassDatenService.veranstaltungsorte.find(
+        (row) => row.kundennummer === nummer,
+      ) ?? null
+    );
   }
 
   beginEditing(scope: 'veranstaltungsort' | 'angebot'): void {
     this.name.set(this.selected()?.['name'] || '');
-    this.session.customerNumber.set(this.selected()?.['kundennummer'] || '');
+    this.guiSessionService.customerNumber.set(this.selected()?.['kundennummer'] || '');
     this.editScope.set(scope);
     this.editing.set(true);
     this.activeTab.set(scope === 'angebot' ? 'angebot' : 'stammdaten');
@@ -32,7 +37,9 @@ export class VeranstaltungsortService {
     const numbers = this.selected()?.['bereichnummer']?.split(', ') ?? [];
     return numbers.map(
       (number) =>
-        this.daten.bereiche.find((bereich) => bereich.bereichnummer === number) ?? {
+        this.kulturkompassDatenService.bereiche.find(
+          (bereich) => bereich.bereichnummer === number,
+        ) ?? {
           bereichnummer: number,
           bezeichnung: 'Bereich',
           status: 'Aktiv',
@@ -56,14 +63,17 @@ export class VeranstaltungsortService {
     ),
   );
   readonly angebot = computed(() =>
-    this.daten.angebote.filter(
+    this.kulturkompassDatenService.angebote.filter(
       (row) =>
         row.name === this.selected()?.['name'] &&
         (this.bereichFilter() === 'alle' || row.bereichnummer === this.bereichFilter()),
     ),
   );
   readonly totalAngebot = computed(
-    () => this.daten.angebote.filter((row) => row.name === this.selected()?.['name']).length,
+    () =>
+      this.kulturkompassDatenService.angebote.filter(
+        (row) => row.name === this.selected()?.['name'],
+      ).length,
   );
   readonly tabs = computed(() => [
     { value: 'stammdaten', label: 'Stammdaten' },

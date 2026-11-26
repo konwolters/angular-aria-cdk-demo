@@ -18,7 +18,7 @@
           caption()
         }}
       </caption>
-      <thead class="bg-canvas text-sm font-semibold text-content-secondary">
+      <thead class="bg-canvas font-semibold text-content-secondary">
         <tr>
           @for (column of columns(); track column.key) {
             <th
@@ -45,7 +45,6 @@
                   appButton
                   type="button"
                   variant="link"
-                  size="small"
                   [icon]="sortIcon(column.key)"
                   iconPosition="end"
                   (click)="sortChange.emit(column.key)"
@@ -107,7 +106,7 @@
 
   @if (pagination()) {
     <footer
-      class="flex flex-wrap items-center justify-between gap-3 border-t border-border px-3 py-3 text-xs text-content-muted"
+      class="flex flex-wrap items-center justify-between gap-3 border-t border-border p-3 text-xs text-content-muted"
     >
       <span role="status" aria-live="polite" class="whitespace-nowrap">
         {{ firstRow() }}–{{ lastRow() }} von {{ total() }} Ergebnissen
@@ -121,7 +120,6 @@
           appButton
           type="button"
           variant="secondary"
-          size="small"
           aria-label="Erste Seite"
           [disabled]="page() === 0 || loading()"
           (click)="pageChange.emit(0)"
@@ -132,7 +130,6 @@
           appButton
           type="button"
           variant="secondary"
-          size="small"
           icon="arrow-left"
           aria-label="Vorherige Seite"
           [disabled]="page() === 0 || loading()"
@@ -144,7 +141,6 @@
             appButton
             type="button"
             variant="secondary"
-            size="small"
             class="min-w-8 tabular-nums"
             [attr.aria-label]="'Seite ' + (pageNumber + 1)"
             [attr.aria-current]="page() === pageNumber ? 'page' : null"
@@ -160,7 +156,6 @@
           appButton
           type="button"
           variant="secondary"
-          size="small"
           icon="arrow-right"
           aria-label="Nächste Seite"
           [disabled]="page() + 1 >= totalPages() || loading()"
@@ -170,7 +165,6 @@
           appButton
           type="button"
           variant="secondary"
-          size="small"
           aria-label="Letzte Seite"
           [disabled]="page() + 1 >= totalPages() || loading()"
           (click)="pageChange.emit(totalPages() - 1)"

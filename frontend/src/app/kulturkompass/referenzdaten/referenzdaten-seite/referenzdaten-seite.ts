@@ -1,12 +1,17 @@
-import { GuiDialogService } from '../../daten/gui-dialog.service';
+import { GUI_STATUSES } from '../../daten/gui-status';
 import { GuiRow } from '../../daten/gui-modelle';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { FormField } from '@angular/forms/signals';
 import { ReferenzdatenService } from '../referenzdaten.service';
 import { ButtonComponent } from '../../../shared/button/button';
 import { DataTableCellDirective } from '../../../shared/data-table/data-table-cell.directive';
 import { DataTableComponent } from '../../../shared/data-table/data-table';
+import { ModalComponent } from '../../../shared/modal/modal';
+import { SelectComponent } from '../../../shared/select/select';
+import { SideDrawerComponent } from '../../../shared/side-drawer/side-drawer';
 import { TabPanelTemplateDirective } from '../../../shared/tabs/tab-panel-template.directive';
 import { TabsComponent } from '../../../shared/tabs/tabs';
+import { TextFieldComponent } from '../../../shared/text-field/text-field';
 
 @Component({
   selector: 'app-referenzdaten-seite',
@@ -14,31 +19,37 @@ import { TabsComponent } from '../../../shared/tabs/tabs';
     ButtonComponent,
     DataTableCellDirective,
     DataTableComponent,
+    FormField,
+    ModalComponent,
+    SelectComponent,
+    SideDrawerComponent,
     TabPanelTemplateDirective,
     TabsComponent,
+    TextFieldComponent,
   ],
   templateUrl: './referenzdaten-seite.html',
 })
 export class ReferenzdatenSeite {
-  protected readonly dialog = inject(GuiDialogService);
-  protected readonly state = inject(ReferenzdatenService);
-  protected readonly tabs = () => this.state.tabs;
-  protected readonly selectedTab = this.state.selectedTab;
-  protected readonly editing = this.state.editing;
-  protected readonly rows = () => this.state.rows;
-  protected readonly columns = () => this.state.columns;
-  protected readonly editableColumns = this.state.editableColumns;
+  protected readonly referenzdatenService = inject(ReferenzdatenService);
+
+  protected readonly editorOpen = signal(false);
+  protected readonly editorTitle = signal('');
+  protected readonly submitDialogOpen = signal(false);
+  protected readonly statuses = GUI_STATUSES;
+  protected readonly tabs = () => this.referenzdatenService.tabs;
+  protected readonly selectedTab = this.referenzdatenService.selectedTab;
+  protected readonly editing = this.referenzdatenService.editing;
+  protected readonly rows = () => this.referenzdatenService.rows;
+  protected readonly columns = () => this.referenzdatenService.columns;
+  protected readonly editableColumns = this.referenzdatenService.editableColumns;
 
   protected openEditor(row: GuiRow | null): void {
-    this.state.prepareEditor(row);
+    this.referenzdatenService.prepareEditor(row);
     const subject =
-      this.state.tabs.find((tab) => tab.value === this.state.selectedTab())?.label ||
-      'Referenzwert';
-    this.dialog.openDrawer(
-      'reference',
-      `${subject} ${row ? 'bearbeiten' : 'hinzufügen'}`,
-      row,
-      true,
-    );
+      this.referenzdatenService.tabs.find(
+        (tab) => tab.value === this.referenzdatenService.selectedTab(),
+      )?.label || 'Referenzwert';
+    this.editorTitle.set(`${subject} ${row ? 'bearbeiten' : 'hinzufügen'}`);
+    this.editorOpen.set(true);
   }
 }

@@ -5,9 +5,10 @@ import { BereichZusatzdatum } from './bereich-detail';
 
 @Service({ autoProvided: false })
 export class BereichService {
-  private readonly daten = inject(KulturkompassDatenService);
+  private readonly kulturkompassDatenService = inject(KulturkompassDatenService);
+
   readonly datenbestand = signal<Record<string, BereichZusatzdatum[]>>(
-    structuredClone(this.daten.bereichZusatzdaten),
+    structuredClone(this.kulturkompassDatenService.bereichZusatzdaten),
   );
   readonly zusatzdaten = signal<BereichZusatzdatum[]>([]);
   private nummer: string | undefined;

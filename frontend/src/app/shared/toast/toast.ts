@@ -9,5 +9,5 @@ import { ToastService } from './toast.service';
   templateUrl: './toast.html',
 })
 export class ToastOutletComponent {
-  protected readonly toasts = inject(ToastService);
+  protected readonly toastService = inject(ToastService);
 }

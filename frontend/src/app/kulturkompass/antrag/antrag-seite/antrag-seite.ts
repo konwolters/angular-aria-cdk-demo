@@ -1,59 +1,86 @@
 import { VeranstaltungsortService } from '../../veranstaltungsort/veranstaltungsort.service';
 import { GUI_STATUSES } from '../../daten/gui-status';
-import { GuiDialogService } from '../../daten/gui-dialog.service';
 import { Component, inject, signal } from '@angular/core';
+import { form, FormField } from '@angular/forms/signals';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SucheService } from '../../suche/suche.service';
 import { RouterLink } from '@angular/router';
 import { StagingService } from '../staging.service';
 import { REQUEST_BEREICH_COLUMNS, REQUEST_ANGEBOT_COLUMNS } from '../../daten/gui-spalten';
 import { ButtonComponent } from '../../../shared/button/button';
+import { DiffEntry, DiffViewComponent } from '../../../shared/diff-view/diff-view';
+import { ModalComponent } from '../../../shared/modal/modal';
+import { SideDrawerComponent } from '../../../shared/side-drawer/side-drawer';
+import { TextareaComponent } from '../../../shared/textarea/textarea';
 import { AntragVergleich } from '../antrag-vergleich/antrag-vergleich';
 import { antragDiff } from '../antrag-diff';
 import { GuiRow } from '../../daten/gui-modelle';
 
 @Component({
   selector: 'app-antrag-seite',
-  imports: [AntragVergleich, ButtonComponent, RouterLink],
+  imports: [
+    AntragVergleich,
+    ButtonComponent,
+    DiffViewComponent,
+    FormField,
+    ModalComponent,
+    RouterLink,
+    SideDrawerComponent,
+    TextareaComponent,
+  ],
   templateUrl: './antrag-seite.html',
 })
 export class AntragSeite {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly suche = inject(SucheService);
+  private readonly stagingService = inject(StagingService);
+  private readonly veranstaltungsortService = inject(VeranstaltungsortService);
+
   protected readonly routeError = signal('');
-  protected readonly dialog = inject(GuiDialogService);
-  protected readonly state = inject(StagingService);
-  protected readonly request = this.state.request;
-  protected readonly customer = this.state.customer;
-  protected readonly comparison = () => this.state.comparison;
-  protected readonly tabs = this.state.tabs;
-  protected readonly selectedTab = this.state.requestTab;
+  protected readonly diffOpen = signal(false);
+  protected readonly diff = signal<{ title: string; entries: DiffEntry[] }>({
+    title: '',
+    entries: [],
+  });
+  protected readonly actionDialogOpen = signal(false);
+  protected readonly actionTitle = signal('');
+  private readonly note = signal('');
+  protected readonly noteForm = form(this.note);
+  protected readonly request = this.stagingService.request;
+  protected readonly customer = this.stagingService.customer;
+  protected readonly comparison = () => this.stagingService.comparison;
+  protected readonly tabs = this.stagingService.tabs;
+  protected readonly selectedTab = this.stagingService.requestTab;
   protected readonly statuses = () => GUI_STATUSES;
-  protected readonly bereichs = this.state.bereichs;
+  protected readonly bereichs = this.stagingService.bereichs;
   protected readonly bereichColumns = () => REQUEST_BEREICH_COLUMNS;
-  protected readonly angebot = this.state.angebot;
+  protected readonly angebot = this.stagingService.angebot;
   protected readonly angebotColumns = () => REQUEST_ANGEBOT_COLUMNS;
-  private readonly detail = inject(VeranstaltungsortService);
 
   constructor() {
     this.route.paramMap.pipe(takeUntilDestroyed()).subscribe((params) => {
       const id = params.get('id');
-      const request = this.state.findById(id);
-      this.suche.page.set('antrag');
-      this.detail.editing.set(false);
-      this.state.request.set(request);
+      const request = this.stagingService.findById(id);
+      this.veranstaltungsortService.editing.set(false);
+      this.stagingService.request.set(request);
       this.routeError.set(request ? '' : 'Antrag nicht gefunden.');
-      this.state.requestTab.set(request?.['bereich'] === 'Angebote' ? 'angebot' : 'stammdaten');
+      this.stagingService.requestTab.set(
+        request?.['bereich'] === 'Angebote' ? 'angebot' : 'stammdaten',
+      );
     });
   }
 
   protected showRequestDiff(kind: 'angebot' | 'bereich', row: GuiRow): void {
-    this.dialog.openDiff(
-      kind === 'bereich' ? 'Bereich-Detail' : 'Angebotsdetail',
-      antragDiff(kind, row),
-    );
+    this.diff.set({
+      title: kind === 'bereich' ? 'Bereich-Detail' : 'Angebotsdetail',
+      entries: antragDiff(kind, row),
+    });
+    this.diffOpen.set(true);
+  }
+
+  protected openActionDialog(title: string): void {
+    this.actionTitle.set(title);
+    this.actionDialogOpen.set(true);
   }
 
   protected editRequest(): void {

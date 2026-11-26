@@ -3,7 +3,6 @@
     <div class="flex items-end gap-3">
       <app-select
         class="w-48 max-w-full"
-        size="small"
         label="Bereichsnummer"
         [options]="bereichOptions()"
         [formField]="bereichFilterForm"
@@ -15,7 +14,7 @@
       >
     </div>
     @if (editing() && editScope() === 'angebot') {
-      <button appButton size="small" type="button" (click)="add.emit()">Angebote hinzufügen</button>
+      <button appButton type="button" (click)="add.emit()">Angebote hinzufügen</button>
     }
   </div>
   <app-data-table [rows]="rows()" [pagination]="false" [columns]="columns()" caption="Angebote">
@@ -23,11 +22,11 @@
       ><span class="font-mono">{{ row.isin }}</span></ng-template
     >
     <ng-template appDataTableCell="action" let-row>
-      <button appButton variant="link" size="small" type="button" (click)="details.emit(row)">
+      <button appButton variant="link" type="button" (click)="details.emit(row)">
         Details
       </button>
       @if (editing() && editScope() === 'angebot') {
-        <button appButton variant="link" size="small" type="button" (click)="edit.emit(row)">
+        <button appButton variant="link" type="button" (click)="edit.emit(row)">
           Bearbeiten
         </button>
       }

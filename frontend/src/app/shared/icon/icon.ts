@@ -8,6 +8,7 @@ export type IconName =
   | 'check'
   | 'chevron-down'
   | 'close'
+  | 'github'
   | 'grid'
   | 'plus'
   | 'receipt'

@@ -12,6 +12,7 @@ import { TabsComponent } from '../shared/tabs/tabs';
 import { TabPanelTemplateDirective } from '../shared/tabs/tab-panel-template.directive';
 import { StepperComponent } from '../shared/stepper/stepper';
 import { FilePickerComponent } from '../shared/file-picker/file-picker';
+import { IconComponent } from '../shared/icon/icon';
 import { DataTableToolbarComponent } from '../shared/data-table-toolbar/data-table-toolbar';
 import { DataTableComponent, DataTableColumn } from '../shared/data-table/data-table';
 import { DataTableCellDirective } from '../shared/data-table/data-table-cell.directive';
@@ -152,7 +153,7 @@ const examples: Record<string, ComponentDocumentation> = {
       sample(
         'sizes',
         'Größen',
-        '<button appButton size="small">Klein</button>\n<button appButton size="medium">Mittel</button>\n<button appButton size="large">Groß</button>',
+        '<button appButton>Klein</button>\n<button appButton size="medium">Mittel</button>\n<button appButton size="large">Groß</button>',
         '// size: small | medium | large (Standard: small).\n// Die Größe steuert hauptsächlich Höhe und Innenabstände.',
       ),
       sample(
@@ -725,19 +726,20 @@ protected resetCombinedFilters(): void {
   },
   toast: {
     name: 'Toast',
-    description: 'Explizit schließbare Rückmeldung außerhalb des aktuellen Inhaltsflusses.',
+    description:
+      'Rückmeldung mit konfigurierbarem Auto-Close außerhalb des aktuellen Inhaltsflusses.',
     examples: [
       sample(
         'success',
         'Erfolgsmeldung',
-        '<button appButton (click)="toasts.show(\'Änderungen gespeichert\')">Speichern</button>\n<app-toast-outlet />',
-        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast.service';\n\ntoasts = inject(ToastService);\n// Die Meldung bleibt sichtbar, bis sie geschlossen wird.\n// show(text) liefert eine ID für toasts.dismiss(id).",
+        '<button appButton (click)="toastService.show(\'Änderungen gespeichert\')">Speichern</button>\n<app-toast-outlet />',
+        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast.service';\n\nprotected readonly toastService = inject(ToastService);\n// Ohne Optionen schließt die Meldung nach drei Sekunden.\n// show(text) liefert eine ID für toastService.dismiss(id).",
       ),
       sample(
         'multiple',
         'Mehrere Meldungen',
         '<button appButton (click)="notify()">Meldungen anzeigen</button>\n<app-toast-outlet />',
-        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast.service';\n\ntoasts = inject(ToastService);\n\nnotify(): void {\n  this.toasts.show('Import gestartet');\n  this.toasts.show('3 Einträge verarbeitet');\n}",
+        "import { inject } from '@angular/core';\nimport { ToastService } from '../shared/toast/toast.service';\n\nprivate readonly toastService = inject(ToastService);\n\nnotify(): void {\n  this.toastService.show('Import gestartet', { durationMs: 6000 });\n  this.toastService.show('3 Einträge verarbeitet', { autoClose: false });\n}",
       ),
     ],
   },
@@ -755,6 +757,7 @@ protected resetCombinedFilters(): void {
     TabPanelTemplateDirective,
     StepperComponent,
     FilePickerComponent,
+    IconComponent,
     DataTableToolbarComponent,
     DataTableComponent,
     DataTableCellDirective,
@@ -768,6 +771,8 @@ protected resetCombinedFilters(): void {
 })
 export class ComponentExamplePage {
   private readonly route = inject(ActivatedRoute);
+  protected readonly toastService = inject(ToastService);
+
   private readonly slug = toSignal(this.route.paramMap, {
     initialValue: this.route.snapshot.paramMap,
   });
@@ -805,6 +810,10 @@ export class ComponentExamplePage {
     this.sourceFiles().includes(this.selectedSource())
       ? this.selectedSource()
       : this.sourceFiles()[0],
+  );
+  protected readonly currentSourceGithubUrl = computed(
+    () =>
+      `https://github.com/konwolters/angular-aria-cdk-demo/blob/master/frontend/src/app/shared/${this.currentSource()}`,
   );
   protected readonly sourceText = signal('');
   protected readonly highlightedSource = computed(() =>
@@ -895,7 +904,6 @@ export class ComponentExamplePage {
   protected readonly activeTab = signal('general');
   protected readonly disabledExampleTab = signal('general');
   protected readonly currentStep = signal('details');
-  protected readonly toast = inject(ToastService);
   protected readonly options = [
     { value: 'd1', label: 'Hauptdepot' },
     { value: 'd2', label: 'Zweitdepot' },
@@ -1111,7 +1119,7 @@ export class ComponentExamplePage {
   }
 
   protected showMultipleToasts(): void {
-    this.toast.show('Import gestartet');
-    this.toast.show('3 Einträge verarbeitet');
+    this.toastService.show('Import gestartet', { durationMs: 6000 });
+    this.toastService.show('3 Einträge verarbeitet', { autoClose: false });
   }
 }

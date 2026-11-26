@@ -119,7 +119,7 @@ weiterhin für Formularverhalten, Tastaturbedienung und Barrierefreiheit.
   Neuer Eintrag
 </button>
 
-<button appButton variant="secondary" size="small" icon="refresh" iconPosition="end">
+<button appButton variant="secondary" icon="refresh" iconPosition="end">
   Aktualisieren
 </button>
 ```
@@ -497,23 +497,11 @@ Mit `ng-template[appDataTableHeader]="spaltenschlüssel"` lassen sich eigene Hea
 eingebauten Sortierbutton der Spalte. Zeilenauswahl ist über Zelltemplates möglich;
 die Auswahl über stabile IDs gehört der aufrufenden Komponente.
 
-### Server-Abfrage
+### Serverseitige Daten
 
-`ServerTableService.search<T>(endpoint, query)` akzeptiert die API-URL und ein
-`Signal<TableQuery>`. Das Ergebnis enthält `value`, `isLoading` und `error`; während einer neuen
-Abfrage bleibt der letzte geladene Tabellenwert sichtbar.
-
-| Parameter / Ergebnis | Typ | Bedeutung |
-| --- | --- | --- |
-| `endpoint` | `string` | API-Pfad, beispielsweise `/api/customers` |
-| `query` | `Signal<TableQuery>` | Reaktiver Such-, Sortier-, Filter- und Pagingzustand |
-| `value` | `Signal<TablePage<T>>` | Letztes geladenes Seitenergebnis |
-| `isLoading` | `Signal<boolean>` | Lädt gerade eine neue Anfrage |
-| `error` | `Signal<unknown>` | Fehler der aktuellen Anfrage oder `undefined` |
-
-`TableQuery` hat `page`, `size`, `search`, `sort`, `direction: 'asc' | 'desc'` und
-`filters: Record<string, string[]>`. `TablePage<T>` enthält `content`, `totalElements`, `totalPages`,
-`number` und `size`.
+Die Tabelle lädt selbst keine Daten und kennt kein API-Format. Die aufrufende Seite verarbeitet
+`pageChange`, `pageSizeChange` und `sortChange` und übergibt die geladenen Zeilen und Seiteninfos
+als Inputs.
 
 ## `app-modal`
 
@@ -648,8 +636,11 @@ andere Meldungen mit `role="status"` ausgezeichnet. Inhalt und `[message-actions
 ### Toasts
 
 Import: `shared/toast/toast.ts`. Einmal `<app-toast-outlet />` im gewünschten Anwendungskontext
-platzieren. `inject(ToastService).show(text)` liefert eine ID, `dismiss(id)` entfernt genau diese
-Meldung. Meldungen werden höflich angekündigt und bleiben bis zum expliziten Schließen sichtbar.
+platzieren. `inject(ToastService).show(text, options?)` liefert eine ID, `dismiss(id)` entfernt genau
+diese Meldung. Meldungen werden höflich angekündigt und schließen standardmäßig nach drei Sekunden.
+Mit `{ durationMs: 8000 }` bleibt eine Meldung acht Sekunden sichtbar; mit `{ autoClose: false }`
+bleibt sie bis zum manuellen Schließen oder `dismiss(id)` sichtbar. Ungültige Zeitangaben fallen auf
+den Standard zurück. Manuelles Schließen ist auch bei aktivem Auto-Close möglich.
 `messages` ist ein schreibgeschütztes `Signal<readonly ToastMessage[]>`; `ToastMessage` enthält
 `id: number` und `text: string`.
 Die Demo platziert den Outlet auf der Komponentenseite; für anwendungsweite Meldungen in die Shell verschieben.

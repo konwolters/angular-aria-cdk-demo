@@ -21,7 +21,9 @@ export type TextFieldType = 'text' | 'email' | 'search' | 'url' | 'tel' | 'passw
   host: { class: 'block' },
 })
 export class TextFieldComponent implements FormValueControl<string> {
-  protected readonly messagesId = inject(ControlIdService).next();
+  private readonly controlIdService = inject(ControlIdService);
+
+  protected readonly messagesId = this.controlIdService.next();
   readonly hint = input('');
   readonly size = input<'small' | 'medium'>('small');
   readonly monospace = input(false);

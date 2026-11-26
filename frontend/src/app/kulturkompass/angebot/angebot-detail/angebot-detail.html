@@ -3,7 +3,6 @@
     <div class="mt-5 grid gap-4 sm:grid-cols-2">
       @if (readonly()) {
         <app-text-field
-          size="small"
           label="Bereich"
           [value]="value()?.['bereichnummer'] || ''"
           [readonly]="true"
@@ -11,7 +10,6 @@
         />
       } @else {
         <app-select
-          size="small"
           label="Bereich"
           [options]="bereichOptions() ?? bereichs"
           [formField]="angebotForm.bereichnummer"
@@ -19,7 +17,6 @@
         />
       }
       <app-select
-        size="small"
         label="Veranstaltungsart"
         [options]="businessTypes"
         [formField]="angebotForm.geschaeft"
@@ -27,7 +24,6 @@
         [changed]="readonly() ? false : undefined"
       />
       <app-select
-        size="small"
         label="Angebotsformat"
         [options]="securities"
         [formField]="angebotForm.wertpapier"
@@ -35,7 +31,6 @@
         [changed]="readonly() ? false : undefined"
       />
       <app-text-field
-        size="small"
         label="Angebotscode"
         [monospace]="true"
         [formField]="angebotForm.isin"
@@ -43,7 +38,6 @@
         [changed]="readonly() ? false : undefined"
       />
       <app-select
-        size="small"
         label="Land"
         [options]="countries"
         [formField]="angebotForm.land"
@@ -51,7 +45,6 @@
         [changed]="readonly() ? false : undefined"
       />
       <app-text-field
-        size="small"
         label="Kontaktcode Veranstaltungsort"
         [formField]="angebotForm.psetBic"
         [initialValue]="value()?.['psetBic'] || ''"
@@ -69,7 +62,6 @@
     >
       <ng-template appDataTableCell="konto" let-row>
         <app-text-field
-          size="small"
           [label]="'Kontakt-ID ' + row.name"
           class="w-full max-w-40"
           [hideLabel]="true"
@@ -80,7 +72,6 @@
       </ng-template>
       <ng-template appDataTableCell="bic" let-row>
         <app-text-field
-          size="small"
           [label]="'Kontaktcode ' + row.name"
           class="w-full max-w-40"
           [hideLabel]="true"
@@ -91,7 +82,6 @@
       </ng-template>
       <ng-template appDataTableCell="pc" let-row>
         <app-text-field
-          size="small"
           [label]="'PC ' + row.name"
           class="w-full max-w-40"
           [hideLabel]="true"
@@ -103,7 +93,6 @@
       <ng-template appDataTableCell="bezeichnung" let-row>
         @if (row.hasName) {
           <app-text-field
-            size="small"
             [label]="'Name ' + row.name"
             class="w-full max-w-40"
             [hideLabel]="true"
@@ -118,7 +107,6 @@
     </app-data-table>
     <div class="mt-4">
       <app-textarea
-        size="small"
         label="Zusatzinformationen"
         [formField]="angebotForm.zusatzinfo"
         [initialValue]="value()?.['zusatzinfo'] || ''"
@@ -126,14 +114,12 @@
       />
     </div>
   </div>
-  <div dialog-footer class="pt-5">
-    <div class="flex justify-end gap-2">
-      <button appButton size="small" variant="secondary" type="button" (click)="open.set(false)">
-        {{ editing() ? 'Abbrechen' : 'Schließen' }}
-      </button>
-      @if (editing()) {
-        <button appButton size="small" type="button" (click)="accept.emit()">Übernehmen</button>
-      }
-    </div>
+  <div dialog-footer class="flex justify-end gap-2 pt-5">
+    <button appButton variant="secondary" type="button" (click)="open.set(false)">
+      {{ editing() ? 'Abbrechen' : 'Schließen' }}
+    </button>
+    @if (editing()) {
+      <button appButton type="button" (click)="accept.emit()">Übernehmen</button>
+    }
   </div>
 </app-side-drawer>

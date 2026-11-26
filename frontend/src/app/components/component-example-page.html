@@ -56,7 +56,7 @@
                   @case ('button') {
                     @switch (item.id) {
                       @case ('primary') {
-                        <button appButton type="button" (click)="toast.show('Gespeichert')">
+                        <button appButton type="button" (click)="toastService.show('Gespeichert')">
                           Speichern
                         </button>
                       }
@@ -72,7 +72,7 @@
                       }
                       @case ('sizes') {
                         <div class="flex flex-wrap items-center gap-3">
-                          <button appButton size="small" variant="secondary">Klein</button
+                          <button appButton variant="secondary">Klein</button
                           ><button appButton size="medium" variant="secondary">Mittel</button
                           ><button appButton size="large" variant="secondary">Groß</button>
                         </div>
@@ -623,7 +623,7 @@
                         <button
                           appButton
                           type="button"
-                          (click)="toast.show('Änderungen gespeichert')"
+                          (click)="toastService.show('Änderungen gespeichert')"
                         >
                           Speichern
                         </button>
@@ -652,7 +652,6 @@
                   <button
                     appButton
                     type="button"
-                    size="small"
                     variant="secondary"
                     (click)="copyCode(item)"
                   >
@@ -661,9 +660,8 @@
                 </div>
               </div>
               <pre
-                class="min-h-40 overflow-x-auto bg-[#edf2f7] p-6 text-sm leading-7 text-content-secondary"
-                style="font-family: Consolas, 'Liberation Mono', Menlo, monospace; tab-size: 2"
-              ><code style="font-family: inherit" [innerHTML]="highlightedCode(item)"></code></pre>
+                 class="min-h-40 overflow-x-auto bg-[#edf2f7] p-6 text-sm leading-7 text-content-secondary [tab-size:2]"
+               ><code [innerHTML]="highlightedCode(item)"></code></pre>
             }
           </section>
         }
@@ -723,7 +721,6 @@
             <button
               appButton
               type="button"
-              size="small"
               variant="secondary"
               [active]="currentSource() === file"
               [attr.aria-pressed]="currentSource() === file"
@@ -737,14 +734,23 @@
           class="flex flex-wrap items-center justify-between gap-3 border-b border-border bg-canvas px-5 py-3"
         >
           <span class="text-sm font-medium">{{ currentSource() }}</span>
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-3">
             <span class="text-xs text-content-muted" role="status" aria-live="polite">{{
               sourceCopyStatus()
             }}</span>
+            <a
+              class="inline-flex min-h-8 items-center gap-2 rounded-control border border-border-strong bg-surface px-2.5 py-1 text-control font-medium text-content-secondary shadow-sm transition-colors hover:border-border-hover hover:bg-surface-subtle focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
+              [href]="currentSourceGithubUrl()"
+              aria-label="Auf GitHub ansehen (öffnet in einem neuen Tab)"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <app-icon name="github" [size]="16" />
+              <span>Auf GitHub ansehen</span>
+            </a>
             <button
               appButton
               type="button"
-              size="small"
               variant="secondary"
               [disabled]="sourceLoading() || !!sourceError()"
               (click)="copySource()"
@@ -759,8 +765,7 @@
           <p class="text-sm text-danger" role="alert">{{ sourceError() }}</p>
         } @else {
           <pre
-            class="max-h-[70vh] overflow-auto whitespace-pre-wrap break-words bg-[#edf2f7] p-6 text-sm leading-7 text-content-secondary"
-            style="font-family: Consolas, 'Liberation Mono', Menlo, monospace; tab-size: 2"
+             class="max-h-[70vh] overflow-auto whitespace-pre-wrap break-words bg-[#edf2f7] p-6 text-sm leading-7 text-content-secondary [tab-size:2]"
           ><code [innerHTML]="highlightedSource()"></code></pre>
         }
       </section>

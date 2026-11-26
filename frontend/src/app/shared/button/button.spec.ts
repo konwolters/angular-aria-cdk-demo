@@ -9,6 +9,7 @@ import { ButtonComponent, ButtonSize, ButtonVariant } from './button';
 class ButtonHostComponent {
   readonly variant = signal<ButtonVariant>('secondary');
   readonly size = signal<ButtonSize>('small');
+  readonly active = signal(false);
 }
 
 describe('ButtonComponent', () => {
@@ -35,5 +36,40 @@ describe('ButtonComponent', () => {
     expect(button.classList.contains('text-left')).toBe(true);
     expect(button.classList.contains('min-h-8')).toBe(false);
     expect(button.classList.contains('px-2.5')).toBe(false);
+  });
+
+  it('uses only active colors while a button is active, regardless of variant', async () => {
+    await TestBed.configureTestingModule({ imports: [ButtonHostComponent] }).compileComponents();
+    const fixture = TestBed.createComponent(ButtonHostComponent);
+    const { variant, active } = fixture.componentInstance;
+    const button = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+    const variants: ButtonVariant[] = [
+      'primary',
+      'secondary',
+      'ghost',
+      'link',
+      'text-link',
+      'danger',
+    ];
+
+    for (const value of variants) {
+      variant.set(value);
+      active.set(true);
+      fixture.detectChanges();
+
+      expect([...button.classList].filter((name) => name.startsWith('bg-'))).toEqual([
+        'bg-brand-subtle',
+      ]);
+      expect(button.classList.contains('text-brand-strong')).toBe(true);
+      expect(button.classList.contains('border-brand')).toBe(true);
+      expect([...button.classList].some((name) => /^hover:(bg|border|text)-/.test(name))).toBe(
+        false,
+      );
+
+      active.set(false);
+      fixture.detectChanges();
+      expect(button.classList.contains('bg-brand-subtle')).toBe(false);
+      expect(button.classList.contains('border-brand')).toBe(false);
+    }
   });
 });

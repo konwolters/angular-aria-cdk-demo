@@ -1,0 +1,51 @@
+{
+  "veranstaltungsorte": [
+    {"name":"Kulturhaus Sonnenhof","kundennummer":"100001","bereichnummer":"10010001, 10010002, 10010003, 10010004, 10010005, 10010006, 10010007","alertId":"123456","akronym":"SONNE","lei":"ORT-SONNENHOF-001","status":"Aktiv","antrag":"Ja"},
+    {"name":"Forum Lindenpark","kundennummer":"100002","bereichnummer":"10020001","alertId":"234567","akronym":"LINDE","lei":"ORT-LINDENPARK-002","status":"Aktiv","antrag":"—"},
+    {"name":"Werkstatt am See","kundennummer":"100003","bereichnummer":"10030001","alertId":"345678","akronym":"SEE","lei":"ORT-WERKSTATT-003","status":"Aktiv","antrag":"—"}
+  ],
+  "angebote": [
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010001","land":"DE","geschaeft":"Workshop","wertpapier":"Präsenz","isin":"ANG-DE-0001","konto":"123456789","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"Ja","zusatzinfo":"Barrierefreier Zugang"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"LU","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-LU-0001","konto":"987654321","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010001","land":"DE","geschaeft":"Workshop","wertpapier":"Präsenz","isin":"ANG-DE-0010","konto":"120000000","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"LU","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-LU-0011","konto":"120000001","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010003","land":"US","geschaeft":"Ausstellung","wertpapier":"Präsenz","isin":"ANG-US-0012","konto":"120000002","agentBic":"TEAM-ORGA","bic":"TEAM-SEE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"DE","geschaeft":"Workshop","wertpapier":"Online","isin":"ANG-DE-0013","konto":"120000003","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010002","land":"LU","geschaeft":"Ausstellung","wertpapier":"Präsenz","isin":"ANG-LU-0014","konto":"120000004","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"US","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-US-0015","konto":"120000005","agentBic":"TEAM-ORGA","bic":"TEAM-SEE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010001","land":"DE","geschaeft":"Workshop","wertpapier":"Präsenz","isin":"ANG-DE-0016","konto":"120000006","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"LU","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-LU-0017","konto":"120000007","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010003","land":"US","geschaeft":"Ausstellung","wertpapier":"Präsenz","isin":"ANG-US-0018","konto":"120000008","agentBic":"TEAM-ORGA","bic":"TEAM-SEE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"DE","geschaeft":"Workshop","wertpapier":"Online","isin":"ANG-DE-0019","konto":"120000009","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010002","land":"LU","geschaeft":"Ausstellung","wertpapier":"Präsenz","isin":"ANG-LU-0020","konto":"120000010","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"US","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-US-0021","konto":"120000011","agentBic":"TEAM-ORGA","bic":"TEAM-SEE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010001","land":"DE","geschaeft":"Workshop","wertpapier":"Präsenz","isin":"ANG-DE-0022","konto":"120000012","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"LU","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-LU-0023","konto":"120000013","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010003","land":"US","geschaeft":"Ausstellung","wertpapier":"Präsenz","isin":"ANG-US-0024","konto":"120000014","agentBic":"TEAM-ORGA","bic":"TEAM-SEE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"DE","geschaeft":"Workshop","wertpapier":"Online","isin":"ANG-DE-0025","konto":"120000015","agentBic":"TEAM-ORGA","bic":"TEAM-SONNE","antrag":"—"},
+    {"name":"Kulturhaus Sonnenhof","bereichnummer":"10010002","land":"LU","geschaeft":"Ausstellung","wertpapier":"Präsenz","isin":"ANG-LU-0026","konto":"120000016","agentBic":"TEAM-ORGA","bic":"TEAM-LINDE","antrag":"—"},
+    {"name":"Forum Lindenpark","bereichnummer":"10020001","land":"US","geschaeft":"Ausstellung","wertpapier":"Online","isin":"ANG-US-0027","konto":"120000017","agentBic":"TEAM-ORGA","bic":"TEAM-SEE","antrag":"—"}
+  ],
+  "bereiche": [
+    {"bereichnummer":"10010001","bezeichnung":"Hauptsaal","status":"Aktiv","anzahl":"2"},
+    {"bereichnummer":"10010002","bezeichnung":"Atelier","status":"Aktiv","anzahl":"1"},
+    {"bereichnummer":"10010003","bezeichnung":"Foyer","status":"Aktiv","anzahl":"0"},
+    {"bereichnummer":"10010004","bezeichnung":"Studio","status":"Aktiv","anzahl":"0"},
+    {"bereichnummer":"10010005","bezeichnung":"Galerie","status":"Aktiv","anzahl":"0"},
+    {"bereichnummer":"10010006","bezeichnung":"Außenbereich","status":"Aktiv","anzahl":"0"},
+    {"bereichnummer":"10010007","bezeichnung":"Proberaum","status":"Aktiv","anzahl":"0"}
+  ],
+  "bereichZusatzdaten": {
+    "10010001": [
+      {"id":0,"art":"KONTAKT","wert":"Max Mustermann","beschreibung":"Hauptkontakt"},
+      {"id":1,"art":"KONTAKT","wert":"Erika Musterfrau","beschreibung":"Vertretung"},
+      {"id":2,"art":"KONTAKT","wert":"bereich@example.test","beschreibung":"E-Mail"},
+      {"id":3,"art":"KONTAKT","wert":"+49 30 123456","beschreibung":"Telefon"}
+    ]
+  },
+  "antraege": [
+    {"id":"M-2026-0001","bereich":"Angebote","name":"2 Veranstaltungsorte","quelle":"CSV","art":"Massenänderung","ersteller":"MMUELLER","datum":"15.10.2026","status":"Eingereicht"},
+    {"id":"E-2026-0041","bereich":"Veranstaltungsort & Bereiche","name":"Kulturhaus Sonnenhof","quelle":"Manuell","art":"Ändern","ersteller":"ASCHMIDT","datum":"14.10.2026","status":"Eingereicht"},
+    {"id":"E-2026-0042","bereich":"Angebote","name":"Kulturhaus Sonnenhof","quelle":"Manuell","art":"Ändern","ersteller":"ASCHMIDT","datum":"14.10.2026","status":"Eingereicht"}
+  ]
+}

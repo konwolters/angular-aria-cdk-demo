@@ -5,29 +5,31 @@ import { GuiRow } from '../daten/gui-modelle';
 
 @Service({ autoProvided: false })
 export class StagingService {
-  private readonly daten = inject(KulturkompassDatenService);
+  private readonly kulturkompassDatenService = inject(KulturkompassDatenService);
+  private readonly importService = inject(ImportService);
+
   readonly request = signal<GuiRow | null>(null);
-  private readonly imports = inject(ImportService);
 
   findById(id: string | null): GuiRow | null {
     return (
-      this.daten.antraege.find((row) => row.id === id) ??
-      this.imports.resultRows.find((row) => row['id'] === id) ??
+      this.kulturkompassDatenService.antraege.find((row) => row.id === id) ??
+      this.importService.resultRows.find((row) => row['id'] === id) ??
       null
     );
   }
 
   findForRow(row: GuiRow, bereich: string): GuiRow | null {
     return (
-      this.daten.antraege.find((item) => item.name === row['name'] && item.bereich === bereich) ??
-      null
+      this.kulturkompassDatenService.antraege.find(
+        (item) => item.name === row['name'] && item.bereich === bereich,
+      ) ?? null
     );
   }
 
   readonly requestTab = signal('stammdaten');
   readonly customer = computed(
     () =>
-      this.daten.veranstaltungsorte.find(
+      this.kulturkompassDatenService.veranstaltungsorte.find(
         (customer) => customer.name === this.request()?.['name'],
       ) ?? null,
   );
@@ -41,10 +43,12 @@ export class StagingService {
         ],
   );
   readonly bereichs = computed(() =>
-    this.daten.bereiche.slice(0, 1).map((row) => ({ ...row, aenderung: 'GEÄNDERT' })),
+    this.kulturkompassDatenService.bereiche
+      .slice(0, 1)
+      .map((row) => ({ ...row, aenderung: 'GEÄNDERT' })),
   );
   readonly angebot = computed(() =>
-    this.daten.angebote
+    this.kulturkompassDatenService.angebote
       .filter((row) => row.name === this.request()?.['name'])
       .slice(0, 1)
       .map((row) => ({ ...row, aenderung: 'GEÄNDERT' })),

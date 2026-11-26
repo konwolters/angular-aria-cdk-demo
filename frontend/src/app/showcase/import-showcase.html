@@ -15,7 +15,7 @@
       <p class="mt-1 text-sm text-content-muted">
         CSV mit den Spalten „Name“ und „E-Mail“ auswählen. Komma oder Semikolon als Trennzeichen.
       </p>
-      <div class="mt-5 w-full">
+      <div class="mt-5">
         <app-file-picker
           label="CSV-Datei"
           [(value)]="file"
@@ -118,7 +118,7 @@
           />
         </ng-template>
         <ng-template appDataTableCell="actions" let-row>
-          <button appButton type="button" variant="link" size="small" (click)="edit(row)">
+          <button appButton type="button" variant="link" (click)="edit(row)">
             {{ row.imported ? 'Details ansehen' : 'Details bearbeiten' }}
           </button>
         </ng-template>

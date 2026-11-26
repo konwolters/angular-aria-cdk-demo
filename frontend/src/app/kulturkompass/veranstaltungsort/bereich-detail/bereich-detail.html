@@ -1,10 +1,10 @@
 <div class="mt-5 grid gap-4 sm:grid-cols-2">
-  <app-text-field size="small" label="Bereichsnummer" [formField]="bereichForm.bereichnummer" />
-  <app-text-field size="small" label="Bezeichnung" [formField]="bereichForm.bezeichnung" />
-  <app-select size="small" label="Status" [options]="statuses()" [formField]="bereichForm.status" />
+  <app-text-field label="Bereichsnummer" [formField]="bereichForm.bereichnummer" />
+  <app-text-field label="Bezeichnung" [formField]="bereichForm.bezeichnung" />
+  <app-select label="Status" [options]="statuses()" [formField]="bereichForm.status" />
 </div>
 <div class="mt-4">
-  <app-textarea size="small" label="Kommentar" [formField]="bereichForm.kommentar" />
+  <app-textarea label="Kommentar" [formField]="bereichForm.kommentar" />
 </div>
 <h3 class="mb-2 mt-5 text-sm font-semibold">Zusatzdaten</h3>
 <app-data-table
@@ -70,7 +70,6 @@
     @if (editing()) {
       <button
         appButton
-        size="small"
         variant="link"
         type="button"
         (click)="removeZusatzdatum(row.id)"
@@ -83,7 +82,6 @@
 @if (zusatzdaten().length > 2) {
   <button
     appButton
-    size="small"
     variant="link"
     type="button"
     [attr.aria-expanded]="zusatzdatenExpanded()"
@@ -98,7 +96,7 @@
 }
 @if (editing()) {
   <div class="mt-2 flex justify-end">
-    <button appButton size="small" variant="secondary" type="button" (click)="addZusatzdatum()">
+    <button appButton variant="secondary" type="button" (click)="addZusatzdatum()">
       Eintrag hinzufügen
     </button>
   </div>
