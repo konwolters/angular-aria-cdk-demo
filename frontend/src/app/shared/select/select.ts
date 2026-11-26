@@ -51,7 +51,9 @@ export interface SelectOption {
   host: { class: 'block' },
 })
 export class SelectComponent implements FormValueControl<string> {
-  protected readonly messagesId = inject(ControlIdService).next();
+  private readonly controlIdService = inject(ControlIdService);
+
+  protected readonly messagesId = this.controlIdService.next();
   protected readonly combobox = viewChild(Combobox);
   protected readonly searchTerm = signal('');
   readonly searchable = input(false);

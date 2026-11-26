@@ -40,7 +40,7 @@
             [tabindex]="readonly() ? -1 : undefined"
             [attr.aria-label]="selectionSummary().accessibleLabel + ', suchen'"
             [placeholder]="selectionSummary().displayValue || placeholder()"
-            class="h-full min-w-0 flex-1 bg-transparent text-control text-content-secondary outline-none placeholder:text-content-subtle"
+            class="h-full min-w-0 flex-1 bg-transparent text-content-secondary outline-none placeholder:text-content-subtle"
             [class.cursor-not-allowed]="readonly() || disabled()"
           />
           <app-icon name="chevron-down" [size]="16" />
@@ -108,7 +108,7 @@
                   [value]="option.value"
                   [label]="option.label"
                   [disabled]="option.disabled ?? false"
-                  class="flex min-h-10 items-center gap-2 rounded-control px-3 py-2 text-control data-[active=true]:bg-surface-muted"
+                   class="flex min-h-10 items-center gap-2 rounded-control px-3 py-2 data-[active=true]:bg-surface-muted"
                   [class.cursor-pointer]="!option.disabled"
                   [class.cursor-not-allowed]="option.disabled"
                   [class.bg-surface-muted]="option.disabled"
@@ -120,11 +120,7 @@
                 >
                   <span class="flex-1">{{ option.label }}</span>
                   @if (value().includes(option.value)) {
-                    <app-icon
-                      [class.text-brand-strong]="!option.disabled"
-                      name="check"
-                      [size]="16"
-                    />
+                    <app-icon name="check" [size]="16" />
                   }
                 </div>
               } @empty {

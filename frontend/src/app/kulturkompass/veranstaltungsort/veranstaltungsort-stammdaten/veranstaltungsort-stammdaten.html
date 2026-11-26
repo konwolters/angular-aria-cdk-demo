@@ -1,6 +1,5 @@
 <div class="grid max-w-3xl gap-4 pt-5 sm:grid-cols-2 lg:grid-cols-3">
   <app-text-field
-    size="small"
     label="Name"
     [formField]="stammdatenForm.name"
     (valueChange)="name.set($event)"
@@ -9,7 +8,6 @@
     [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
   />
   <app-text-field
-    size="small"
     label="Standortnummer"
     [formField]="stammdatenForm.kundennummer"
     (valueChange)="customerNumber.set($event)"
@@ -18,7 +16,6 @@
     [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
   />
   <app-text-field
-    size="small"
     label="Standort-ID"
     [formField]="stammdatenForm.alertId"
     [initialValue]="historyPreviousValue('alertId')"
@@ -26,7 +23,6 @@
     [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
   />
   <app-text-field
-    size="small"
     label="Standortkürzel"
     [formField]="stammdatenForm.akronym"
     [initialValue]="historyPreviousValue('akronym')"
@@ -34,7 +30,6 @@
     [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
   />
   <app-text-field
-    size="small"
     label="Registerkennung"
     [formField]="stammdatenForm.lei"
     [initialValue]="historyPreviousValue('lei')"
@@ -42,7 +37,6 @@
     [previousValueLabel]="historical() ? previousLabel() || historyPreviousLabel() : 'Wert vorher'"
   />
   <app-select
-    size="small"
     label="Status"
     [options]="statuses()"
     [formField]="stammdatenForm.status"

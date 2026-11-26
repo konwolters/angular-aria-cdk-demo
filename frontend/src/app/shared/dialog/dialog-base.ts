@@ -18,9 +18,11 @@ export type CloseReason = 'escape' | 'backdrop' | 'button';
 /** Gemeinsamer CDK-Lebenszyklus für Modal und Drawer; Schließanfragen können delegiert werden. */
 @Directive()
 export abstract class DialogBase implements OnDestroy {
-  protected readonly titleId = inject(ControlIdService).next();
-  protected readonly dialog = inject(Dialog);
-  private readonly overlay = inject(Overlay);
+  private readonly controlIdService = inject(ControlIdService);
+  private readonly dialogService = inject(Dialog);
+  private readonly overlayService = inject(Overlay);
+
+  protected readonly titleId = this.controlIdService.next();
   protected readonly content = viewChild<TemplateRef<unknown>>('dialogContent');
   protected ref?: DialogRef;
   protected abstract readonly drawer: boolean;
@@ -40,7 +42,7 @@ export abstract class DialogBase implements OnDestroy {
         this.ref?.close();
         this.ref = undefined;
       } else if (content && !this.ref) {
-        const ref = this.dialog.open(content, {
+        const ref = this.dialogService.open(content, {
           // Schließanfragen laufen über requestClose, damit der Aufrufer sie ablehnen kann.
           disableClose: true,
           ariaLabelledBy: this.titleId,
@@ -48,7 +50,7 @@ export abstract class DialogBase implements OnDestroy {
           width,
           maxHeight: '100dvh',
           positionStrategy: this.drawer
-            ? this.overlay.position().global().right('0').top('0')
+            ? this.overlayService.position().global().right('0').top('0')
             : undefined,
           height: this.drawer ? '100dvh' : undefined,
         });
@@ -82,7 +84,7 @@ export abstract class DialogBase implements OnDestroy {
 
   requestClose(reason: CloseReason = 'button'): void {
     // Bei verschachtelten Dialogen darf nur der oberste auf die Anfrage reagieren.
-    if (this.dialog.openDialogs.at(-1) !== this.ref) return;
+    if (this.dialogService.openDialogs.at(-1) !== this.ref) return;
     this.closeRequested.emit(reason);
     if (this.closeOnRequest()) this.open.set(false);
   }

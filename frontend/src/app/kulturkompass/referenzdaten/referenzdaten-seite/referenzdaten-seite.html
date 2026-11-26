@@ -1,9 +1,9 @@
 <div class="flex flex-wrap items-center justify-between gap-3 px-5">
   <h1 class="text-lg font-semibold text-brand-strong">Referenzdaten</h1>
   @if (editing()) {
-    <button appButton size="small" type="button" (click)="openEditor(null)">Neu</button>
+    <button appButton type="button" (click)="openEditor(null)">Neu</button>
   } @else {
-    <button appButton size="small" type="button" (click)="editing.set(true)">Bearbeiten</button>
+    <button appButton type="button" (click)="editing.set(true)">Bearbeiten</button>
   }
 </div>
 <app-tabs [tabs]="tabs()" [(selectedTab)]="selectedTab" [framed]="false">
@@ -17,7 +17,7 @@
           caption="Referenzdaten"
         >
           <ng-template appDataTableCell="action" let-row>
-            <button appButton variant="link" size="small" type="button" (click)="openEditor(row)">
+            <button appButton variant="link" type="button" (click)="openEditor(row)">
               Bearbeiten
             </button>
           </ng-template>
@@ -28,16 +28,53 @@
 </app-tabs>
 @if (editing()) {
   <div class="flex justify-end gap-3 border-t border-border pt-5">
-    <button appButton size="small" variant="secondary" type="button" (click)="editing.set(false)">
+    <button appButton variant="secondary" type="button" (click)="editing.set(false)">
       Abbrechen
     </button>
-    <button
-      appButton
-      size="small"
-      type="button"
-      (click)="dialog.confirm('Zur Freigabe einreichen')"
-    >
+    <button appButton type="button" (click)="submitDialogOpen.set(true)">
       Zur Freigabe einreichen
     </button>
   </div>
 }
+
+<app-side-drawer [(open)]="editorOpen" [title]="editorTitle()">
+  <div class="mt-5 grid gap-4 text-base sm:grid-cols-2">
+    @if (selectedTab() !== 'zusatz') {
+      <app-text-field label="Kurzbezeichnung" [formField]="referenzdatenService.editorForm.code" />
+    }
+    <app-text-field label="Bezeichnung" [formField]="referenzdatenService.editorForm.bezeichnung" />
+    @if (selectedTab() === 'land') {
+      <app-text-field label="Regionscode" [formField]="referenzdatenService.editorForm.verwahrart" />
+    }
+    <app-select
+      label="Status"
+      [options]="statuses"
+      [formField]="referenzdatenService.editorForm.status"
+    />
+  </div>
+  <div dialog-footer class="flex justify-end gap-2 pt-5">
+    <button
+      appButton
+      variant="secondary"
+      type="button"
+      (click)="editorOpen.set(false)"
+    >
+      Abbrechen
+    </button>
+    <button appButton type="button" (click)="editorOpen.set(false)">Übernehmen</button>
+  </div>
+</app-side-drawer>
+
+<app-modal [(open)]="submitDialogOpen" title="Zur Freigabe einreichen">
+  <p class="mt-3 text-sm text-content-muted">Zur Freigabe einreichen?</p>
+  <div dialog-footer class="mt-5 flex justify-end gap-2">
+    <button
+      appButton
+      variant="secondary"
+      type="button"
+      (click)="submitDialogOpen.set(false)"
+    >
+      Schließen
+    </button>
+  </div>
+</app-modal>

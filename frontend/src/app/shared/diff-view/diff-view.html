@@ -16,10 +16,10 @@
     <tbody class="divide-y divide-border">
       @for (entry of entries(); track entry.key) {
         <tr>
-          <th scope="row" class="px-4 py-4 font-medium">{{ entry.label }}</th>
-          <td class="px-4 py-4 text-content-muted">{{ entry.before ?? '—' }}</td>
-          <td class="px-4 py-4 text-content-secondary">{{ entry.after ?? '—' }}</td>
-          <td class="px-4 py-4">
+          <th scope="row" class="p-4 font-medium">{{ entry.label }}</th>
+          <td class="p-4 text-content-muted">{{ entry.before ?? '—' }}</td>
+          <td class="p-4 text-content-secondary">{{ entry.after ?? '—' }}</td>
+          <td class="p-4">
             <span
               class="inline-flex whitespace-nowrap rounded-control bg-canvas px-2 py-1 text-xs font-medium"
               >{{ status(entry) }}</span

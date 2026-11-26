@@ -2,13 +2,11 @@ import { KulturkompassDatenService } from '../daten/kulturkompass-daten.service'
 import { computed, inject, Service, signal } from '@angular/core';
 import { DataTableColumn } from '../../shared/data-table/data-table';
 import { GuiRow } from '../daten/gui-modelle';
-import { BereichService } from '../veranstaltungsort/bereich-detail/bereich.service';
-import { importVorschau } from './import-vorschau';
 
 @Service({ autoProvided: false })
 export class ImportService {
-  private readonly daten = inject(KulturkompassDatenService);
-  private readonly bereich = inject(BereichService);
+  private readonly kulturkompassDatenService = inject(KulturkompassDatenService);
+
   readonly stage = signal('datei');
   readonly file = signal<File | null>(null);
   readonly dataType = signal('angebot');
@@ -71,19 +69,7 @@ export class ImportService {
     ['konflikt', 'Konfliktstatus'],
     ['ergebnis', 'Ergebnis'],
   ]);
-  readonly groupRows = this.daten.importGruppen;
-  readonly previewRows = computed(() =>
-    importVorschau(
-      this.dataType(),
-      this.daten.veranstaltungsorte,
-      this.daten.bereiche,
-      this.daten.angebote,
-      this.bereich.datenbestand(),
-      this.daten.referenzdaten['zusatz']
-        .filter((row) => row['status'] === 'Aktiv')
-        .map((row) => ({ value: row['code'], label: row['bezeichnung'] })),
-    ),
-  );
+  readonly groupRows = this.kulturkompassDatenService.importGruppen;
   readonly resultColumns = this.columns([
     ['id', 'Antragsnummer'],
     ['action', 'Aktion'],

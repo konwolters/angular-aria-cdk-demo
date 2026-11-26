@@ -2,9 +2,7 @@
   <router-outlet />
 } @else {
   <div>
-    <aside
-      class="fixed inset-y-0 left-0 hidden w-64 border-r border-border bg-surface p-6 lg:block"
-    >
+    <aside class="fixed inset-y-0 left-0 w-64 border-r border-border bg-surface p-6">
       <a routerLink="/showcase" class="flex items-center gap-3">
         <span
           class="grid h-10 w-10 place-items-center rounded-card bg-brand font-bold text-on-brand"
@@ -25,17 +23,18 @@
           >
             Showcase
           </p>
-          <div class="space-y-1">
-            <a
-              routerLink="/showcase"
-              routerLinkActive="bg-brand-subtle text-brand-strong"
-              ariaCurrentWhenActive="page"
-              class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm text-content-secondary hover:bg-canvas"
-            >
-              <app-icon name="grid" [size]="16" />
-              Datenimport
-            </a>
-          </div>
+          <a
+            routerLink="/showcase"
+            routerLinkActive="bg-brand-subtle text-brand-strong"
+            #showcaseLink="routerLinkActive"
+            ariaCurrentWhenActive="page"
+            class="flex items-center gap-3 rounded-control px-3 py-2.5 text-sm"
+            [class.text-content-secondary]="!showcaseLink.isActive"
+            [class.hover:bg-canvas]="!showcaseLink.isActive"
+          >
+            <app-icon name="grid" [size]="16" />
+            Datenimport
+          </a>
         </section>
         <section aria-labelledby="components-nav-label">
           <p
@@ -49,8 +48,11 @@
               <a
                 [routerLink]="'/components/' + item.slug"
                 routerLinkActive="bg-brand-subtle text-brand-strong"
+                #componentLink="routerLinkActive"
                 ariaCurrentWhenActive="page"
-                class="block rounded-control px-3 py-2 text-sm text-content-secondary hover:bg-canvas"
+                class="block rounded-control px-3 py-2 text-sm"
+                [class.text-content-secondary]="!componentLink.isActive"
+                [class.hover:bg-canvas]="!componentLink.isActive"
                 >{{ item.name }}</a
               >
             }
@@ -66,7 +68,7 @@
       </div>
     </aside>
 
-    <main class="min-h-screen bg-surface px-4 py-8 sm:px-6 lg:ml-64 lg:px-10">
+    <main class="ml-64 min-h-screen bg-surface px-4 py-8 sm:px-6 lg:px-10">
       <router-outlet />
     </main>
   </div>

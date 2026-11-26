@@ -3,6 +3,11 @@
 Demo für eigene UI-Komponenten mit Angular 22, Angular Aria, CDK und Tailwind CSS. Im Fokus stehen zugängliche Interaktionen, Overlays und wiederverwendbare Bausteine.
 
 Ein kleines Spring-Boot-Backend ermöglicht serverseitiges Filtern, Sortieren und Paginieren der Beispieltabellen.
+Die Kulturkompass-Suchlisten laden ihre Mockdaten über `/api/kulturkompass/veranstaltungsorte`,
+`/api/kulturkompass/angebote` und `/api/kulturkompass/antraege`. Die Endpunkte unterstützen
+`search`, `page` (ab 0) und `size`. Die Importvorschau lädt paginierte Mockdaten von
+`/api/kulturkompass/import/vorschau` (`datenart`, `page`, `size`); die ausgewählte CSV wird dabei
+weder hochgeladen noch ausgewertet.
 
 ## Starten
 

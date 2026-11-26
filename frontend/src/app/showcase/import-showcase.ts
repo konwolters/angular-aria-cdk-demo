@@ -88,7 +88,8 @@ export function parseCsv(text: string): string[][] {
   templateUrl: './import-showcase.html',
 })
 export class ImportShowcaseComponent {
-  private readonly toast = inject(ToastService);
+  private readonly toastService = inject(ToastService);
+
   private loadVersion = 0;
   protected readonly file = signal<File | null>(null);
   protected readonly stage = signal<'file' | 'review' | 'done'>('file');
@@ -366,7 +367,7 @@ export class ImportShowcaseComponent {
     }
     this.rows.update((rows) => rows.map((item) => (item.id === row.id ? updated : item)));
     this.drawerOpen.set(false);
-    this.toast.show('Datensatz für diesen Demo-Import aktualisiert.');
+    this.toastService.show('Datensatz für diesen Demo-Import aktualisiert.');
   }
   protected confirm(): void {
     const ids = this.selected();
@@ -379,6 +380,6 @@ export class ImportShowcaseComponent {
     this.confirmOpen.set(false);
     this.selected.set([]);
     this.stage.set('done');
-    this.toast.show(`${ids.length} Datensätze in der Demo übernommen.`);
+    this.toastService.show(`${ids.length} Datensätze in der Demo übernommen.`);
   }
 }

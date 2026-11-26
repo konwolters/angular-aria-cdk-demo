@@ -1,5 +1,8 @@
 package dev.angularariacdk.demo;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,12 +50,11 @@ public class DemoTablesController {
             "progress", Comparator.comparingInt(Project::progress));
 
     @GetMapping("/api/orders")
-    public PageResponse<Order> orders(
+    public Page<Order> orders(
             @RequestParam(defaultValue = "") String search,
             @RequestParam(required = false) List<String> status,
             @RequestParam(required = false) List<String> paymentMethod,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size,
+            @PageableDefault(size = 8) Pageable pageable,
             @RequestParam(defaultValue = "orderedAt") String sort,
             @RequestParam(defaultValue = "desc") String direction) {
         Comparator<Order> comparator = ORDER_SORTS.getOrDefault(sort, ORDER_SORTS.get("orderedAt"));
@@ -68,16 +70,15 @@ public class DemoTablesController {
                 .sorted(comparator)
                 .toList();
 
-        return PageResponse.from(filtered, page, size);
+        return MockPages.from(filtered, pageable);
     }
 
     @GetMapping("/api/projects")
-    public PageResponse<Project> projects(
+    public Page<Project> projects(
             @RequestParam(defaultValue = "") String search,
             @RequestParam(required = false) List<String> status,
             @RequestParam(required = false) List<String> priority,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size,
+            @PageableDefault(size = 8) Pageable pageable,
             @RequestParam(defaultValue = "updatedAt") String sort,
             @RequestParam(defaultValue = "desc") String direction) {
         Comparator<Project> comparator = PROJECT_SORTS.getOrDefault(sort, PROJECT_SORTS.get("updatedAt"));
@@ -94,7 +95,7 @@ public class DemoTablesController {
                 .sorted(comparator)
                 .toList();
 
-        return PageResponse.from(filtered, page, size);
+        return MockPages.from(filtered, pageable);
     }
 
     private static Order order(int id) {

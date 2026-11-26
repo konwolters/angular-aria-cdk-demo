@@ -16,7 +16,6 @@
         </div>
         <button
           appButton
-          size="small"
           variant="secondary"
           type="button"
           (click)="historical.set(null); activeTab.set('historie')"
@@ -61,13 +60,12 @@
         <div class="flex flex-wrap gap-2">
           <button
             appButton
-            size="small"
             type="button"
-            (click)="state.beginEditing('veranstaltungsort')"
+            (click)="veranstaltungsortService.beginEditing('veranstaltungsort')"
           >
             Veranstaltungsort & Bereiche ändern
           </button>
-          <button appButton size="small" type="button" (click)="state.beginEditing('angebot')">
+          <button appButton type="button" (click)="veranstaltungsortService.beginEditing('angebot')">
             Angebote ändern
           </button>
         </div>
@@ -104,22 +102,69 @@
       <div class="flex justify-end gap-3 border-t border-border pt-5">
         <button
           appButton
-          size="small"
           variant="secondary"
           type="button"
           (click)="editing.set(false)"
         >
           Abbrechen
         </button>
-        <button
-          appButton
-          size="small"
-          type="button"
-          (click)="dialog.confirm('Zur Freigabe einreichen')"
-        >
+        <button appButton type="button" (click)="submitDialogOpen.set(true)">
           Zur Freigabe einreichen
         </button>
       </div>
     }
   </div>
 }
+
+@if (drawer(); as detail) {
+  @if (detail.kind === 'angebot') {
+    <app-angebot-detail
+      [(open)]="drawerOpen"
+      [title]="detail.title"
+      [value]="detail.row"
+      [editing]="detail.editing"
+      [bereichOptions]="bereichOptions().slice(1)"
+      (accept)="drawerOpen.set(false)"
+    />
+  } @else {
+    <app-side-drawer [(open)]="drawerOpen" [title]="detail.title">
+      <div class="text-base">
+        <app-bereich-detail
+          [value]="detail.row"
+          [editing]="detail.editing"
+          [editScope]="editScope()"
+          [statuses]="statuses()"
+          [zusatzarten]="zusatzarten()"
+          [(zusatzdaten)]="zusatzdatenEntwurf"
+        />
+      </div>
+      <div dialog-footer class="flex justify-end gap-2 pt-5">
+        <button
+          appButton
+          variant="secondary"
+          type="button"
+          (click)="drawerOpen.set(false)"
+        >
+          {{ detail.editing ? 'Abbrechen' : 'Schließen' }}
+        </button>
+        @if (detail.editing) {
+          <button appButton type="button" (click)="acceptBereich()">Übernehmen</button>
+        }
+      </div>
+    </app-side-drawer>
+  }
+}
+
+<app-modal [(open)]="submitDialogOpen" title="Zur Freigabe einreichen">
+  <p class="mt-3 text-sm text-content-muted">Zur Freigabe einreichen?</p>
+  <div dialog-footer class="mt-5 flex justify-end gap-2">
+    <button
+      appButton
+      variant="secondary"
+      type="button"
+      (click)="submitDialogOpen.set(false)"
+    >
+      Schließen
+    </button>
+  </div>
+</app-modal>

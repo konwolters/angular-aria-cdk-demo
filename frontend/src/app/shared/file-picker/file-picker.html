@@ -57,7 +57,7 @@
       <span
         class="grid h-9 w-9 shrink-0 place-items-center rounded-control bg-brand-subtle text-brand-strong"
         aria-hidden="true"
-        ><app-icon name="receipt" [size]="18"
+        ><app-icon name="receipt"
       /></span>
       <div class="min-w-0 flex-1">
         <p class="truncate text-sm font-medium text-content">{{ file.name }}</p>
@@ -67,7 +67,6 @@
         appButton
         type="button"
         variant="ghost"
-        size="small"
         icon="close"
         [disabled]="disabled()"
         (click)="remove()"

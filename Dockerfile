@@ -3,6 +3,7 @@ WORKDIR /build/frontend
 COPY frontend/package*.json ./
 RUN npm ci
 COPY frontend/ ./
+COPY backend/src/main/resources/kulturkompass-demo.json /build/backend/src/main/resources/
 RUN npm run build -- --base-href=/aria-demo/
 
 FROM --platform=$BUILDPLATFORM maven:3.9-eclipse-temurin-25 AS backend

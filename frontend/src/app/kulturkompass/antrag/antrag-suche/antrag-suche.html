@@ -1,9 +1,10 @@
+@let result = results.hasValue() ? results.value() : undefined;
+
 <div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
   <h1 class="text-lg font-semibold text-brand-strong">Staging & Freigaben</h1>
 </div>
-<section class="bg-surface !mt-0">
+<section class="bg-surface">
   <app-data-table-toolbar
-    buttonSize="small"
     [compactTop]="true"
     [showApply]="false"
     [showReset]="false"
@@ -12,36 +13,36 @@
   >
     <div data-table-searches class="w-full">
       <div
-        class="@container grid grid-cols-[repeat(auto-fill,minmax(min(100%,11rem),1fr))] items-end gap-3"
+        class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,11rem),1fr))] items-end gap-3"
       >
-        <app-text-field size="small" label="Antrag" [formField]="queryForm" />
-        <app-text-field size="small" label="Standortnummer" [formField]="customerNumberForm" />
-        <app-text-field size="small" label="Bereichsnummer" [formField]="extraForm.bereichnummer" />
+        <app-text-field label="Antrag" [formField]="searchForm.id" />
+        <app-text-field label="Standortnummer" [formField]="searchForm.kundennummer" />
+        <app-text-field
+          label="Bereichsnummer"
+          [formField]="searchForm.bereichnummer"
+        />
         <app-multi-select
-          size="small"
           [fullWidth]="true"
           label="Status"
           [options]="['In Bearbeitung', 'Eingereicht']"
-          [formField]="referenceTypesForm"
+          [formField]="searchForm.status"
           [changed]="false"
         />
         <app-multi-select
-          size="small"
           [fullWidth]="true"
           label="Änderungsumfang"
-          [formField]="extraForm.umfang"
+          [formField]="searchForm.bereich"
           [options]="['Veranstaltungsort & Bereiche', 'Angebote', 'Referenzdaten']"
           [changed]="false"
         />
       </div>
     </div>
     <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
-      <span>{{ rows().length }} Einträge</span>
+      <span>{{ result?.page.totalElements ?? 0 }} Einträge</span>
       <div class="flex flex-wrap justify-end gap-3">
-        <button appButton size="small" type="submit">Suchen</button>
+        <button appButton type="submit">Suchen</button>
         <button
           appButton
-          size="small"
           type="button"
           variant="secondary"
           icon="refresh"
@@ -54,18 +55,20 @@
   </app-data-table-toolbar>
   <app-data-table
     [framed]="false"
-    [rows]="pagination.rows('staging', rows())"
-    [total]="rows().length"
-    [totalPages]="pagination.totalPages('staging', rows())"
-    [page]="pagination.page('staging', rows())"
-    [pageSize]="pagination.size('staging')"
-    (pageChange)="pagination.setPage('staging', $event)"
-    (pageSizeChange)="pagination.setSize('staging', $event)"
+    [rows]="result?.content ?? []"
+    [total]="result?.page.totalElements ?? 0"
+    [totalPages]="result?.page.totalPages ?? 0"
+    [page]="result?.page.number ?? 0"
+    [pageSize]="result?.page.size ?? tableQuery().size"
+    [loading]="results.isLoading()"
+    [error]="results.error() ? 'Änderungsanträge konnten nicht geladen werden.' : null"
+    (pageChange)="setPage($event)"
+    (pageSizeChange)="setPageSize($event)"
     [columns]="columns"
     caption="Änderungsanträge"
   >
     <ng-template appDataTableCell="action" let-row
-      ><button appButton variant="link" size="small" type="button" (click)="openAntrag(row)">
+      ><button appButton variant="link" type="button" (click)="openAntrag(row)">
         Prüfen
       </button></ng-template
     >

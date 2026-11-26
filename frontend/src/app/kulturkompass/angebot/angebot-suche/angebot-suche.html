@@ -1,9 +1,12 @@
+@let result = results.hasValue() ? results.value() : undefined;
+
+<app-angebot-detail [(open)]="detailsOpen" [value]="detailRow()" title="Angebotsdetail" />
+
 <div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
   <h1 class="text-lg font-semibold text-brand-strong">Angebotssuche</h1>
 </div>
-<section class="bg-surface !mt-0">
+<section class="bg-surface">
   <app-data-table-toolbar
-    buttonSize="small"
     [compactTop]="true"
     [showApply]="false"
     [showReset]="false"
@@ -11,7 +14,7 @@
     (reset)="reset()"
   >
     <div data-table-searches class="w-full">
-      <section aria-labelledby="angebot-customer-filters" class="@container">
+      <section aria-labelledby="angebot-customer-filters">
         <h2
           id="angebot-customer-filters"
           class="mb-2 text-xs font-semibold uppercase tracking-wide text-content-muted"
@@ -19,21 +22,19 @@
           Veranstaltungsort und Bereich
         </h2>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3">
-          <app-text-field size="small" label="Veranstaltungsort" [formField]="queryForm" />
-          <app-text-field size="small" label="Standortnummer" [formField]="customerNumberForm" />
+          <app-text-field label="Veranstaltungsort" [formField]="searchForm.name" />
           <app-text-field
-            size="small"
-            label="Registerkennung"
-            [formField]="extraForm.registerkennung"
+            label="Standortnummer"
+            [formField]="searchForm.kundennummer"
           />
+          <app-text-field label="Registerkennung" [formField]="searchForm.lei" />
           <app-text-field
-            size="small"
             label="Bereichsnummer"
-            [formField]="extraForm.bereichnummer"
+            [formField]="searchForm.bereichnummer"
           />
         </div>
       </section>
-      <section aria-labelledby="angebot-characteristic-filters" class="@container mt-4">
+      <section aria-labelledby="angebot-characteristic-filters" class="mt-4">
         <h2
           id="angebot-characteristic-filters"
           class="mb-2 text-xs font-semibold uppercase tracking-wide text-content-muted"
@@ -42,65 +43,56 @@
         </h2>
         <div class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3">
           <app-multi-select
-            size="small"
             [fullWidth]="true"
             label="Land"
             [options]="['DE', 'LU', 'US']"
-            [formField]="countriesForm"
+            [formField]="searchForm.land"
             [changed]="false"
           />
           <app-multi-select
-            size="small"
             [fullWidth]="true"
             label="Veranstaltungsart"
             [options]="['Workshop', 'Ausstellung']"
-            [formField]="businessTypesForm"
+            [formField]="searchForm.geschaeft"
             [changed]="false"
           />
           <app-multi-select
-            size="small"
             [fullWidth]="true"
             label="Angebotsformat"
-            [formField]="extraForm.format"
+            [formField]="searchForm.wertpapier"
             [options]="['Präsenz', 'Online']"
             [changed]="false"
           />
           <app-text-field
-            size="small"
             label="Angebotscode"
-            [formField]="extraForm.code"
+            [formField]="searchForm.isin"
             [monospace]="true"
           />
           <app-text-field
-            size="small"
             label="Kontaktcode Ansprechperson"
-            [formField]="extraForm.ansprechcode"
+            [formField]="searchForm.agentBic"
           />
           <app-text-field
-            size="small"
             label="Kontakt-ID Ansprechperson"
-            [formField]="extraForm.ansprechid"
+            [formField]="searchForm.konto"
           />
           <app-text-field
-            size="small"
             label="Kontaktcode Veranstaltungsteam"
-            [formField]="extraForm.teamcode"
+            [formField]="searchForm.bic"
           />
           <app-text-field
-            size="small"
             label="Zusatzinformationen"
-            [formField]="extraForm.zusatzinfo"
+            [formField]="searchForm.zusatzinfo"
           />
         </div>
       </section>
     </div>
     <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
-      <span>{{ rows().length }} Treffer</span>
+      <span>{{ result?.page.totalElements ?? 0 }} Treffer</span>
       <div class="flex flex-wrap justify-end gap-3">
-        <button appButton size="small" type="submit">Suchen</button>
+        <button appButton type="submit">Suchen</button>
         <button
           appButton
-          size="small"
           type="button"
           variant="secondary"
           icon="refresh"
@@ -109,7 +101,6 @@
           Zurücksetzen</button
         ><button
           appButton
-          size="small"
           variant="secondary"
           type="button"
           [disabled]="true"
@@ -122,13 +113,15 @@
   </app-data-table-toolbar>
   <app-data-table
     [framed]="false"
-    [rows]="pagination.rows('angebot', rows())"
-    [total]="rows().length"
-    [totalPages]="pagination.totalPages('angebot', rows())"
-    [page]="pagination.page('angebot', rows())"
-    [pageSize]="pagination.size('angebot')"
-    (pageChange)="pagination.setPage('angebot', $event)"
-    (pageSizeChange)="pagination.setSize('angebot', $event)"
+    [rows]="result?.content ?? []"
+    [total]="result?.page.totalElements ?? 0"
+    [totalPages]="result?.page.totalPages ?? 0"
+    [page]="result?.page.number ?? 0"
+    [pageSize]="result?.page.size ?? tableQuery().size"
+    [loading]="results.isLoading()"
+    [error]="results.error() ? 'Suchergebnisse konnten nicht geladen werden.' : null"
+    (pageChange)="setPage($event)"
+    (pageSizeChange)="setPageSize($event)"
     [columns]="columns"
     caption="Suchergebnisse"
   >
@@ -137,7 +130,7 @@
     >
     <ng-template appDataTableCell="antrag" let-row>
       @if (row.antrag === 'Ja') {
-        <button appButton variant="link" size="small" type="button" (click)="openRequest(row)">
+        <button appButton variant="link" type="button" (click)="openRequest(row)">
           Ja
         </button>
       } @else {
@@ -145,7 +138,7 @@
       }
     </ng-template>
     <ng-template appDataTableCell="action" let-row
-      ><button appButton variant="link" size="small" type="button" (click)="openDetails(row)">
+      ><button appButton variant="link" type="button" (click)="openDetails(row)">
         Details
       </button></ng-template
     >

@@ -1,123 +1,15 @@
+import fixtures from '../../../../../backend/src/main/resources/kulturkompass-demo.json';
 import { Antrag, Bereich, GuiRow, Veranstaltungsort, Angebot } from './gui-modelle';
 
-export const DEMO_CUSTOMERS: Veranstaltungsort[] = [
-  {
-    name: 'Kulturhaus Sonnenhof',
-    kundennummer: '100001',
-    bereichnummer: '10010001, 10010002, 10010003, 10010004, 10010005, 10010006, 10010007',
-    alertId: '123456',
-    akronym: 'SONNE',
-    lei: 'ORT-SONNENHOF-001',
-    status: 'Aktiv',
-    antrag: 'Ja',
-  },
-  {
-    name: 'Forum Lindenpark',
-    kundennummer: '100002',
-    bereichnummer: '10020001',
-    alertId: '234567',
-    akronym: 'LINDE',
-    lei: 'ORT-LINDENPARK-002',
-    status: 'Aktiv',
-    antrag: '—',
-  },
-  {
-    name: 'Werkstatt am See',
-    kundennummer: '100003',
-    bereichnummer: '10030001',
-    alertId: '345678',
-    akronym: 'SEE',
-    lei: 'ORT-WERKSTATT-003',
-    status: 'Aktiv',
-    antrag: '—',
-  },
-];
+export const DEMO_CUSTOMERS: Veranstaltungsort[] = fixtures.veranstaltungsorte;
+export const DEMO_ANGEBOT: Angebot[] = fixtures.angebote.map((angebot) => ({
+  ...angebot,
+  zusatzinfo: angebot.zusatzinfo ?? '',
+}));
+export const DEMO_REQUESTS: Antrag[] = fixtures.antraege;
 
-export const DEMO_ANGEBOT: Angebot[] = [
-  {
-    name: 'Kulturhaus Sonnenhof',
-    bereichnummer: '10010001',
-    land: 'DE',
-    geschaeft: 'Workshop',
-    wertpapier: 'Präsenz',
-    isin: 'ANG-DE-0001',
-    konto: '123456789',
-    agentBic: 'TEAM-ORGA',
-    bic: 'TEAM-SONNE',
-    antrag: 'Ja',
-  },
-  {
-    name: 'Forum Lindenpark',
-    bereichnummer: '10020001',
-    land: 'LU',
-    geschaeft: 'Ausstellung',
-    wertpapier: 'Online',
-    isin: 'ANG-LU-0001',
-    konto: '987654321',
-    agentBic: 'TEAM-ORGA',
-    bic: 'TEAM-LINDE',
-    antrag: '—',
-  },
-  ...Array.from({ length: 18 }, (_, index) => {
-    const union = index % 2 === 0;
-    const land = ['DE', 'LU', 'US'][index % 3];
-    return {
-      name: union ? 'Kulturhaus Sonnenhof' : 'Forum Lindenpark',
-      bereichnummer: union ? ['10010001', '10010002', '10010003'][index % 3] : '10020001',
-      land,
-      geschaeft: index % 3 === 0 ? 'Workshop' : 'Ausstellung',
-      wertpapier: index % 2 === 0 ? 'Präsenz' : 'Online',
-      isin: `ANG-${land}-${String(index + 10).padStart(4, '0')}`,
-      konto: String(120000000 + index),
-      agentBic: 'TEAM-ORGA',
-      bic: land === 'LU' ? 'TEAM-LINDE' : land === 'US' ? 'TEAM-SEE' : 'TEAM-SONNE',
-      antrag: '—',
-    };
-  }),
-];
-
-export const DEMO_REQUESTS: Antrag[] = [
-  {
-    id: 'M-2026-0001',
-    bereich: 'Angebote',
-    name: '2 Veranstaltungsorte',
-    quelle: 'CSV',
-    art: 'Massenänderung',
-    ersteller: 'MMUELLER',
-    datum: '15.10.2026',
-    status: 'Eingereicht',
-  },
-  {
-    id: 'E-2026-0041',
-    bereich: 'Veranstaltungsort & Bereiche',
-    name: 'Kulturhaus Sonnenhof',
-    quelle: 'Manuell',
-    art: 'Ändern',
-    ersteller: 'ASCHMIDT',
-    datum: '14.10.2026',
-    status: 'Eingereicht',
-  },
-  {
-    id: 'E-2026-0042',
-    bereich: 'Angebote',
-    name: 'Kulturhaus Sonnenhof',
-    quelle: 'Manuell',
-    art: 'Ändern',
-    ersteller: 'ASCHMIDT',
-    datum: '14.10.2026',
-    status: 'Eingereicht',
-  },
-];
-
-export const DEMO_BEREICHS: Bereich[] = [
-  { bereichnummer: '10010001', bezeichnung: 'Hauptsaal', status: 'Aktiv', anzahl: '2' },
-  { bereichnummer: '10010002', bezeichnung: 'Atelier', status: 'Aktiv', anzahl: '1' },
-  { bereichnummer: '10010003', bezeichnung: 'Foyer', status: 'Aktiv', anzahl: '0' },
-  { bereichnummer: '10010004', bezeichnung: 'Studio', status: 'Aktiv', anzahl: '0' },
-  { bereichnummer: '10010005', bezeichnung: 'Galerie', status: 'Aktiv', anzahl: '0' },
-  { bereichnummer: '10010006', bezeichnung: 'Außenbereich', status: 'Aktiv', anzahl: '0' },
-  { bereichnummer: '10010007', bezeichnung: 'Proberaum', status: 'Aktiv', anzahl: '0' },
-];
+export const DEMO_BEREICHS: Bereich[] = fixtures.bereiche;
+export const DEMO_BEREICH_ZUSATZDATEN = fixtures.bereichZusatzdaten;
 
 export const DEMO_REFERENZDATEN: Record<string, GuiRow[]> = {
   land: [

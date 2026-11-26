@@ -503,8 +503,8 @@ export const componentApis: Record<string, ComponentApi> = {
   toast: {
     methods: [
       entry(
-        'show(text)',
-        '(text: string) => number',
+        'show(text, options?)',
+        '(text: string, options?: ToastOptions) => number',
         '—',
         'ToastService: Zeigt eine Meldung und liefert ihre ID.',
       ),
@@ -525,6 +525,23 @@ export const componentApis: Record<string, ComponentApi> = {
     ],
     types: [
       {
+        name: 'ToastOptions',
+        entries: [
+          entry(
+            'autoClose',
+            'boolean',
+            'true',
+            'Schließt die Meldung nach Ablauf der Anzeigedauer.',
+          ),
+          entry(
+            'durationMs',
+            'number',
+            '3000',
+            'Anzeigedauer in Millisekunden bei aktivem Auto-Close.',
+          ),
+        ],
+      },
+      {
         name: 'ToastMessage',
         entries: [
           entry(
@@ -538,7 +555,7 @@ export const componentApis: Record<string, ComponentApi> = {
       },
     ],
     notes:
-      'ToastOutletComponent zeigt die Meldungen des injizierbaren ToastService an. Meldungen werden explizit geschlossen.',
+      'ToastOutletComponent zeigt die Meldungen des injizierbaren ToastService an. Meldungen schließen standardmäßig automatisch und können auch manuell geschlossen werden.',
   },
 };
 

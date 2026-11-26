@@ -21,7 +21,9 @@ import { FormValueControl } from '@angular/forms/signals';
   templateUrl: './file-picker.html',
 })
 export class FilePickerComponent implements FormValueControl<File | null> {
-  protected readonly errorId = inject(ControlIdService).next();
+  private readonly controlIdService = inject(ControlIdService);
+
+  protected readonly errorId = this.controlIdService.next();
   readonly label = input('Datei');
   readonly buttonSize = input<ButtonSize>('small');
   readonly accept = input('.csv,text/csv');

@@ -1,12 +1,13 @@
+@let result = results.hasValue() ? results.value() : undefined;
+
 <div class="flex min-h-8 flex-wrap items-center justify-between gap-3 px-5">
   <h1 class="text-lg font-semibold text-brand-strong">Veranstaltungsorte</h1>
-  <button appButton size="small" type="button" (click)="createVeranstaltungsort()">
+  <button appButton type="button" (click)="createVeranstaltungsort()">
     Veranstaltungsort anlegen
   </button>
 </div>
-<section class="bg-surface !mt-0">
+<section class="bg-surface">
   <app-data-table-toolbar
-    buttonSize="small"
     [compactTop]="true"
     [showApply]="false"
     [showReset]="false"
@@ -15,38 +16,31 @@
   >
     <div data-table-searches class="w-full">
       <div
-        class="@container grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3"
+        class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,12rem),1fr))] items-end gap-3"
       >
-        <app-text-field size="small" label="Name" [formField]="queryForm" />
-        <app-text-field size="small" label="Standortnummer" [formField]="customerNumberForm" />
-        <app-text-field size="small" label="Bereichsnummer" [formField]="extraForm.bereichnummer" />
-        <app-text-field size="small" label="Standort-ID" [formField]="extraForm.standortId" />
+        <app-text-field label="Name" [formField]="searchForm.name" />
+        <app-text-field label="Standortnummer" [formField]="searchForm.kundennummer" />
         <app-text-field
-          size="small"
-          label="Standortkürzel"
-          [formField]="extraForm.standortkuerzel"
+          label="Bereichsnummer"
+          [formField]="searchForm.bereichnummer"
         />
-        <app-text-field
-          size="small"
-          label="Registerkennung"
-          [formField]="extraForm.registerkennung"
-        />
+        <app-text-field label="Standort-ID" [formField]="searchForm.alertId" />
+        <app-text-field label="Standortkürzel" [formField]="searchForm.akronym" />
+        <app-text-field label="Registerkennung" [formField]="searchForm.lei" />
         <app-select
-          size="small"
           label="Status"
           [options]="statuses()"
-          [formField]="statusForm"
+          [formField]="searchForm.status"
           [changed]="false"
         />
       </div>
     </div>
     <div data-table-summary class="flex flex-wrap items-center justify-between gap-3">
-      <span>{{ rows().length }} Treffer</span>
+      <span>{{ result?.page.totalElements ?? 0 }} Treffer</span>
       <div class="flex flex-wrap justify-end gap-3">
-        <button appButton size="small" type="submit">Suchen</button>
+        <button appButton type="submit">Suchen</button>
         <button
           appButton
-          size="small"
           type="button"
           variant="secondary"
           icon="refresh"
@@ -55,7 +49,6 @@
           Zurücksetzen</button
         ><button
           appButton
-          size="small"
           variant="secondary"
           type="button"
           [disabled]="true"
@@ -68,13 +61,15 @@
   </app-data-table-toolbar>
   <app-data-table
     [framed]="false"
-    [rows]="pagination.rows('veranstaltungsorte', rows())"
-    [total]="rows().length"
-    [totalPages]="pagination.totalPages('veranstaltungsorte', rows())"
-    [page]="pagination.page('veranstaltungsorte', rows())"
-    [pageSize]="pagination.size('veranstaltungsorte')"
-    (pageChange)="pagination.setPage('veranstaltungsorte', $event)"
-    (pageSizeChange)="pagination.setSize('veranstaltungsorte', $event)"
+    [rows]="result?.content ?? []"
+    [total]="result?.page.totalElements ?? 0"
+    [totalPages]="result?.page.totalPages ?? 0"
+    [page]="result?.page.number ?? 0"
+    [pageSize]="result?.page.size ?? tableQuery().size"
+    [loading]="results.isLoading()"
+    [error]="results.error() ? 'Suchergebnisse konnten nicht geladen werden.' : null"
+    (pageChange)="setPage($event)"
+    (pageSizeChange)="setPageSize($event)"
     [columns]="columns"
     caption="Suchergebnisse"
   >
@@ -91,7 +86,7 @@
     >
     <ng-template appDataTableCell="antrag" let-row>
       @if (row.antrag === 'Ja') {
-        <button appButton variant="link" size="small" type="button" (click)="openRequest(row)">
+        <button appButton variant="link" type="button" (click)="openRequest(row)">
           Ja
         </button>
       } @else {
@@ -105,7 +100,6 @@
           <button
             appButton
             variant="link"
-            size="small"
             type="button"
             (click)="openVeranstaltungsort(row, 'bereichs')"
           >
@@ -116,7 +110,6 @@
           <button
             appButton
             variant="link"
-            size="small"
             type="button"
             (click)="openVeranstaltungsort(row, 'bereichs')"
           >
@@ -129,7 +122,6 @@
       ><button
         appButton
         variant="link"
-        size="small"
         type="button"
         (click)="openVeranstaltungsort(row, 'stammdaten')"
       >

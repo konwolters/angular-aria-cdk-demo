@@ -11,6 +11,7 @@ import { IconComponent } from './shared/icon/icon';
 })
 export class App {
   private readonly router = inject(Router);
+
   private readonly url = toSignal(
     this.router.events.pipe(
       filter((event) => event instanceof NavigationEnd),

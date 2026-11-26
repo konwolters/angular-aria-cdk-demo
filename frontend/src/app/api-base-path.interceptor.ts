@@ -8,6 +8,7 @@ export const apiBasePathInterceptor: HttpInterceptorFn = (request, next) => {
     return next(request);
   }
 
-  const url = new URL(request.url.slice(1), inject(DOCUMENT).baseURI);
+  const document = inject(DOCUMENT);
+  const url = new URL(request.url.slice(1), document.baseURI);
   return next(request.clone({ url: url.pathname + url.search }));
 };

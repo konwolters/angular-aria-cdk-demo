@@ -34,7 +34,9 @@ import { FieldWrapperComponent } from '../field-wrapper/field-wrapper';
   host: { class: 'block' },
 })
 export class MultiSelectComponent implements FormValueControl<string[]> {
-  protected readonly messagesId = inject(ControlIdService).next();
+  private readonly controlIdService = inject(ControlIdService);
+
+  protected readonly messagesId = this.controlIdService.next();
   readonly disabled = input(false);
   readonly required = input(false);
   readonly invalid = input(false);

@@ -5,25 +5,29 @@
     <div class="space-y-5">
       <app-select
         class="w-full max-w-xs"
-        size="small"
         label="Datenart"
         [options]="importTypes()"
         [formField]="dataTypeForm"
         [changed]="false"
       />
-      <app-file-picker buttonSize="small" label="CSV-Datei" [formField]="fileForm" />
+      <app-file-picker label="CSV-Datei" [formField]="fileForm" />
     </div>
   } @else if (importStage() === 'vorschau') {
+    <p class="text-sm text-content-muted">
+      Demo-Vorschau: Die ausgewählte CSV wird nicht ausgewertet.
+    </p>
     <app-data-table
       class="-mx-5 block border-y border-border"
       [framed]="false"
-      [rows]="pagination().rows('import-vorschau', previewRows())"
-      [total]="previewRows().length"
-      [totalPages]="pagination().totalPages('import-vorschau', previewRows())"
-      [page]="pagination().page('import-vorschau', previewRows())"
-      [pageSize]="pagination().size('import-vorschau')"
-      (pageChange)="pagination().setPage('import-vorschau', $event)"
-      (pageSizeChange)="pagination().setSize('import-vorschau', $event)"
+      [rows]="previewPage()?.content ?? []"
+      [total]="previewPage()?.page.totalElements ?? 0"
+      [totalPages]="previewPage()?.page.totalPages ?? 0"
+      [page]="previewPage()?.page.number ?? 0"
+      [pageSize]="previewPage()?.page.size ?? 8"
+      [loading]="preview.isLoading()"
+      [error]="preview.error() ? 'Importvorschau konnte nicht geladen werden.' : null"
+      (pageChange)="setPreviewPage($event)"
+      (pageSizeChange)="setPreviewSize($event)"
       [columns]="previewColumns()"
       caption="Importvorschau"
     >
@@ -50,7 +54,7 @@
       caption="Erzeugte Änderungsanträge"
     >
       <ng-template appDataTableCell="action" let-row>
-        <button appButton size="small" variant="link" type="button" (click)="openResult(row)">
+        <button appButton variant="link" type="button" (click)="openResult(row)">
           Öffnen
         </button>
       </ng-template>
@@ -58,12 +62,12 @@
   }
   <div class="flex justify-end gap-3 pt-4">
     @if (importStage() !== 'datei') {
-      <button appButton size="small" variant="secondary" type="button" (click)="changeStep(-1)">
+      <button appButton variant="secondary" type="button" (click)="changeStep(-1)">
         Zurück
       </button>
     }
     @if (importStage() !== 'ergebnis') {
-      <button appButton size="small" type="button" (click)="changeStep(1)">
+      <button appButton type="button" (click)="changeStep(1)">
         {{
           importStage() === 'datei'
             ? 'Vorschau anzeigen'
@@ -75,13 +79,12 @@
     } @else {
       <button
         appButton
-        size="small"
         type="button"
         (click)="importStage.set('datei'); file.set(null)"
       >
         Neuen Import starten
       </button>
-      <button appButton size="small" type="button" (click)="router.navigate(['/gui/staging'])">
+      <button appButton type="button" (click)="router.navigate(['/gui/staging'])">
         Zu Staging &amp; Freigaben
       </button>
     }

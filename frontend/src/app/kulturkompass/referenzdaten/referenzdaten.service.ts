@@ -6,7 +6,8 @@ import { GuiRow } from '../daten/gui-modelle';
 
 @Service({ autoProvided: false })
 export class ReferenzdatenService {
-  private readonly daten = inject(KulturkompassDatenService);
+  private readonly kulturkompassDatenService = inject(KulturkompassDatenService);
+
   readonly selectedTab = signal('land');
   readonly editing = signal(false);
   private readonly existing = signal(false);
@@ -31,7 +32,7 @@ export class ReferenzdatenService {
     { value: 'wertpapier', label: 'Angebotsformate' },
     { value: 'zusatz', label: 'Arten der Zusatzdaten' },
   ];
-  readonly rows = this.daten.referenzdaten;
+  readonly rows = this.kulturkompassDatenService.referenzdaten;
   readonly zusatzarten = this.rows['zusatz']
     .filter((row) => row['status'] === 'Aktiv')
     .map((row) => ({ value: row['code'], label: row['bezeichnung'] }));
